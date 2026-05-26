@@ -7,6 +7,7 @@ VAR_GLOBAL
 	На текущую логику одной горелки карта пока не подключена.
 	Индексы горелок: 1..burner_quantity.
 	*)
+	enable          : ARRAY[1..burner_quantity] OF BOOL;
 	run             : ARRAY[1..burner_quantity] OF BOOL;
 	ready           : ARRAY[1..burner_quantity] OF BOOL;
 	alarm           : ARRAY[1..burner_quantity] OF BOOL;
