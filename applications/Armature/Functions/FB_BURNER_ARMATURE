@@ -25,6 +25,14 @@ VAR
 	reg_down_out   : BOOL;
 	reg_auto_set   : BOOL;
 	reg_manual_set : BOOL;
+	cmd_up         : BOOL;
+	cmd_down       : BOOL;
+	cmd_open       : BOOL;
+	cmd_closed     : BOOL;
+	cmd_stop       : BOOL;
+	cmd_block      : BOOL;
+	cmd_set_auto   : BOOL;
+	cmd_set_manual : BOOL;
 
 	i : WORD;
 END_VAR
@@ -96,16 +104,36 @@ FOR i := 0 TO counter_armature DO
 		reg_manual_set := regulator_data.reg_valve[i].man_set;
 	END_IF;
 
+	IF enable THEN
+		cmd_up := up_cmd[i] OR reg_up_out;
+		cmd_down := down_cmd[i] OR reg_down_out;
+		cmd_open := open_cmd[i];
+		cmd_closed := close_cmd[i];
+		cmd_stop := valve_data.stop[i];
+		cmd_block := block_cmd[i];
+		cmd_set_auto := reg_auto_set;
+		cmd_set_manual := valve_data.open[i] OR valve_data.closed[i] OR reg_manual_set;
+	ELSE
+		cmd_up := FALSE;
+		cmd_down := FALSE;
+		cmd_open := FALSE;
+		cmd_closed := FALSE;
+		cmd_stop := FALSE;
+		cmd_block := TRUE;
+		cmd_set_auto := FALSE;
+		cmd_set_manual := FALSE;
+	END_IF;
+
 	valves[i](
-		up := up_cmd[i] OR reg_up_out,
-		down := down_cmd[i] OR reg_down_out,
-		open := open_cmd[i],
-		closed := close_cmd[i],
-		stop := valve_data.stop[i],
+		up := cmd_up,
+		down := cmd_down,
+		open := cmd_open,
+		closed := cmd_closed,
+		stop := cmd_stop,
 		set_special := FALSE,
-		set_auto := reg_auto_set,
-		set_manual := valve_data.open[i] OR valve_data.closed[i] OR reg_manual_set,
-		block := block_cmd[i],
+		set_auto := cmd_set_auto,
+		set_manual := cmd_set_manual,
+		block := cmd_block,
 		open_state_di := valve_data.open_state_di[i],
 		closed_state_di := valve_data.closed_state_di[i],
 		special_state_di := valve_data.special_state_di[i],
