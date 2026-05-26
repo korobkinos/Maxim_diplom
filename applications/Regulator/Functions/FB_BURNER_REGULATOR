@@ -124,7 +124,7 @@ ELSE
 	END_FOR;
 
 	FOR i := 0 TO PID_quantity DO
-		IF SETTINGS.reg_binding_map[i][0] = reg_binding_on THEN
+		IF SETTINGS.reg_binding_map[i][0] = SETTINGS.reg_binding_on THEN
 			pid_idx := SETTINGS.reg_binding_map[i][1];
 			valve_idx := SETTINGS.reg_binding_map[i][2];
 			pv_idx := SETTINGS.reg_binding_map[i][3];
