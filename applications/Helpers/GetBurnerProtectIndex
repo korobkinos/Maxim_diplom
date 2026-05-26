@@ -1,4 +1,4 @@
-FUNCTION GetBurnerProtectIndex : WORD
+п»їFUNCTION GetBurnerProtectIndex : WORD
 VAR_INPUT
 	burner_id : WORD;
 	local_idx : WORD;
@@ -10,8 +10,8 @@ END_VAR
 // === IMPLEMENTATION ===
 
 (*
-Маппинг локального индекса защиты горелки в плоский глобальный индекс.
-Для защиты сохраняется текущая локальная индексация 0..burner_protect_quantity.
+РњР°РїРїРёРЅРі Р»РѕРєР°Р»СЊРЅРѕРіРѕ РёРЅРґРµРєСЃР° Р·Р°С‰РёС‚С‹ РіРѕСЂРµР»РєРё РІ РїР»РѕСЃРєРёР№ РіР»РѕР±Р°Р»СЊРЅС‹Р№ РёРЅРґРµРєСЃ.
+Р”Р»СЏ Р·Р°С‰РёС‚С‹ СЃРѕС…СЂР°РЅСЏРµС‚СЃСЏ С‚РµРєСѓС‰Р°СЏ Р»РѕРєР°Р»СЊРЅР°СЏ РёРЅРґРµРєСЃР°С†РёСЏ 0..burner_protect_quantity.
 *)
 protect_per_burner := burner_protect_quantity + 1;
 GetBurnerProtectIndex := (burner_id - 1) * protect_per_burner + local_idx;
