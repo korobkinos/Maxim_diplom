@@ -7,7 +7,8 @@ END_VAR
 // === IMPLEMENTATION ===
 
 (*
-Маппинг локального индекса регулятора горелки в плоский глобальный индекс.
-Вентиляция остается на уровне котла, AutoBurner и общая автопоследовательность не входят в FB_BURNER_UNIT.
+Горелки индексируются как 1..burner_quantity.
+Текущие локальные индексы регуляторов сохраняются 0-базными.
+Возвращаемый глобальный индекс является 1-базным для плоских массивов Weintek/OPC UA.
 *)
-GetBurnerRegulatorIndex := (burner_id - 1) * regulator_per_burner + local_idx;
+GetBurnerRegulatorIndex := (burner_id - 1) * regulator_per_burner + local_idx + 1;
