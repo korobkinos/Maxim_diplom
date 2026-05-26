@@ -1,0 +1,14 @@
+FUNCTION GetBurnerValveIndex : WORD
+VAR_INPUT
+	burner_id : WORD;
+	local_idx : WORD;
+END_VAR
+
+// === IMPLEMENTATION ===
+
+(*
+ћаппинг индекса арматуры горелки в плоский глобальный индекс дл€ Weintek/OPC UA.
+√орелки индексируютс€ как 1..burner_quantity.
+“екуща€ локальна€ индексаци€ арматуры остаетс€ 0..31 (будущий переход на 1-базную возможен позже).
+*)
+GetBurnerValveIndex := (burner_id - 1) * burner_valve_quantity + local_idx;

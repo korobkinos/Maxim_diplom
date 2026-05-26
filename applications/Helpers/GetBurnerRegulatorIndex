@@ -1,0 +1,13 @@
+FUNCTION GetBurnerRegulatorIndex : WORD
+VAR_INPUT
+	burner_id : WORD;
+	local_idx : WORD;
+END_VAR
+
+// === IMPLEMENTATION ===
+
+(*
+ћаппинг локального индекса регул€тора горелки в плоский глобальный индекс.
+¬ентил€ци€ остаетс€ на уровне котла, AutoBurner и обща€ автопоследовательность не вход€т в FB_BURNER_UNIT.
+*)
+GetBurnerRegulatorIndex := (burner_id - 1) * regulator_per_burner + local_idx;
