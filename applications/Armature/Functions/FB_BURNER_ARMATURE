@@ -1,0 +1,139 @@
+﻿FUNCTION_BLOCK FB_BURNER_ARMATURE
+VAR_INPUT
+	burner_id : WORD;
+	enable    : BOOL;
+END_VAR
+
+VAR_IN_OUT
+	valve_data     : ST_BURNER_VALVE_DATA;
+	burner_data    : ST_BURNER_DATA;
+	ignition_data  : ST_BURNER_IGNITION_DATA;
+	pressure_data  : ST_BURNER_PRESSURE_DATA;
+	regulator_data : ST_BURNER_REGULATOR_DATA;
+END_VAR
+
+VAR
+	valves : ARRAY[0..counter_armature] OF valve_universal_singl;
+
+	up_cmd       : ARRAY[0..counter_armature] OF BOOL;
+	down_cmd     : ARRAY[0..counter_armature] OF BOOL;
+	open_cmd     : ARRAY[0..counter_armature] OF BOOL;
+	close_cmd    : ARRAY[0..counter_armature] OF BOOL;
+	block_cmd    : ARRAY[0..counter_armature] OF BOOL;
+
+	reg_up_out     : BOOL;
+	reg_down_out   : BOOL;
+	reg_auto_set   : BOOL;
+	reg_manual_set : BOOL;
+
+	i : WORD;
+END_VAR
+
+// === IMPLEMENTATION ===
+
+(*
+FB_BURNER_ARMATURE - будущая горелочная замена старого одногорелочного ARMATURE.
+Старый ARMATURE остается без изменений.
+Блок использует только внутренние данные будущего FB_BURNER_UNIT.
+Вентиляция и AutoBurner в этот блок не входят.
+BURNERS_MANAGER пока не вызывается из MAIN, поэтому текущая runtime-логика не меняется.
+*)
+
+FOR i := 0 TO counter_armature DO
+	open_cmd[i] := valve_data.open[i];
+	close_cmd[i] := valve_data.closed[i];
+	up_cmd[i] := valve_data.up[i];
+	down_cmd[i] := valve_data.down[i];
+	block_cmd[i] := valve_data.block[i];
+END_FOR;
+
+IF enable THEN
+	up_cmd[gas_shiber] := up_cmd[gas_shiber] OR regulator_data.min_power_impulse_up;
+
+	open_cmd[pilot] := open_cmd[pilot];
+	close_cmd[pilot] := close_cmd[pilot];
+	open_cmd[ignit] := open_cmd[ignit];
+	close_cmd[ignit] := close_cmd[ignit];
+
+	open_cmd[spark] := open_cmd[spark] OR ignition_data.spark_SET;
+	close_cmd[spark] := close_cmd[spark] OR ignition_data.spark_RESET;
+
+	open_cmd[pzk_1] := open_cmd[pzk_1] OR burner_data.PZK_1_SET OR pressure_data.PZK_1_SET OR ignition_data.PZK_1_SET;
+	close_cmd[pzk_1] := close_cmd[pzk_1] OR burner_data.PZK_1_RESET OR pressure_data.PZK_1_RESET OR ignition_data.PZK_1_RESET;
+
+	open_cmd[pzk_2] := open_cmd[pzk_2] OR burner_data.PZK_2_SET;
+	close_cmd[pzk_2] := close_cmd[pzk_2] OR burner_data.PZK_2_RESET;
+
+	open_cmd[air_shiber] := open_cmd[air_shiber] OR burner_data.shiber_open;
+	close_cmd[air_shiber] := close_cmd[air_shiber] OR burner_data.shiber_closed;
+
+	open_cmd[gas_shiber] := open_cmd[gas_shiber] OR burner_data.GAZ_shiber_open;
+	close_cmd[gas_shiber] := close_cmd[gas_shiber] OR burner_data.GAZ_shiber_closed;
+
+	open_cmd[kz] := open_cmd[kz] OR ignition_data.KZ_SET;
+	close_cmd[kz] := close_cmd[kz] OR ignition_data.KZ_RESET;
+
+	open_cmd[vent_burner] := open_cmd[vent_burner] OR burner_data.ventilator_burner_on;
+	close_cmd[vent_burner] := close_cmd[vent_burner] OR burner_data.ventilator_burner_off;
+
+	open_cmd[kb] := open_cmd[kb] OR pressure_data.KB_SET;
+	close_cmd[kb] := close_cmd[kb] OR pressure_data.KB_RESET;
+
+	open_cmd[ko] := open_cmd[ko] OR pressure_data.KO_SET;
+	close_cmd[ko] := close_cmd[ko] OR pressure_data.KO_RESET;
+END_IF;
+
+FOR i := 0 TO counter_armature DO
+	reg_up_out := FALSE;
+	reg_down_out := FALSE;
+	reg_auto_set := FALSE;
+	reg_manual_set := FALSE;
+
+	IF i <= PID_quantity THEN
+		reg_up_out := regulator_data.reg_valve[i].up_out;
+		reg_down_out := regulator_data.reg_valve[i].down_out;
+		reg_auto_set := regulator_data.reg_valve[i].auto_set;
+		reg_manual_set := regulator_data.reg_valve[i].man_set;
+	END_IF;
+
+	valves[i](
+		up := up_cmd[i] OR reg_up_out,
+		down := down_cmd[i] OR reg_down_out,
+		open := open_cmd[i],
+		closed := close_cmd[i],
+		stop := valve_data.stop[i],
+		set_special := FALSE,
+		set_auto := reg_auto_set,
+		set_manual := valve_data.open[i] OR valve_data.closed[i] OR reg_manual_set,
+		block := block_cmd[i],
+		open_state_di := valve_data.open_state_di[i],
+		closed_state_di := valve_data.closed_state_di[i],
+		special_state_di := valve_data.special_state_di[i],
+		wait_time := SETTINGS.wait_time_burner[i],
+		pull_time := SETTINGS.pull_time[i],
+		off_time := SETTINGS.off_time_burner[i],
+		one_state := SETTINGS.BURNER_ONE_STATE[i],
+		imitation_mode := FALSE,
+		block_mode := SETTINGS.BURNER_BLOCK_MODE[i],
+		load_state := FALSE,
+		control_out => valve_data.control_out[i],
+		auto_mode => valve_data.auto_mode[i],
+		open_state => valve_data.open_state[i],
+		closed_state => valve_data.closed_state[i],
+		up_out => valve_data.up_out[i],
+		down_out => valve_data.down_out[i],
+		move_out => valve_data.move_out[i],
+		error => valve_data.error_out[i],
+		state => valve_data.state[i],
+		percent_imitation => valve_data.percent[i]
+	);
+END_FOR;
+
+FOR i := 0 TO counter_armature DO
+	IF i <= PID_quantity THEN
+		regulator_data.reg_valve[i].open_state := valve_data.open_state[i];
+		regulator_data.reg_valve[i].closed_state := valve_data.closed_state[i];
+	END_IF;
+END_FOR;
+
+ignition_data.ignition_flame := valve_data.open_state[ignit];

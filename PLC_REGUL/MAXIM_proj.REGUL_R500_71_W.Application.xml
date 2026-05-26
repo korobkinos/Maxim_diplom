@@ -1,0 +1,429 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Symbolconfiguration xmlns="http://www.3s-software.com/schemas/Symbolconfiguration.xsd">
+  <Header>
+    <Version>3.5.14.0</Version>
+    <SymbolConfigObject version="4.0.0.0" runtimeid="11.7.2.40" libversion="3.5.17.0" compiler="3.5.17.30" lmm="3.5.17.0" profile="Astra.IDE_V1.7.2.1+" settings="SupportOPCUA, LayoutCalculator=OptimizedClientSideLayoutCalculator" />
+    <ProjectInfo name="MAXIM_proj" devicename="REGUL_R500_71_W" appname="Application" />
+  </Header>
+  <TypeList>
+    <TypeSimple name="T_BOOL" size="1" swapsize="0" typeclass="Bool" iecname="BOOL" />
+    <TypeSimple name="T_BYTE" size="1" swapsize="1" typeclass="Byte" iecname="BYTE" />
+    <TypeSimple name="T_DWORD" size="4" swapsize="4" typeclass="DWord" iecname="DWORD" />
+    <TypeSimple name="T_REAL" size="4" swapsize="4" typeclass="Real" iecname="REAL" />
+    <TypeSimple name="T_WORD" size="2" swapsize="2" typeclass="Word" iecname="WORD" />
+    <TypeArray name="T_ARRAY__0__10__OF_BOOL" size="11" nativesize="11" typeclass="Array" iecname="ARRAY [0..10] OF BOOL" basetype="T_BOOL">
+      <ArrayDim minrange="0" maxrange="10" />
+    </TypeArray>
+    <TypeArray name="T_ARRAY__0__10__OF_REAL" size="44" nativesize="44" typeclass="Array" iecname="ARRAY [0..10] OF REAL" basetype="T_REAL">
+      <ArrayDim minrange="0" maxrange="10" />
+    </TypeArray>
+    <TypeArray name="T_ARRAY__0__15__OF_BOOL" size="16" nativesize="16" typeclass="Array" iecname="ARRAY [0..15] OF BOOL" basetype="T_BOOL">
+      <ArrayDim minrange="0" maxrange="15" />
+    </TypeArray>
+    <TypeArray name="T_ARRAY__0__15__OF_REAL" size="64" nativesize="64" typeclass="Array" iecname="ARRAY [0..15] OF REAL" basetype="T_REAL">
+      <ArrayDim minrange="0" maxrange="15" />
+    </TypeArray>
+    <TypeArray name="T_ARRAY__0__16__OF_BOOL" size="17" nativesize="17" typeclass="Array" iecname="ARRAY [0..16] OF BOOL" basetype="T_BOOL">
+      <ArrayDim minrange="0" maxrange="16" />
+    </TypeArray>
+    <TypeArray name="T_ARRAY__0__16__OF_BYTE" size="17" nativesize="17" typeclass="Array" iecname="ARRAY [0..16] OF BYTE" basetype="T_BYTE">
+      <ArrayDim minrange="0" maxrange="16" />
+    </TypeArray>
+    <TypeArray name="T_ARRAY__0__16__OF_REAL" size="68" nativesize="68" typeclass="Array" iecname="ARRAY [0..16] OF REAL" basetype="T_REAL">
+      <ArrayDim minrange="0" maxrange="16" />
+    </TypeArray>
+    <TypeArray name="T_ARRAY__0__2__OF_REAL" size="12" nativesize="12" typeclass="Array" iecname="ARRAY [0..2] OF REAL" basetype="T_REAL">
+      <ArrayDim minrange="0" maxrange="2" />
+    </TypeArray>
+    <TypeArray name="T_ARRAY__0__31__OF_BOOL" size="32" nativesize="32" typeclass="Array" iecname="ARRAY [0..31] OF BOOL" basetype="T_BOOL">
+      <ArrayDim minrange="0" maxrange="31" />
+    </TypeArray>
+    <TypeArray name="T_ARRAY__0__31__OF_DWORD" size="128" nativesize="128" typeclass="Array" iecname="ARRAY [0..31] OF DWORD" basetype="T_DWORD">
+      <ArrayDim minrange="0" maxrange="31" />
+    </TypeArray>
+    <TypeArray name="T_ARRAY__0__31__OF_REAL" size="128" nativesize="128" typeclass="Array" iecname="ARRAY [0..31] OF REAL" basetype="T_REAL">
+      <ArrayDim minrange="0" maxrange="31" />
+    </TypeArray>
+    <TypeArray name="T_ARRAY__0__4__OF_WORD" size="10" nativesize="10" typeclass="Array" iecname="ARRAY [0..4] OF WORD" basetype="T_WORD">
+      <ArrayDim minrange="0" maxrange="4" />
+    </TypeArray>
+    <TypeArray name="T_ARRAY__0__7__OF_REAL" size="32" nativesize="32" typeclass="Array" iecname="ARRAY [0..7] OF REAL" basetype="T_REAL">
+      <ArrayDim minrange="0" maxrange="7" />
+    </TypeArray>
+    <TypeArray name="T_ARRAY__1__10__OF_REAL" size="40" nativesize="40" typeclass="Array" iecname="ARRAY [1..10] OF REAL" basetype="T_REAL">
+      <ArrayDim minrange="1" maxrange="10" />
+    </TypeArray>
+    <TypeArray name="T_ARRAY__1__15__OF_REAL" size="60" nativesize="60" typeclass="Array" iecname="ARRAY [1..15] OF REAL" basetype="T_REAL">
+      <ArrayDim minrange="1" maxrange="15" />
+    </TypeArray>
+    <TypeArray name="T_ARRAY__1__5__OF_REAL" size="20" nativesize="20" typeclass="Array" iecname="ARRAY [1..5] OF REAL" basetype="T_REAL">
+      <ArrayDim minrange="1" maxrange="5" />
+    </TypeArray>
+    <TypeArray name="T_ARRAY__1__7__OF_REAL" size="28" nativesize="28" typeclass="Array" iecname="ARRAY [1..7] OF REAL" basetype="T_REAL">
+      <ArrayDim minrange="1" maxrange="7" />
+    </TypeArray>
+    <TypeArray name="T_ARRAY__1__9__OF_REAL" size="36" nativesize="36" typeclass="Array" iecname="ARRAY [1..9] OF REAL" basetype="T_REAL">
+      <ArrayDim minrange="1" maxrange="9" />
+    </TypeArray>
+    <TypeUserDef name="T_IGNITION_SEQ_STATE_STRUCT" size="18" nativesize="18" typeclass="Userdef" pouclass="STRUCTURE" iecname="IGNITION_SEQ_STATE_STRUCT">
+      <UserDefElement iecname="success" type="T_BOOL" byteoffset="0" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="in_progress" type="T_BOOL" byteoffset="1" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="error" type="T_BOOL" byteoffset="2" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="wait_ventilation" type="T_BOOL" byteoffset="3" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="wait_pressure" type="T_BOOL" byteoffset="4" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="start_burner_done" type="T_BOOL" byteoffset="5" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="vent_skipped_done" type="T_BOOL" byteoffset="6" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="pressure_skipped_done" type="T_BOOL" byteoffset="7" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="vent_watchdog_error" type="T_BOOL" byteoffset="8" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="press_watchdog_error" type="T_BOOL" byteoffset="9" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="stopped" type="T_BOOL" byteoffset="10" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="msg_vent_error" type="T_BOOL" byteoffset="11" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="msg_press_error" type="T_BOOL" byteoffset="12" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="msg_vent_watchdog" type="T_BOOL" byteoffset="13" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="msg_press_watchdog" type="T_BOOL" byteoffset="14" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="msg_stopped" type="T_BOOL" byteoffset="15" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="process_success_imp" type="T_BOOL" byteoffset="16" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="reserved_17" type="T_BOOL" byteoffset="17" vartype="VAR" access="ReadWrite" />
+    </TypeUserDef>
+    <TypeUserDef name="T_IGNITION_STATE_STRUCT" size="18" nativesize="18" typeclass="Userdef" pouclass="STRUCTURE" iecname="IGNITION_STATE_STRUCT">
+      <UserDefElement iecname="in_progress" type="T_BOOL" byteoffset="0" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="no_flame" type="T_BOOL" byteoffset="1" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="success_msg" type="T_BOOL" byteoffset="2" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="reserved_3" type="T_BOOL" byteoffset="3" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="reserved_4" type="T_BOOL" byteoffset="4" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="reserved_5" type="T_BOOL" byteoffset="5" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="reserved_6" type="T_BOOL" byteoffset="6" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="flame_lost" type="T_BOOL" byteoffset="7" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="reserved_8" type="T_BOOL" byteoffset="8" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="reserved_9" type="T_BOOL" byteoffset="9" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="reserved_10" type="T_BOOL" byteoffset="10" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="reserved_11" type="T_BOOL" byteoffset="11" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="reserved_12" type="T_BOOL" byteoffset="12" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="reserved_13" type="T_BOOL" byteoffset="13" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="repeat_msg" type="T_BOOL" byteoffset="14" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="stop_msg" type="T_BOOL" byteoffset="15" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="reserved_16" type="T_BOOL" byteoffset="16" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="reserved_17" type="T_BOOL" byteoffset="17" vartype="VAR" access="ReadWrite" />
+    </TypeUserDef>
+    <TypeUserDef name="T_PRESSURE_STATE_STRUCT" size="18" nativesize="18" typeclass="Userdef" pouclass="STRUCTURE" iecname="PRESSURE_STATE_STRUCT">
+      <UserDefElement iecname="success" type="T_BOOL" byteoffset="0" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="in_progress" type="T_BOOL" byteoffset="1" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="skipped" type="T_BOOL" byteoffset="2" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="reserved_3" type="T_BOOL" byteoffset="3" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="kb_not_closed" type="T_BOOL" byteoffset="4" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="pzk1_leak" type="T_BOOL" byteoffset="5" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="reserved_6" type="T_BOOL" byteoffset="6" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="skip_forbidden" type="T_BOOL" byteoffset="7" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="timeout_cancel" type="T_BOOL" byteoffset="8" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="aborted" type="T_BOOL" byteoffset="9" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="msg_success" type="T_BOOL" byteoffset="10" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="msg_fail" type="T_BOOL" byteoffset="11" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="overpressure" type="T_BOOL" byteoffset="12" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="leak" type="T_BOOL" byteoffset="13" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="full_success" type="T_BOOL" byteoffset="14" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="fast_success" type="T_BOOL" byteoffset="15" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="reserved_16" type="T_BOOL" byteoffset="16" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="abort_forbidden" type="T_BOOL" byteoffset="17" vartype="VAR" access="ReadWrite" />
+    </TypeUserDef>
+    <TypeUserDef name="T_VENT_STATE_STRUCT" size="19" nativesize="19" typeclass="Userdef" pouclass="STRUCTURE" iecname="VENT_STATE_STRUCT">
+      <UserDefElement iecname="success" type="T_BOOL" byteoffset="0" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="in_progress" type="T_BOOL" byteoffset="1" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="skipped" type="T_BOOL" byteoffset="2" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="cancelled" type="T_BOOL" byteoffset="3" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="fan_start_error" type="T_BOOL" byteoffset="4" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="shiber_open_error" type="T_BOOL" byteoffset="5" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="fan_lost" type="T_BOOL" byteoffset="6" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="shiber_reopen" type="T_BOOL" byteoffset="7" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="timeout_reset" type="T_BOOL" byteoffset="8" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="reset_done" type="T_BOOL" byteoffset="9" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="msg_success" type="T_BOOL" byteoffset="10" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="msg_fail" type="T_BOOL" byteoffset="11" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="prestart_success" type="T_BOOL" byteoffset="12" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="skip_success" type="T_BOOL" byteoffset="13" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="shiber_close_error" type="T_BOOL" byteoffset="14" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="post_emergency_success" type="T_BOOL" byteoffset="15" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="post_emergency_active" type="T_BOOL" byteoffset="16" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="prestart_active" type="T_BOOL" byteoffset="17" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="shiber_init_error" type="T_BOOL" byteoffset="18" vartype="VAR" access="ReadWrite" />
+    </TypeUserDef>
+    <TypeArray name="T_ARRAY__0__10__OF_ARRAY__0__4__OF_WORD" size="110" nativesize="110" typeclass="Array" iecname="ARRAY [0..10] OF ARRAY [0..4] OF WORD" basetype="T_ARRAY__0__4__OF_WORD">
+      <ArrayDim minrange="0" maxrange="10" />
+    </TypeArray>
+    <TypeArray name="T_ARRAY__0__31__OF_ARRAY__0__4__OF_WORD" size="320" nativesize="320" typeclass="Array" iecname="ARRAY [0..31] OF ARRAY [0..4] OF WORD" basetype="T_ARRAY__0__4__OF_WORD">
+      <ArrayDim minrange="0" maxrange="31" />
+    </TypeArray>
+    <TypeUserDef name="T_GAS_AIR_PROPORTION" size="120" nativesize="120" typeclass="Userdef" pouclass="STRUCTURE" iecname="GAS_AIR_PROPORTION">
+      <UserDefElement iecname="GAS_VALUE" type="T_ARRAY__1__10__OF_REAL" byteoffset="0" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="AIR_VALUE" type="T_ARRAY__1__10__OF_REAL" byteoffset="40" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="SHIBER_VALUE" type="T_ARRAY__1__10__OF_REAL" byteoffset="80" vartype="VAR" access="ReadWrite" />
+    </TypeUserDef>
+    <TypeUserDef name="T_PID_SETTINGS" size="60" nativesize="60" typeclass="Userdef" pouclass="STRUCTURE" iecname="PID_SETTINGS">
+      <UserDefElement iecname="VALUE" type="T_ARRAY__1__15__OF_REAL" byteoffset="0" vartype="VAR" access="ReadWrite" />
+    </TypeUserDef>
+    <TypeUserDef name="T_PID_TREND_DATA" size="32" nativesize="32" typeclass="Userdef" pouclass="STRUCTURE" iecname="PID_TREND_DATA">
+      <UserDefElement iecname="DATA" type="T_ARRAY__0__7__OF_REAL" byteoffset="0" vartype="VAR" access="ReadWrite" />
+    </TypeUserDef>
+    <TypeUserDef name="T_SCALE_DATA" size="44" nativesize="44" typeclass="Userdef" pouclass="STRUCTURE" iecname="SCALE_DATA">
+      <UserDefElement iecname="VALUE" type="T_ARRAY__0__10__OF_REAL" byteoffset="0" vartype="VAR" access="ReadWrite" />
+    </TypeUserDef>
+    <TypeUserDef name="T_burner_settings" size="40" nativesize="40" typeclass="Userdef" pouclass="STRUCTURE" iecname="burner_settings">
+      <UserDefElement iecname="VALUE" type="T_ARRAY__1__10__OF_REAL" byteoffset="0" vartype="VAR" access="ReadWrite" />
+    </TypeUserDef>
+    <TypeUserDef name="T_ignition_settings" size="20" nativesize="20" typeclass="Userdef" pouclass="STRUCTURE" iecname="ignition_settings">
+      <UserDefElement iecname="VALUE" type="T_ARRAY__1__5__OF_REAL" byteoffset="0" vartype="VAR" access="ReadWrite" />
+    </TypeUserDef>
+    <TypeUserDef name="T_pressure_settings" size="36" nativesize="36" typeclass="Userdef" pouclass="STRUCTURE" iecname="pressure_settings">
+      <UserDefElement iecname="VALUE" type="T_ARRAY__1__9__OF_REAL" byteoffset="0" vartype="VAR" access="ReadWrite" />
+    </TypeUserDef>
+    <TypeUserDef name="T_ventilation_settings" size="28" nativesize="28" typeclass="Userdef" pouclass="STRUCTURE" iecname="ventilation_settings">
+      <UserDefElement iecname="VALUE" type="T_ARRAY__1__7__OF_REAL" byteoffset="0" vartype="VAR" access="ReadWrite" />
+    </TypeUserDef>
+    <TypeArray name="T_ARRAY__0__10__OF_PID_SETTINGS" size="660" nativesize="660" typeclass="Array" iecname="ARRAY [0..10] OF PID_SETTINGS" basetype="T_PID_SETTINGS">
+      <ArrayDim minrange="0" maxrange="10" />
+    </TypeArray>
+    <TypeArray name="T_ARRAY__0__16__OF_SCALE_DATA" size="748" nativesize="748" typeclass="Array" iecname="ARRAY [0..16] OF SCALE_DATA" basetype="T_SCALE_DATA">
+      <ArrayDim minrange="0" maxrange="16" />
+    </TypeArray>
+    <TypeUserDef name="T_PID_CONTROL" size="40" nativesize="40" typeclass="Userdef" pouclass="STRUCTURE" iecname="PID_CONTROL">
+      <UserDefElement iecname="man_up" type="T_BOOL" byteoffset="0" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="man_down" type="T_BOOL" byteoffset="1" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="man_set" type="T_BOOL" byteoffset="2" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="auto_set" type="T_BOOL" byteoffset="3" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="open_state" type="T_BOOL" byteoffset="4" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="closed_state" type="T_BOOL" byteoffset="5" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="up_out" type="T_BOOL" byteoffset="6" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="down_out" type="T_BOOL" byteoffset="7" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="trend" type="T_PID_TREND_DATA" byteoffset="8" vartype="VAR" access="ReadWrite" />
+    </TypeUserDef>
+    <TypeArray name="T_ARRAY__0__10__OF_PID_CONTROL" size="440" nativesize="440" typeclass="Array" iecname="ARRAY [0..10] OF PID_CONTROL" basetype="T_PID_CONTROL">
+      <ArrayDim minrange="0" maxrange="10" />
+    </TypeArray>
+    <TypeArray name="T_ARRAY__0__31__OF_PID_CONTROL" size="1280" nativesize="1280" typeclass="Array" iecname="ARRAY [0..31] OF PID_CONTROL" basetype="T_PID_CONTROL">
+      <ArrayDim minrange="0" maxrange="31" />
+    </TypeArray>
+    <TypeUserDef name="T_SENSOR_AI_SETTINGS" size="748" nativesize="748" typeclass="Userdef" pouclass="STRUCTURE" iecname="SENSOR_AI_SETTINGS">
+      <UserDefElement iecname="SENSOR" type="T_ARRAY__0__16__OF_SCALE_DATA" byteoffset="0" vartype="VAR" access="ReadWrite" />
+    </TypeUserDef>
+  </TypeList>
+  <NodeList>
+    <Node name="Application">
+      <Node name="GVL_BLOCKS">
+        <Node name="valves_blocks" type="T_ARRAY__0__31__OF_BOOL" access="ReadWrite" />
+      </Node>
+      <Node name="GVL_BURNER">
+        <Node name="boiler_in_process" type="T_BOOL" access="ReadWrite" />
+        <Node name="boiler_run" type="T_BOOL" access="ReadWrite" />
+        <Node name="boiler_unload" type="T_BOOL" access="ReadWrite" />
+        <Node name="burner_block" type="T_BOOL" access="ReadWrite" />
+        <Node name="burner_control_state" type="T_DWORD" access="ReadWrite" />
+        <Node name="burner_control_state_groupe_mask" type="T_ARRAY__0__31__OF_BOOL" access="ReadWrite" />
+        <Node name="burner_in_process" type="T_BOOL" access="ReadWrite" />
+        <Node name="burner_start" type="T_BOOL" access="ReadWrite" />
+        <Node name="burner_stop" type="T_BOOL" access="ReadWrite" />
+        <Node name="burner_stop_block" type="T_BOOL" access="ReadWrite" />
+        <Node name="burner_stop_imitation" type="T_BOOL" access="ReadWrite" />
+        <Node name="burner_work" type="T_BOOL" access="ReadWrite" />
+        <Node name="burner_work_LAMP" type="T_BOOL" access="ReadWrite" />
+        <Node name="burner_work_mazut" type="T_BOOL" access="ReadWrite" />
+        <Node name="GAZ_shiber_auto" type="T_BOOL" access="ReadWrite" />
+        <Node name="GAZ_shiber_closed" type="T_BOOL" access="ReadWrite" />
+        <Node name="GAZ_SHIBER_DOWN" type="T_BOOL" access="ReadWrite" />
+        <Node name="GAZ_shiber_manual" type="T_BOOL" access="ReadWrite" />
+        <Node name="GAZ_shiber_open" type="T_BOOL" access="ReadWrite" />
+        <Node name="GAZ_shiber_stop" type="T_BOOL" access="ReadWrite" />
+        <Node name="GAZ_SHIBER_UP" type="T_BOOL" access="ReadWrite" />
+        <Node name="IGNITION_RESET" type="T_BOOL" access="ReadWrite" />
+        <Node name="IGNITION_SET" type="T_BOOL" access="ReadWrite" />
+        <Node name="main_protect_alarm_reset" type="T_BOOL" access="ReadWrite" />
+        <Node name="mazut_enable_main" type="T_BOOL" access="ReadWrite" />
+        <Node name="PZK_1_RESET" type="T_BOOL" access="ReadWrite" />
+        <Node name="PZK_1_SET" type="T_BOOL" access="ReadWrite" />
+        <Node name="PZK_2_RESET" type="T_BOOL" access="ReadWrite" />
+        <Node name="PZK_2_SET" type="T_BOOL" access="ReadWrite" />
+        <Node name="shiber_auto" type="T_BOOL" access="ReadWrite" />
+        <Node name="shiber_closed" type="T_BOOL" access="ReadWrite" />
+        <Node name="SHIBER_DOWN" type="T_BOOL" access="ReadWrite" />
+        <Node name="shiber_manual" type="T_BOOL" access="ReadWrite" />
+        <Node name="shiber_open" type="T_BOOL" access="ReadWrite" />
+        <Node name="shiber_stop" type="T_BOOL" access="ReadWrite" />
+        <Node name="SHIBER_UP" type="T_BOOL" access="ReadWrite" />
+        <Node name="ventilator_burner_off" type="T_BOOL" access="ReadWrite" />
+        <Node name="ventilator_burner_on" type="T_BOOL" access="ReadWrite" />
+      </Node>
+      <Node name="GVL_IGNITION">
+        <Node name="ignition_block" type="T_BOOL" access="ReadWrite" />
+        <Node name="ignition_false_flame" type="T_BOOL" access="ReadWrite" />
+        <Node name="ignition_flame" type="T_BOOL" access="ReadWrite" />
+        <Node name="Ignition_state" type="T_DWORD" access="ReadWrite" />
+        <Node name="Ignition_state_decoded" type="T_IGNITION_STATE_STRUCT" access="ReadWrite" />
+        <Node name="KZ_RESET" type="T_BOOL" access="ReadWrite" />
+        <Node name="KZ_SET" type="T_BOOL" access="ReadWrite" />
+        <Node name="pilot_false_flame" type="T_BOOL" access="ReadWrite" />
+        <Node name="pilot_flame" type="T_BOOL" access="ReadWrite" />
+        <Node name="pilot_flame_sensor_broken" type="T_BOOL" access="ReadWrite" />
+        <Node name="PZK_1_SET" type="T_BOOL" access="ReadWrite" />
+        <Node name="spark_RESET" type="T_BOOL" access="ReadWrite" />
+        <Node name="spark_SET" type="T_BOOL" access="ReadWrite" />
+        <Node name="start" type="T_BOOL" access="ReadWrite" />
+        <Node name="start_block" type="T_BOOL" access="ReadWrite" />
+        <Node name="stop" type="T_BOOL" access="ReadWrite" />
+      </Node>
+      <Node name="GVL_IGNITION_SEQUENCE">
+        <Node name="block" type="T_BOOL" access="ReadWrite" />
+        <Node name="current_step" type="T_WORD" access="ReadWrite" />
+        <Node name="pressure_in_progress" type="T_BOOL" access="ReadWrite" />
+        <Node name="pressure_success" type="T_BOOL" access="ReadWrite" />
+        <Node name="reset" type="T_BOOL" access="ReadWrite" />
+        <Node name="start" type="T_BOOL" access="ReadWrite" />
+        <Node name="start_burner" type="T_BOOL" access="ReadWrite" />
+        <Node name="start_pressure" type="T_BOOL" access="ReadWrite" />
+        <Node name="start_pressure_fast" type="T_BOOL" access="ReadWrite" />
+        <Node name="start_ventilation" type="T_BOOL" access="ReadWrite" />
+        <Node name="state" type="T_DWORD" access="ReadWrite" />
+        <Node name="state_decoded" type="T_IGNITION_SEQ_STATE_STRUCT" access="ReadWrite" />
+        <Node name="stop" type="T_BOOL" access="ReadWrite" />
+        <Node name="vent_in_progress" type="T_BOOL" access="ReadWrite" />
+        <Node name="vent_success" type="T_BOOL" access="ReadWrite" />
+      </Node>
+      <Node name="GVL_MAIN">
+        <Node name="Boiler_status" type="T_WORD" access="ReadWrite" />
+      </Node>
+      <Node name="GVL_PRESSURE">
+        <Node name="abort" type="T_BOOL" access="ReadWrite" />
+        <Node name="abort_block" type="T_BOOL" access="ReadWrite" />
+        <Node name="block" type="T_BOOL" access="ReadWrite" />
+        <Node name="fast_auto" type="T_BOOL" access="ReadWrite" />
+        <Node name="KB_RESET" type="T_BOOL" access="ReadWrite" />
+        <Node name="KB_SET" type="T_BOOL" access="ReadWrite" />
+        <Node name="KO_RESET" type="T_BOOL" access="ReadWrite" />
+        <Node name="KO_SET" type="T_BOOL" access="ReadWrite" />
+        <Node name="P_max_active" type="T_BOOL" access="ReadWrite" />
+        <Node name="P_max_out" type="T_BOOL" access="ReadWrite" />
+        <Node name="P_min_active" type="T_BOOL" access="ReadWrite" />
+        <Node name="P_min_out" type="T_BOOL" access="ReadWrite" />
+        <Node name="Pressure_state" type="T_DWORD" access="ReadWrite" />
+        <Node name="Pressure_state_structure" type="T_PRESSURE_STATE_STRUCT" access="ReadWrite" />
+        <Node name="PZK_1_RESET" type="T_BOOL" access="ReadWrite" />
+        <Node name="PZK_1_SET" type="T_BOOL" access="ReadWrite" />
+        <Node name="skip" type="T_BOOL" access="ReadWrite" />
+        <Node name="start" type="T_BOOL" access="ReadWrite" />
+        <Node name="stop" type="T_BOOL" access="ReadWrite" />
+        <Node name="trend_data" type="T_ARRAY__0__2__OF_REAL" access="ReadWrite" />
+      </Node>
+      <Node name="GVL_PROTECT">
+        <Node name="main_alarm" type="T_BOOL" access="ReadWrite" />
+        <Node name="protect_alarm_out" type="T_ARRAY__0__15__OF_BOOL" access="ReadWrite" />
+        <Node name="protect_alarm_reset" type="T_BOOL" access="ReadWrite" />
+        <Node name="protect_control" type="T_ARRAY__0__15__OF_BOOL" access="ReadWrite" />
+        <Node name="protect_execure_state_out" type="T_ARRAY__0__15__OF_BOOL" access="ReadWrite" />
+        <Node name="protect_signal" type="T_ARRAY__0__15__OF_BOOL" access="ReadWrite" />
+        <Node name="protect_warning_out" type="T_ARRAY__0__15__OF_BOOL" access="ReadWrite" />
+      </Node>
+      <Node name="GVL_REGULATOR">
+        <Node name="air_percent_set_point" type="T_REAL" access="ReadWrite" />
+        <Node name="air_set_point" type="T_REAL" access="ReadWrite" />
+        <Node name="min_power_active" type="T_BOOL" access="ReadWrite" />
+        <Node name="min_power_error" type="T_BOOL" access="ReadWrite" />
+        <Node name="min_power_impulse_up" type="T_BOOL" access="ReadWrite" />
+        <Node name="min_power_limit_active" type="T_BOOL" access="ReadWrite" />
+        <Node name="min_power_pid_auto" type="T_BOOL" access="ReadWrite" />
+        <Node name="min_power_pid_manual" type="T_BOOL" access="ReadWrite" />
+        <Node name="min_power_start" type="T_BOOL" access="ReadWrite" />
+        <Node name="min_power_stop" type="T_BOOL" access="ReadWrite" />
+        <Node name="pid_control" type="T_ARRAY__0__10__OF_PID_CONTROL" access="ReadWrite" />
+        <Node name="pid_ON" type="T_ARRAY__0__10__OF_BOOL" access="ReadWrite" />
+        <Node name="reg_valve" type="T_ARRAY__0__31__OF_PID_CONTROL" access="ReadWrite" />
+        <Node name="UP_limit_active" type="T_BOOL" access="ReadWrite" />
+      </Node>
+      <Node name="GVL_SCALE">
+        <Node name="AI_IN_ALARM_MAX" type="T_ARRAY__0__16__OF_BOOL" access="ReadWrite" />
+        <Node name="AI_IN_ALARM_MIN" type="T_ARRAY__0__16__OF_BOOL" access="ReadWrite" />
+        <Node name="AI_IN_ERR" type="T_ARRAY__0__16__OF_BYTE" access="ReadWrite" />
+        <Node name="AI_IN_RAW" type="T_ARRAY__0__16__OF_REAL" access="ReadWrite" />
+        <Node name="AI_IN_SCALE" type="T_ARRAY__0__16__OF_REAL" access="ReadWrite" />
+        <Node name="AI_IN_WARN_MAX" type="T_ARRAY__0__16__OF_BOOL" access="ReadWrite" />
+        <Node name="AI_IN_WARN_MIN" type="T_ARRAY__0__16__OF_BOOL" access="ReadWrite" />
+      </Node>
+      <Node name="GVL_VALVE">
+        <Node name="auto_mode" type="T_ARRAY__0__31__OF_BOOL" access="ReadWrite" />
+        <Node name="block" type="T_ARRAY__0__31__OF_BOOL" access="ReadWrite" />
+        <Node name="block_out" type="T_ARRAY__0__31__OF_BOOL" access="ReadWrite" />
+        <Node name="closed" type="T_ARRAY__0__31__OF_BOOL" access="ReadWrite" />
+        <Node name="closed_state" type="T_ARRAY__0__31__OF_BOOL" access="ReadWrite" />
+        <Node name="closed_state_di" type="T_ARRAY__0__31__OF_BOOL" access="ReadWrite" />
+        <Node name="control_out" type="T_ARRAY__0__31__OF_BOOL" access="ReadWrite" />
+        <Node name="down" type="T_ARRAY__0__31__OF_BOOL" access="ReadWrite" />
+        <Node name="down_out" type="T_ARRAY__0__31__OF_BOOL" access="ReadWrite" />
+        <Node name="error_out" type="T_ARRAY__0__31__OF_BOOL" access="ReadWrite" />
+        <Node name="error_state" type="T_ARRAY__0__31__OF_BOOL" access="ReadWrite" />
+        <Node name="ignition_start" type="T_BOOL" access="ReadWrite" />
+        <Node name="ignition_stop" type="T_BOOL" access="ReadWrite" />
+        <Node name="imitation_mode" type="T_ARRAY__0__31__OF_BOOL" access="ReadWrite" />
+        <Node name="move_out" type="T_ARRAY__0__31__OF_BOOL" access="ReadWrite" />
+        <Node name="open" type="T_ARRAY__0__31__OF_BOOL" access="ReadWrite" />
+        <Node name="open_state" type="T_ARRAY__0__31__OF_BOOL" access="ReadWrite" />
+        <Node name="open_state_di" type="T_ARRAY__0__31__OF_BOOL" access="ReadWrite" />
+        <Node name="percent_imitation" type="T_ARRAY__0__31__OF_REAL" access="ReadWrite" />
+        <Node name="set_auto" type="T_ARRAY__0__31__OF_BOOL" access="ReadWrite" />
+        <Node name="set_manual" type="T_ARRAY__0__31__OF_BOOL" access="ReadWrite" />
+        <Node name="set_special" type="T_ARRAY__0__31__OF_BOOL" access="ReadWrite" />
+        <Node name="special_state_di" type="T_ARRAY__0__31__OF_BOOL" access="ReadWrite" />
+        <Node name="state" type="T_ARRAY__0__31__OF_DWORD" access="ReadWrite" />
+        <Node name="stop" type="T_ARRAY__0__31__OF_BOOL" access="ReadWrite" />
+        <Node name="stop_out" type="T_ARRAY__0__31__OF_BOOL" access="ReadWrite" />
+        <Node name="up" type="T_ARRAY__0__31__OF_BOOL" access="ReadWrite" />
+        <Node name="up_out" type="T_ARRAY__0__31__OF_BOOL" access="ReadWrite" />
+      </Node>
+      <Node name="GVL_VENTILATION">
+        <Node name="block" type="T_BOOL" access="ReadWrite" />
+        <Node name="fan_on" type="T_BOOL" access="ReadWrite" />
+        <Node name="fan_on_state" type="T_BOOL" access="ReadWrite" />
+        <Node name="reset" type="T_BOOL" access="ReadWrite" />
+        <Node name="shiber_close" type="T_BOOL" access="ReadWrite" />
+        <Node name="shiber_closed_state" type="T_BOOL" access="ReadWrite" />
+        <Node name="shiber_open" type="T_BOOL" access="ReadWrite" />
+        <Node name="shiber_open_state" type="T_BOOL" access="ReadWrite" />
+        <Node name="skip" type="T_BOOL" access="ReadWrite" />
+        <Node name="start" type="T_BOOL" access="ReadWrite" />
+        <Node name="start_post_emergency" type="T_BOOL" access="ReadWrite" />
+        <Node name="stop" type="T_BOOL" access="ReadWrite" />
+        <Node name="time_actual" type="T_WORD" access="ReadWrite" />
+        <Node name="time_left_sec" type="T_DWORD" access="ReadWrite" />
+        <Node name="vent_state" type="T_DWORD" access="ReadWrite" />
+        <Node name="vent_state_decoded" type="T_VENT_STATE_STRUCT" access="ReadWrite" />
+      </Node>
+      <Node name="SETTINGS">
+        <Node name="alarm_stop" type="T_BOOL" access="ReadWrite" />
+        <Node name="armature_simulation" type="T_BOOL" access="ReadWrite" />
+        <Node name="BURNER_BLOCK_MODE" type="T_ARRAY__0__31__OF_BOOL" access="ReadWrite" />
+        <Node name="BURNER_ONE_STATE" type="T_ARRAY__0__31__OF_BOOL" access="ReadWrite" />
+        <Node name="burner_settings" type="T_burner_settings" access="ReadWrite" />
+        <Node name="flame_control_delay" type="T_REAL" access="ReadWrite" />
+        <Node name="gas_air_map" type="T_GAS_AIR_PROPORTION" access="ReadWrite" />
+        <Node name="ignition_settings" type="T_ignition_settings" access="ReadWrite" />
+        <Node name="map_valve_ai_bind" type="T_ARRAY__0__31__OF_ARRAY__0__4__OF_WORD" access="ReadWrite" />
+        <Node name="max_reach_time" type="T_REAL" access="ReadWrite" />
+        <Node name="min_power" type="T_REAL" access="ReadWrite" />
+        <Node name="off_time_burner" type="T_ARRAY__0__31__OF_REAL" access="ReadWrite" />
+        <Node name="p_air_control_delay" type="T_REAL" access="ReadWrite" />
+        <Node name="p_gas_control_delay" type="T_REAL" access="ReadWrite" />
+        <Node name="pid_settings" type="T_ARRAY__0__10__OF_PID_SETTINGS" access="ReadWrite" />
+        <Node name="pres_settings" type="T_pressure_settings" access="ReadWrite" />
+        <Node name="protect_delay_time" type="T_ARRAY__0__15__OF_REAL" access="ReadWrite" />
+        <Node name="protect_enable" type="T_ARRAY__0__15__OF_BOOL" access="ReadWrite" />
+        <Node name="protect_execute_reset" type="T_ARRAY__0__15__OF_BOOL" access="ReadWrite" />
+        <Node name="protect_execute_set" type="T_ARRAY__0__15__OF_BOOL" access="ReadWrite" />
+        <Node name="pull_time" type="T_ARRAY__0__31__OF_REAL" access="ReadWrite" />
+        <Node name="reg_binding_map" type="T_ARRAY__0__10__OF_ARRAY__0__4__OF_WORD" access="ReadWrite" />
+        <Node name="reg_binding_off" type="T_WORD" access="ReadWrite" />
+        <Node name="reg_binding_on" type="T_WORD" access="ReadWrite" />
+        <Node name="SENSOR_AI_SETTINGS" type="T_SENSOR_AI_SETTINGS" access="ReadWrite" />
+        <Node name="shiber_percent" type="T_REAL" access="ReadWrite" />
+        <Node name="test_mode" type="T_BOOL" access="ReadWrite" />
+        <Node name="use_fast_pressure" type="T_BOOL" access="ReadWrite" />
+        <Node name="vent_settings" type="T_ventilation_settings" access="ReadWrite" />
+        <Node name="wait_time_burner" type="T_ARRAY__0__31__OF_REAL" access="ReadWrite" />
+      </Node>
+    </Node>
+  </NodeList>
+</Symbolconfiguration>

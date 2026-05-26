@@ -20,6 +20,7 @@ VAR
 	regulator_data : ST_BURNER_REGULATOR_DATA;
 	valve_data     : ST_BURNER_VALVE_DATA;
 	hmi_sync       : FB_BURNER_HMI_SYNC;
+	armature       : FB_BURNER_ARMATURE;
 END_VAR
 
 // === IMPLEMENTATION ===
@@ -41,6 +42,16 @@ hmi_sync(
 	protect_data := protect_data,
 	regulator_data := regulator_data,
 	valve_data := valve_data
+);
+
+armature(
+	burner_id := burner_id,
+	enable := enable,
+	valve_data := valve_data,
+	burner_data := burner_data,
+	ignition_data := ignition_data,
+	pressure_data := pressure_data,
+	regulator_data := regulator_data
 );
 
 IF NOT enable THEN

@@ -17,6 +17,9 @@ STRUCT
 	special_state_di  : ARRAY[0..counter_armature] OF BOOL;
 	open_state        : ARRAY[0..counter_armature] OF BOOL;
 	closed_state      : ARRAY[0..counter_armature] OF BOOL;
+	auto_mode         : ARRAY[0..counter_armature] OF BOOL;
+	up_out            : ARRAY[0..counter_armature] OF BOOL;
+	down_out          : ARRAY[0..counter_armature] OF BOOL;
 	error_out         : ARRAY[0..counter_armature] OF BOOL;
 	control_out       : ARRAY[0..counter_armature] OF BOOL;
 	move_out          : ARRAY[0..counter_armature] OF BOOL;
