@@ -1,0 +1,215 @@
+FUNCTION_BLOCK FB_BURNER_REGULATOR
+VAR_INPUT
+	burner_id : WORD;
+	enable    : BOOL;
+END_VAR
+
+VAR_IN_OUT
+	regulator_data : ST_BURNER_REGULATOR_DATA;
+	burner_data    : ST_BURNER_DATA;
+	valve_data     : ST_BURNER_VALVE_DATA;
+	protect_data   : ST_BURNER_PROTECT_DATA;
+END_VAR
+
+VAR
+	burner_pid        : ARRAY[0..PID_quantity] OF PID_singl;
+	pid_on_rs         : ARRAY[0..PID_quantity] OF RS;
+	min_power         : min_power_pwm_singl;
+	air_from_gas      : air_from_gas_set;
+	pid_on            : ARRAY[0..PID_quantity] OF BOOL;
+	pid_trend         : ARRAY[0..PID_quantity] OF PID_TREND_DATA;
+	pid_settings_local: PID_SETTINGS;
+	air_set_point_tmp : REAL;
+	shiber_percent_tmp: REAL;
+	gas_sensor_value  : REAL;
+	min_power_error   : BOOL;
+	alarm_accum       : BOOL;
+	warning_accum     : BOOL;
+	auto_set_cmd      : BOOL;
+	auto_reset_cmd    : BOOL;
+	pid_idx           : WORD;
+	valve_idx         : WORD;
+	pv_idx            : WORD;
+	proc_idx          : WORD;
+	local_idx         : WORD;
+	global_idx        : WORD;
+	i                 : WORD;
+END_VAR
+
+// === IMPLEMENTATION ===
+
+IF NOT enable THEN
+	min_power(
+		Start := FALSE,
+		Stop := TRUE,
+		Pulse := 0.1,
+		Pause := 5,
+		min_power_sp := SETTINGS.min_power,
+		sensor := 0.0,
+		max_reach_time := SETTINGS.max_reach_time,
+		PwmOutput => regulator_data.min_power_impulse_up,
+		min_power_error => min_power_error
+	);
+
+	FOR i := 0 TO PID_quantity DO
+		local_idx := i;
+		global_idx := GetBurnerRegulatorIndex(burner_id := burner_id, local_idx := local_idx);
+
+		pid_on_rs[i](
+			SET := FALSE,
+			RESET1 := TRUE,
+			Q1 => pid_on[i]
+		);
+
+		regulator_data.reg_valve[i].auto_set := FALSE;
+		regulator_data.reg_valve[i].man_set := FALSE;
+		regulator_data.reg_valve[i].up_out := FALSE;
+		regulator_data.reg_valve[i].down_out := FALSE;
+		regulator_data.reg_valve[i].open_state := FALSE;
+		regulator_data.reg_valve[i].closed_state := FALSE;
+		regulator_data.reg_valve[i].feedback := 0.0;
+		regulator_data.reg_valve[i].output := 0.0;
+		regulator_data.reg_valve[i].alarm := FALSE;
+		regulator_data.reg_valve[i].warning := FALSE;
+
+		GVL_BURNER_REGULATOR.up_out[global_idx] := FALSE;
+		GVL_BURNER_REGULATOR.down_out[global_idx] := FALSE;
+		GVL_BURNER_REGULATOR.feedback[global_idx] := 0.0;
+		GVL_BURNER_REGULATOR.output[global_idx] := 0.0;
+		GVL_BURNER_REGULATOR.alarm[global_idx] := FALSE;
+		GVL_BURNER_REGULATOR.warning[global_idx] := FALSE;
+	END_FOR;
+
+	regulator_data.enable := FALSE;
+	regulator_data.auto_mode := FALSE;
+	regulator_data.manual_mode := FALSE;
+	regulator_data.min_power_impulse_up := FALSE;
+	regulator_data.load_feedback := 0.0;
+	regulator_data.alarm := FALSE;
+	regulator_data.warning := FALSE;
+	regulator_data.state := 0;
+ELSE
+	regulator_data.enable := TRUE;
+	regulator_data.auto_mode := burner_data.auto_mode;
+	regulator_data.manual_mode := burner_data.manual_mode;
+	gas_sensor_value := GVL_SCALE.AI_IN_SCALE[gas_pressure_burner];
+
+	air_from_gas(
+		gas_sensor := gas_sensor_value,
+		settings := SETTINGS.gas_air_map,
+		air_set_point => air_set_point_tmp,
+		shiber_percent => shiber_percent_tmp
+	);
+
+	alarm_accum := FALSE;
+	warning_accum := FALSE;
+
+	FOR i := 0 TO PID_quantity DO
+		local_idx := i;
+		global_idx := GetBurnerRegulatorIndex(burner_id := burner_id, local_idx := local_idx);
+
+		regulator_data.reg_valve[i].up_out := FALSE;
+		regulator_data.reg_valve[i].down_out := FALSE;
+		regulator_data.reg_valve[i].feedback := 0.0;
+		regulator_data.reg_valve[i].output := 0.0;
+		regulator_data.reg_valve[i].alarm := FALSE;
+		regulator_data.reg_valve[i].warning := FALSE;
+
+		GVL_BURNER_REGULATOR.up_out[global_idx] := FALSE;
+		GVL_BURNER_REGULATOR.down_out[global_idx] := FALSE;
+		GVL_BURNER_REGULATOR.feedback[global_idx] := regulator_data.reg_valve[i].feedback;
+		GVL_BURNER_REGULATOR.output[global_idx] := regulator_data.reg_valve[i].output;
+		GVL_BURNER_REGULATOR.alarm[global_idx] := FALSE;
+		GVL_BURNER_REGULATOR.warning[global_idx] := FALSE;
+	END_FOR;
+
+	FOR i := 0 TO PID_quantity DO
+		IF SETTINGS.reg_binding_map[i][0] = reg_binding_on THEN
+			pid_idx := SETTINGS.reg_binding_map[i][1];
+			valve_idx := SETTINGS.reg_binding_map[i][2];
+			pv_idx := SETTINGS.reg_binding_map[i][3];
+			proc_idx := SETTINGS.reg_binding_map[i][4];
+
+			IF (pid_idx <= PID_quantity) AND (valve_idx <= counter_armature) AND (pv_idx <= in_out_quantity) AND (proc_idx <= in_out_quantity) THEN
+				auto_set_cmd := regulator_data.reg_valve[pid_idx].auto_set;
+				auto_reset_cmd := regulator_data.reg_valve[pid_idx].man_set;
+
+				IF regulator_data.auto_mode THEN
+					auto_set_cmd := TRUE;
+				END_IF;
+				IF regulator_data.manual_mode THEN
+					auto_reset_cmd := TRUE;
+				END_IF;
+
+				pid_on_rs[pid_idx](
+					SET := auto_set_cmd,
+					RESET1 := auto_reset_cmd,
+					Q1 => pid_on[pid_idx]
+				);
+
+				pid_settings_local := SETTINGS.pid_settings[pid_idx];
+
+				IF regulator_data.reg_valve[pid_idx].setpoint > 0.0 THEN
+					pid_settings_local.VALUE[SP] := regulator_data.reg_valve[pid_idx].setpoint;
+				END_IF;
+
+				IF pid_idx = burner_pGas THEN
+					IF regulator_data.load_setpoint > 0.0 THEN
+						pid_settings_local.VALUE[SP] := regulator_data.load_setpoint;
+					END_IF;
+				ELSIF pid_idx = burner_pAir THEN
+					pid_settings_local.VALUE[SP] := air_set_point_tmp;
+				ELSIF pid_idx = burner_posShiber THEN
+					pid_settings_local.VALUE[SP] := shiber_percent_tmp;
+				END_IF;
+
+				burner_pid[pid_idx](
+					sensor := GVL_SCALE.AI_IN_SCALE[pv_idx],
+					settings := pid_settings_local,
+					up_block := FALSE,
+					down_block := FALSE,
+					PID_EN := pid_on[pid_idx] AND NOT protect_data.main_alarm,
+					up_man := valve_data.up[valve_idx],
+					down_man := valve_data.down[valve_idx],
+					up_out => regulator_data.reg_valve[pid_idx].up_out,
+					down_out => regulator_data.reg_valve[pid_idx].down_out,
+					data_trend => pid_trend[pid_idx]
+				);
+
+				regulator_data.reg_valve[pid_idx].open_state := valve_data.open_state[valve_idx];
+				regulator_data.reg_valve[pid_idx].closed_state := valve_data.closed_state[valve_idx];
+				regulator_data.reg_valve[pid_idx].feedback := pid_trend[pid_idx].DATA[PID_TREND_PV];
+				regulator_data.reg_valve[pid_idx].output := GVL_SCALE.AI_IN_SCALE[proc_idx];
+				regulator_data.reg_valve[pid_idx].alarm := valve_data.error_out[valve_idx];
+				alarm_accum := alarm_accum OR regulator_data.reg_valve[pid_idx].alarm;
+				warning_accum := warning_accum OR regulator_data.reg_valve[pid_idx].warning;
+
+				local_idx := pid_idx;
+				global_idx := GetBurnerRegulatorIndex(burner_id := burner_id, local_idx := local_idx);
+				GVL_BURNER_REGULATOR.up_out[global_idx] := regulator_data.reg_valve[pid_idx].up_out;
+				GVL_BURNER_REGULATOR.down_out[global_idx] := regulator_data.reg_valve[pid_idx].down_out;
+				GVL_BURNER_REGULATOR.feedback[global_idx] := regulator_data.reg_valve[pid_idx].feedback;
+				GVL_BURNER_REGULATOR.output[global_idx] := regulator_data.reg_valve[pid_idx].output;
+				GVL_BURNER_REGULATOR.alarm[global_idx] := regulator_data.reg_valve[pid_idx].alarm;
+				GVL_BURNER_REGULATOR.warning[global_idx] := regulator_data.reg_valve[pid_idx].warning;
+			END_IF;
+		END_IF;
+	END_FOR;
+
+	min_power(
+		Start := burner_data.burner_start,
+		Stop := burner_data.burner_stop OR protect_data.main_alarm OR NOT burner_data.boiler_run,
+		Pulse := 0.1,
+		Pause := 5,
+		min_power_sp := SETTINGS.min_power,
+		sensor := gas_sensor_value,
+		max_reach_time := SETTINGS.max_reach_time,
+		PwmOutput => regulator_data.min_power_impulse_up,
+		min_power_error => min_power_error
+	);
+
+	regulator_data.load_feedback := regulator_data.reg_valve[burner_pGas].feedback;
+	regulator_data.alarm := alarm_accum OR min_power_error;
+	regulator_data.warning := warning_accum;
+	regulator_data.state := 0;
+END_IF;

@@ -22,6 +22,7 @@ VAR
 	hmi_sync       : FB_BURNER_HMI_SYNC;
 	pressure       : FB_BURNER_PRESSURE;
 	ignition       : FB_BURNER_IGNITION;
+	regulator      : FB_BURNER_REGULATOR;
 	armature       : FB_BURNER_ARMATURE;
 	protect        : FB_BURNER_PROTECT;
 END_VAR
@@ -60,6 +61,15 @@ ignition(
 	enable := enable,
 	ignition_data := ignition_data,
 	valve_data := valve_data
+);
+
+regulator(
+	burner_id := burner_id,
+	enable := enable,
+	regulator_data := regulator_data,
+	burner_data := burner_data,
+	valve_data := valve_data,
+	protect_data := protect_data
 );
 
 armature(
