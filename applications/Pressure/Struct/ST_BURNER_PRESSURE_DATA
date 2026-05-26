@@ -1,0 +1,23 @@
+﻿TYPE ST_BURNER_PRESSURE_DATA :
+STRUCT
+	// Внутренняя память для будущего FB_BURNER_UNIT.
+	// К текущей логике одной горелки пока не подключено.
+	// Локальная 0-базная индексация внутренних массивов сохранена (арматура 0..counter_armature, защиты 0..burner_protect_quantity, регуляторы 0..PID_quantity).
+	// Визуализация и OPC UA используют отдельные плоские карты GVL_BURNER_*.
+	// Вентиляция остается логикой уровня котла и в эти типы не входит.
+	// Логика AutoBurner и общая автопоследовательность здесь не описываются.
+	start             : BOOL;
+	stop              : BOOL;
+	ready             : BOOL;
+	alarm             : BOOL;
+	warning           : BOOL;
+	PZK_1_SET         : BOOL;
+	PZK_1_RESET       : BOOL;
+	KB_SET            : BOOL;
+	KB_RESET          : BOOL;
+	KO_SET            : BOOL;
+	KO_RESET          : BOOL;
+	step              : WORD;
+	state             : DWORD;
+END_STRUCT
+END_TYPE

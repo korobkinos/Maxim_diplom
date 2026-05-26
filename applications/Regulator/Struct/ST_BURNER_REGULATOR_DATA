@@ -1,0 +1,20 @@
+﻿TYPE ST_BURNER_REGULATOR_DATA :
+STRUCT
+	// Внутренняя память для будущего FB_BURNER_UNIT.
+	// К текущей логике одной горелки пока не подключено.
+	// Локальная 0-базная индексация внутренних массивов сохранена (арматура 0..counter_armature, защиты 0..burner_protect_quantity, регуляторы 0..PID_quantity).
+	// Визуализация и OPC UA используют отдельные плоские карты GVL_BURNER_*.
+	// Вентиляция остается логикой уровня котла и в эти типы не входит.
+	// Логика AutoBurner и общая автопоследовательность здесь не описываются.
+	enable               : BOOL;
+	auto_mode            : BOOL;
+	manual_mode          : BOOL;
+	load_setpoint        : REAL;
+	load_feedback        : REAL;
+	min_power_impulse_up : BOOL;
+	reg_valve            : ARRAY[0..PID_quantity] OF ST_REG_VALVE;
+	alarm                : BOOL;
+	warning              : BOOL;
+	state                : DWORD;
+END_STRUCT
+END_TYPE
