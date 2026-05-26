@@ -149,10 +149,10 @@ ELSE
 		burner_data.state := BURNER_STATE_IGNITION_ACTIVE;
 	ELSIF pressure_in_progress THEN
 		burner_data.state := BURNER_STATE_PRESSURE_ACTIVE;
-	ELSIF burner_data.ready THEN
-		burner_data.state := BURNER_STATE_READY;
 	ELSIF burner_data.warning THEN
 		burner_data.state := BURNER_STATE_WARNING;
+	ELSIF burner_data.ready THEN
+		burner_data.state := BURNER_STATE_READY;
 	ELSE
 		burner_data.state := BURNER_STATE_STOPPED;
 	END_IF;
