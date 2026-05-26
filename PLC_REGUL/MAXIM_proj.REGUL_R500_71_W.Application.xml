@@ -36,9 +36,6 @@
     <TypeArray name="T_ARRAY__1__5__OF_REAL" size="20" nativesize="20" typeclass="Array" iecname="ARRAY [1..5] OF REAL" basetype="T_REAL">
       <ArrayDim minrange="1" maxrange="5" />
     </TypeArray>
-    <TypeArray name="T_ARRAY__1__7__OF_REAL" size="28" nativesize="28" typeclass="Array" iecname="ARRAY [1..7] OF REAL" basetype="T_REAL">
-      <ArrayDim minrange="1" maxrange="7" />
-    </TypeArray>
     <TypeArray name="T_ARRAY__1__9__OF_REAL" size="36" nativesize="36" typeclass="Array" iecname="ARRAY [1..9] OF REAL" basetype="T_REAL">
       <ArrayDim minrange="1" maxrange="9" />
     </TypeArray>
@@ -67,9 +64,6 @@
     </TypeUserDef>
     <TypeUserDef name="T_pressure_settings" size="36" nativesize="36" typeclass="Userdef" pouclass="STRUCTURE" iecname="pressure_settings">
       <UserDefElement iecname="VALUE" type="T_ARRAY__1__9__OF_REAL" byteoffset="0" vartype="VAR" access="ReadWrite" />
-    </TypeUserDef>
-    <TypeUserDef name="T_ventilation_settings" size="28" nativesize="28" typeclass="Userdef" pouclass="STRUCTURE" iecname="ventilation_settings">
-      <UserDefElement iecname="VALUE" type="T_ARRAY__1__7__OF_REAL" byteoffset="0" vartype="VAR" access="ReadWrite" />
     </TypeUserDef>
     <TypeArray name="T_ARRAY__0__10__OF_PID_SETTINGS" size="660" nativesize="660" typeclass="Array" iecname="ARRAY [0..10] OF PID_SETTINGS" basetype="T_PID_SETTINGS">
       <ArrayDim minrange="0" maxrange="10" />
@@ -111,8 +105,6 @@
         <Node name="SENSOR_AI_SETTINGS" type="T_SENSOR_AI_SETTINGS" access="ReadWrite" />
         <Node name="shiber_percent" type="T_REAL" access="ReadWrite" />
         <Node name="test_mode" type="T_BOOL" access="ReadWrite" />
-        <Node name="use_fast_pressure" type="T_BOOL" access="ReadWrite" />
-        <Node name="vent_settings" type="T_ventilation_settings" access="ReadWrite" />
         <Node name="wait_time_burner" type="T_ARRAY__0__31__OF_REAL" access="ReadWrite" />
       </Node>
     </Node>
