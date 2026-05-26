@@ -1,0 +1,19 @@
+﻿{attribute 'qualified_only'}
+VAR_GLOBAL
+	(*
+	Плоская карта HMI/OPC UA для регуляторов горелок.
+	Вложенные массивы не используются из-за ограничений Weintek/OPC UA.
+	Карта зарезервирована для будущей миграции на несколько горелок.
+	На текущую логику одной горелки карта пока не подключена.
+	Глобальные индексы 1-базные и должны формироваться через GetBurnerRegulatorIndex.
+	*)
+	auto_set       : ARRAY[1..total_burner_regulator_quantity] OF BOOL;
+	man_set        : ARRAY[1..total_burner_regulator_quantity] OF BOOL;
+	up_out         : ARRAY[1..total_burner_regulator_quantity] OF BOOL;
+	down_out       : ARRAY[1..total_burner_regulator_quantity] OF BOOL;
+	setpoint       : ARRAY[1..total_burner_regulator_quantity] OF REAL;
+	feedback       : ARRAY[1..total_burner_regulator_quantity] OF REAL;
+	output         : ARRAY[1..total_burner_regulator_quantity] OF REAL;
+	alarm          : ARRAY[1..total_burner_regulator_quantity] OF BOOL;
+	warning        : ARRAY[1..total_burner_regulator_quantity] OF BOOL;
+END_VAR

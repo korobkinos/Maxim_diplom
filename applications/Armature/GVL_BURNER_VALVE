@@ -1,0 +1,23 @@
+﻿{attribute 'qualified_only'}
+VAR_GLOBAL
+	(*
+	Плоская карта HMI/OPC UA для арматуры горелок.
+	Вложенные массивы не используются из-за ограничений Weintek/OPC UA.
+	Карта зарезервирована для будущей миграции на несколько горелок.
+	На текущую логику одной горелки карта пока не подключена.
+	Глобальные индексы 1-базные и должны формироваться через GetBurnerValveIndex.
+	*)
+	up             : ARRAY[1..total_burner_valve_quantity] OF BOOL;
+	down           : ARRAY[1..total_burner_valve_quantity] OF BOOL;
+	open           : ARRAY[1..total_burner_valve_quantity] OF BOOL;
+	closed         : ARRAY[1..total_burner_valve_quantity] OF BOOL;
+	stop           : ARRAY[1..total_burner_valve_quantity] OF BOOL;
+	block          : ARRAY[1..total_burner_valve_quantity] OF BOOL;
+	open_state     : ARRAY[1..total_burner_valve_quantity] OF BOOL;
+	closed_state   : ARRAY[1..total_burner_valve_quantity] OF BOOL;
+	error_out      : ARRAY[1..total_burner_valve_quantity] OF BOOL;
+	control_out    : ARRAY[1..total_burner_valve_quantity] OF BOOL;
+	move_out       : ARRAY[1..total_burner_valve_quantity] OF BOOL;
+	state          : ARRAY[1..total_burner_valve_quantity] OF DWORD;
+	percent        : ARRAY[1..total_burner_valve_quantity] OF REAL;
+END_VAR
