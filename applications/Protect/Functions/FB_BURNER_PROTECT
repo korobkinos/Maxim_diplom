@@ -27,6 +27,7 @@ VAR
 	warning_value          : BOOL;
 	cmd_execute_set        : BOOL;
 	cmd_execute_reset      : BOOL;
+	pilot_p_control_current: BOOL;
 	i                      : WORD;
 END_VAR
 
@@ -60,6 +61,20 @@ ELSE
 
 	pzk_2_ft(CLK := valve_data.control_out[pzk_2]);
 
+	pilot_p_control_current := protect_data.protect_control[PROTECT_CONSTANT.pilot_p];
+	IF valve_data.control_out[pzk_2] AND flame_control_delay_ton.Q THEN
+		pilot_p_control_current := TRUE;
+	END_IF;
+	IF pzk_2_ft.Q OR protect_data.protect_alarm[PROTECT_CONSTANT.pilot_p] THEN
+		pilot_p_control_current := FALSE;
+	END_IF;
+	IF SETTINGS.test_mode THEN
+		pilot_p_control_current := TRUE;
+	END_IF;
+	IF NOT SETTINGS.protect_enable[PROTECT_CONSTANT.pilot_p] THEN
+		pilot_p_control_current := FALSE;
+	END_IF;
+
 	FOR i := 0 TO burner_protect_quantity DO
 		signal_value := protect_data.protect_input[i];
 		control_value := protect_data.protect_control[i];
@@ -82,7 +97,7 @@ ELSE
 				IF valve_data.open_state[pzk_1] AND valve_data.open_state[kz] AND burner_data.boiler_in_process THEN
 					control_value := TRUE;
 				END_IF;
-				IF protect_data.protect_control[PROTECT_CONSTANT.pilot_p] OR pzk_2_ft.Q THEN
+				IF pilot_p_control_current OR pzk_2_ft.Q THEN
 					control_value := FALSE;
 				END_IF;
 			PROTECT_CONSTANT.air_burner_p:
