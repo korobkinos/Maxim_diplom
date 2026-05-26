@@ -16,6 +16,9 @@ VAR_GLOBAL CONSTANT
 	regulator_per_burner					:		WORD:=PID_quantity+1; //Количество регуляторов на горелку (локальная индексация 0..PID_quantity)
 	total_burner_regulator_quantity			:		WORD:=burner_quantity*regulator_per_burner; //Плоский размер массива регуляторов для всех горелок
 
+	pressure_per_burner						:		WORD:=1;			//Количество контуров опрессовки на горелку
+	total_burner_pressure_quantity			:		WORD:=burner_quantity*pressure_per_burner; //Плоский размер массива опрессовки для всех горелок
+
 	(*
 	Пояснение по области миграции:
 	- функции индексации переводят локальные индексы горелки в плоский глобальный индекс;

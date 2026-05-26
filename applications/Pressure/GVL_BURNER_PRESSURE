@@ -1,0 +1,38 @@
+{attribute 'qualified_only'}
+VAR_GLOBAL
+	(*
+	Плоская карта HMI/OPC UA для опрессовки горелок.
+	Вложенные массивы не используются из-за ограничений Weintek/OPC UA.
+	Глобальные индексы 1-базные и должны формироваться через GetBurnerPressureIndex.
+	*)
+	start           : ARRAY[1..total_burner_pressure_quantity] OF BOOL;
+	stop            : ARRAY[1..total_burner_pressure_quantity] OF BOOL;
+	block           : ARRAY[1..total_burner_pressure_quantity] OF BOOL;
+	skip            : ARRAY[1..total_burner_pressure_quantity] OF BOOL;
+	fast_auto       : ARRAY[1..total_burner_pressure_quantity] OF BOOL;
+	abort           : ARRAY[1..total_burner_pressure_quantity] OF BOOL;
+	abort_block     : ARRAY[1..total_burner_pressure_quantity] OF BOOL;
+	p_max_active    : ARRAY[1..total_burner_pressure_quantity] OF BOOL;
+	p_min_active    : ARRAY[1..total_burner_pressure_quantity] OF BOOL;
+
+	ready           : ARRAY[1..total_burner_pressure_quantity] OF BOOL;
+	success         : ARRAY[1..total_burner_pressure_quantity] OF BOOL;
+	in_progress     : ARRAY[1..total_burner_pressure_quantity] OF BOOL;
+	alarm           : ARRAY[1..total_burner_pressure_quantity] OF BOOL;
+	warning         : ARRAY[1..total_burner_pressure_quantity] OF BOOL;
+	p_max_out       : ARRAY[1..total_burner_pressure_quantity] OF BOOL;
+	p_min_out       : ARRAY[1..total_burner_pressure_quantity] OF BOOL;
+
+	PZK_1_SET       : ARRAY[1..total_burner_pressure_quantity] OF BOOL;
+	PZK_1_RESET     : ARRAY[1..total_burner_pressure_quantity] OF BOOL;
+	KB_SET          : ARRAY[1..total_burner_pressure_quantity] OF BOOL;
+	KB_RESET        : ARRAY[1..total_burner_pressure_quantity] OF BOOL;
+	KO_SET          : ARRAY[1..total_burner_pressure_quantity] OF BOOL;
+	KO_RESET        : ARRAY[1..total_burner_pressure_quantity] OF BOOL;
+
+	step            : ARRAY[1..total_burner_pressure_quantity] OF WORD;
+	state           : ARRAY[1..total_burner_pressure_quantity] OF DWORD;
+	trend_pressure  : ARRAY[1..total_burner_pressure_quantity] OF REAL;
+	trend_p_min     : ARRAY[1..total_burner_pressure_quantity] OF REAL;
+	trend_p_max     : ARRAY[1..total_burner_pressure_quantity] OF REAL;
+END_VAR

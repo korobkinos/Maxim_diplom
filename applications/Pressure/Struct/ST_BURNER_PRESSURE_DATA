@@ -8,9 +8,18 @@ STRUCT
 	// Логика AutoBurner и общая автопоследовательность здесь не описываются.
 	start             : BOOL;
 	stop              : BOOL;
+	block             : BOOL;
+	skip              : BOOL;
+	fast_auto         : BOOL;
+	abort             : BOOL;
+	abort_block       : BOOL;
 	ready             : BOOL;
 	alarm             : BOOL;
 	warning           : BOOL;
+	p_max_active      : BOOL;
+	p_min_active      : BOOL;
+	p_max_out         : BOOL;
+	p_min_out         : BOOL;
 	PZK_1_SET         : BOOL;
 	PZK_1_RESET       : BOOL;
 	KB_SET            : BOOL;

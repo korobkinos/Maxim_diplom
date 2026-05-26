@@ -1,0 +1,142 @@
+FUNCTION_BLOCK FB_BURNER_PRESSURE
+VAR_INPUT
+	burner_id : WORD;
+	enable    : BOOL;
+END_VAR
+
+VAR_IN_OUT
+	pressure_data : ST_BURNER_PRESSURE_DATA;
+	burner_data   : ST_BURNER_DATA;
+	valve_data    : ST_BURNER_VALVE_DATA;
+END_VAR
+
+VAR
+	pressure_control      : pressure_singl;
+	pressure_state_decoded: PRESSURE_STATE_STRUCT;
+	pressure_alarm_tmp    : BOOL;
+	pressure_warning_tmp  : BOOL;
+	global_idx            : WORD;
+	local_idx             : WORD;
+END_VAR
+
+// === IMPLEMENTATION ===
+
+local_idx := 0;
+global_idx := GetBurnerPressureIndex(burner_id := burner_id, local_idx := local_idx);
+
+IF NOT enable THEN
+	pressure_data.start := FALSE;
+	pressure_data.stop := FALSE;
+	pressure_data.block := FALSE;
+	pressure_data.skip := FALSE;
+	pressure_data.fast_auto := FALSE;
+	pressure_data.abort := FALSE;
+	pressure_data.abort_block := FALSE;
+	pressure_data.p_max_active := FALSE;
+	pressure_data.p_min_active := FALSE;
+	pressure_data.p_max_out := FALSE;
+	pressure_data.p_min_out := FALSE;
+	pressure_data.ready := FALSE;
+	pressure_data.alarm := FALSE;
+	pressure_data.warning := FALSE;
+	pressure_data.PZK_1_SET := FALSE;
+	pressure_data.PZK_1_RESET := FALSE;
+	pressure_data.KB_SET := FALSE;
+	pressure_data.KB_RESET := FALSE;
+	pressure_data.KO_SET := FALSE;
+	pressure_data.KO_RESET := FALSE;
+	pressure_data.step := 0;
+	pressure_data.state := 0;
+
+	GVL_BURNER_PRESSURE.ready[global_idx] := FALSE;
+	GVL_BURNER_PRESSURE.success[global_idx] := FALSE;
+	GVL_BURNER_PRESSURE.in_progress[global_idx] := FALSE;
+	GVL_BURNER_PRESSURE.alarm[global_idx] := FALSE;
+	GVL_BURNER_PRESSURE.warning[global_idx] := FALSE;
+	GVL_BURNER_PRESSURE.p_max_out[global_idx] := FALSE;
+	GVL_BURNER_PRESSURE.p_min_out[global_idx] := FALSE;
+	GVL_BURNER_PRESSURE.PZK_1_SET[global_idx] := FALSE;
+	GVL_BURNER_PRESSURE.PZK_1_RESET[global_idx] := FALSE;
+	GVL_BURNER_PRESSURE.KB_SET[global_idx] := FALSE;
+	GVL_BURNER_PRESSURE.KB_RESET[global_idx] := FALSE;
+	GVL_BURNER_PRESSURE.KO_SET[global_idx] := FALSE;
+	GVL_BURNER_PRESSURE.KO_RESET[global_idx] := FALSE;
+	GVL_BURNER_PRESSURE.step[global_idx] := 0;
+	GVL_BURNER_PRESSURE.state[global_idx] := 0;
+	GVL_BURNER_PRESSURE.trend_pressure[global_idx] := 0.0;
+	GVL_BURNER_PRESSURE.trend_p_min[global_idx] := 0.0;
+	GVL_BURNER_PRESSURE.trend_p_max[global_idx] := 0.0;
+ELSE
+	pressure_data.start := GVL_BURNER_PRESSURE.start[global_idx];
+	pressure_data.stop := GVL_BURNER_PRESSURE.stop[global_idx];
+	pressure_data.block := GVL_BURNER_PRESSURE.block[global_idx];
+	pressure_data.skip := GVL_BURNER_PRESSURE.skip[global_idx];
+	pressure_data.fast_auto := GVL_BURNER_PRESSURE.fast_auto[global_idx];
+	pressure_data.abort := GVL_BURNER_PRESSURE.abort[global_idx];
+	pressure_data.abort_block := GVL_BURNER_PRESSURE.abort_block[global_idx];
+	pressure_data.p_max_active := GVL_BURNER_PRESSURE.p_max_active[global_idx];
+	pressure_data.p_min_active := GVL_BURNER_PRESSURE.p_min_active[global_idx];
+
+	pressure_control(
+		block := pressure_data.block OR burner_data.boiler_run,
+		start := pressure_data.start,
+		stop := pressure_data.stop,
+		abort := pressure_data.abort OR valve_data.control_out[pzk_2],
+		abort_block := pressure_data.abort_block,
+		skip := pressure_data.skip,
+		fast_auto := pressure_data.fast_auto,
+		Pressure_sensor_in := GVL_SCALE.AI_IN_SCALE[pressure_sensor],
+		KB_on_state := valve_data.open_state[kb],
+		PZK_1_on_state := valve_data.open_state[pzk_1],
+		P_max_active := pressure_data.p_max_active,
+		P_min_active := pressure_data.p_min_active,
+		pressure_source_mode := 0,
+		Pressure_settings := SETTINGS.pres_settings,
+		KB_on => pressure_data.KB_SET,
+		KB_off => pressure_data.KB_RESET,
+		KO_on => pressure_data.KO_SET,
+		KO_off => pressure_data.KO_RESET,
+		PZK_1_on => pressure_data.PZK_1_SET,
+		PZK_1_off => pressure_data.PZK_1_RESET,
+		P_max_out => pressure_data.p_max_out,
+		P_min_out => pressure_data.p_min_out,
+		Pressure_state_decoded => pressure_state_decoded,
+		Pressure_state => pressure_data.state
+	);
+
+	pressure_data.ready := pressure_state_decoded.success;
+
+	pressure_alarm_tmp := pressure_state_decoded.msg_fail
+		OR pressure_state_decoded.kb_not_closed
+		OR pressure_state_decoded.pzk1_leak
+		OR pressure_state_decoded.overpressure
+		OR pressure_state_decoded.leak;
+
+	pressure_warning_tmp := pressure_state_decoded.timeout_cancel
+		OR pressure_state_decoded.aborted
+		OR pressure_state_decoded.skip_forbidden
+		OR pressure_state_decoded.abort_forbidden;
+
+	pressure_data.alarm := pressure_alarm_tmp;
+	pressure_data.warning := pressure_warning_tmp;
+	pressure_data.step := 0;
+
+	GVL_BURNER_PRESSURE.ready[global_idx] := pressure_data.ready;
+	GVL_BURNER_PRESSURE.success[global_idx] := pressure_state_decoded.success;
+	GVL_BURNER_PRESSURE.in_progress[global_idx] := pressure_state_decoded.in_progress;
+	GVL_BURNER_PRESSURE.alarm[global_idx] := pressure_data.alarm;
+	GVL_BURNER_PRESSURE.warning[global_idx] := pressure_data.warning;
+	GVL_BURNER_PRESSURE.p_max_out[global_idx] := pressure_data.p_max_out;
+	GVL_BURNER_PRESSURE.p_min_out[global_idx] := pressure_data.p_min_out;
+	GVL_BURNER_PRESSURE.PZK_1_SET[global_idx] := pressure_data.PZK_1_SET;
+	GVL_BURNER_PRESSURE.PZK_1_RESET[global_idx] := pressure_data.PZK_1_RESET;
+	GVL_BURNER_PRESSURE.KB_SET[global_idx] := pressure_data.KB_SET;
+	GVL_BURNER_PRESSURE.KB_RESET[global_idx] := pressure_data.KB_RESET;
+	GVL_BURNER_PRESSURE.KO_SET[global_idx] := pressure_data.KO_SET;
+	GVL_BURNER_PRESSURE.KO_RESET[global_idx] := pressure_data.KO_RESET;
+	GVL_BURNER_PRESSURE.step[global_idx] := pressure_data.step;
+	GVL_BURNER_PRESSURE.state[global_idx] := pressure_data.state;
+	GVL_BURNER_PRESSURE.trend_pressure[global_idx] := GVL_SCALE.AI_IN_SCALE[pressure_sensor];
+	GVL_BURNER_PRESSURE.trend_p_min[global_idx] := SETTINGS.pres_settings.VALUE[1];
+	GVL_BURNER_PRESSURE.trend_p_max[global_idx] := SETTINGS.pres_settings.VALUE[2];
+END_IF;

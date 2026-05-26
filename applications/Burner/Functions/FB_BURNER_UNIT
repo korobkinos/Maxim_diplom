@@ -20,6 +20,7 @@ VAR
 	regulator_data : ST_BURNER_REGULATOR_DATA;
 	valve_data     : ST_BURNER_VALVE_DATA;
 	hmi_sync       : FB_BURNER_HMI_SYNC;
+	pressure       : FB_BURNER_PRESSURE;
 	armature       : FB_BURNER_ARMATURE;
 	protect        : FB_BURNER_PROTECT;
 END_VAR
@@ -42,6 +43,14 @@ hmi_sync(
 	burner_data := burner_data,
 	protect_data := protect_data,
 	regulator_data := regulator_data,
+	valve_data := valve_data
+);
+
+pressure(
+	burner_id := burner_id,
+	enable := enable,
+	pressure_data := pressure_data,
+	burner_data := burner_data,
 	valve_data := valve_data
 );
 
