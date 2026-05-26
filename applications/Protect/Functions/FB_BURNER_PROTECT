@@ -28,7 +28,19 @@ VAR
 	cmd_execute_set        : BOOL;
 	cmd_execute_reset      : BOOL;
 	pilot_p_control_current: BOOL;
+	case_counter           : WORD;
 	i                      : WORD;
+END_VAR
+
+VAR CONSTANT
+	PC_PZK_1_P         : WORD := 0;
+	PC_PZK_2_P         : WORD := 1;
+	PC_IGNITION_P      : WORD := 2;
+	PC_PILOT_P         : WORD := 3;
+	PC_AIR_BURNER_P    : WORD := 4;
+	PC_GAS_BURNER_P    : WORD := 5;
+	PC_VENT_BURNER_P   : WORD := 6;
+	PC_GAS_BURNER_UP_P : WORD := 7;
 END_VAR
 
 // === IMPLEMENTATION ===
@@ -61,93 +73,96 @@ ELSE
 
 	pzk_2_ft(CLK := valve_data.control_out[pzk_2]);
 
-	pilot_p_control_current := protect_data.protect_control[PROTECT_CONSTANT.pilot_p];
+	pilot_p_control_current := protect_data.protect_control[PC_PILOT_P];
 	IF valve_data.control_out[pzk_2] AND flame_control_delay_ton.Q THEN
 		pilot_p_control_current := TRUE;
 	END_IF;
-	IF pzk_2_ft.Q OR protect_data.protect_alarm[PROTECT_CONSTANT.pilot_p] THEN
+	IF pzk_2_ft.Q OR protect_data.protect_alarm[PC_PILOT_P] THEN
 		pilot_p_control_current := FALSE;
 	END_IF;
 	IF SETTINGS.test_mode THEN
 		pilot_p_control_current := TRUE;
 	END_IF;
-	IF NOT SETTINGS.protect_enable[PROTECT_CONSTANT.pilot_p] THEN
+	IF NOT SETTINGS.protect_enable[PC_PILOT_P] THEN
 		pilot_p_control_current := FALSE;
 	END_IF;
 
 	FOR i := 0 TO burner_protect_quantity DO
 		signal_value := protect_data.protect_input[i];
 		control_value := protect_data.protect_control[i];
+		case_counter := i;
 
-		IF i = PROTECT_CONSTANT.PZK_1_p THEN
-			signal_value := valve_data.closed_state[pzk_1];
-		ELSIF i = PROTECT_CONSTANT.PZK_2_p THEN
-			signal_value := valve_data.closed_state[pzk_2];
-		ELSIF i = PROTECT_CONSTANT.ignition_p THEN
-			signal_value := valve_data.closed_state[ignit] OR NOT valve_data.open_state[ignit];
-		ELSIF i = PROTECT_CONSTANT.pilot_p THEN
-			signal_value := valve_data.closed_state[pilot] OR NOT valve_data.open_state[pilot];
-		ELSIF i = PROTECT_CONSTANT.vent_burner_p THEN
-			signal_value := valve_data.closed_state[vent_burner] OR NOT valve_data.open_state[vent_burner];
-		END_IF;
+		CASE case_counter OF
+			PC_PZK_1_P:
+				signal_value := valve_data.closed_state[pzk_1];
+			PC_PZK_2_P:
+				signal_value := valve_data.closed_state[pzk_2];
+			PC_IGNITION_P:
+				signal_value := valve_data.closed_state[ignit] OR NOT valve_data.open_state[ignit];
+			PC_PILOT_P:
+				signal_value := valve_data.closed_state[pilot] OR NOT valve_data.open_state[pilot];
+			PC_VENT_BURNER_P:
+				signal_value := valve_data.closed_state[vent_burner] OR NOT valve_data.open_state[vent_burner];
+		END_CASE;
 
-		IF i = PROTECT_CONSTANT.ignition_p THEN
-			IF valve_data.open_state[pzk_1] AND valve_data.open_state[kz] AND burner_data.burner_start THEN
-				control_value := TRUE;
-			END_IF;
-			IF pilot_p_control_current OR pzk_2_ft.Q THEN
-				control_value := FALSE;
-			END_IF;
-		ELSIF i = PROTECT_CONSTANT.air_burner_p THEN
-			IF p_air_control_delay_ton.Q THEN
-				control_value := TRUE;
-			END_IF;
-			IF pzk_2_ft.Q OR valve_data.closed_state[pzk_2] THEN
-				control_value := FALSE;
-			END_IF;
-		ELSIF i = PROTECT_CONSTANT.gas_burner_p THEN
-			IF p_gas_control_delay_ton.Q THEN
-				control_value := TRUE;
-			END_IF;
-			IF pzk_2_ft.Q OR valve_data.closed_state[pzk_2] THEN
-				control_value := FALSE;
-			END_IF;
-		ELSIF i = PROTECT_CONSTANT.gas_burner_up_p THEN
-			IF p_gas_control_delay_ton.Q THEN
-				control_value := TRUE;
-			END_IF;
-			IF pzk_2_ft.Q OR valve_data.closed_state[pzk_2] THEN
-				control_value := FALSE;
-			END_IF;
-		ELSIF i = PROTECT_CONSTANT.pilot_p THEN
-			IF valve_data.control_out[pzk_2] AND flame_control_delay_ton.Q THEN
-				control_value := TRUE;
-			END_IF;
-			IF pzk_2_ft.Q OR protect_data.protect_alarm[PROTECT_CONSTANT.pilot_p] THEN
-				control_value := FALSE;
-			END_IF;
-		ELSIF i = PROTECT_CONSTANT.PZK_1_p THEN
-			IF ((burner_data.burner_start OR burner_data.boiler_run) AND valve_data.open_state[pzk_1]) OR SETTINGS.test_mode THEN
-				control_value := TRUE;
-			END_IF;
-			IF valve_data.down_out[pzk_1] THEN
-				control_value := FALSE;
-			END_IF;
-		ELSIF i = PROTECT_CONSTANT.PZK_2_p THEN
-			IF ((burner_data.burner_start OR burner_data.boiler_run) AND valve_data.open_state[pzk_2]) OR SETTINGS.test_mode THEN
-				control_value := TRUE;
-			END_IF;
-			IF valve_data.down_out[pzk_2] THEN
-				control_value := FALSE;
-			END_IF;
-		ELSIF i = PROTECT_CONSTANT.vent_burner_p THEN
-			IF valve_data.closed_state[air_shiber] AND burner_data.burner_start THEN
-				control_value := TRUE;
-			END_IF;
-			IF burner_data.burner_stop OR ignition_data.stop OR protect_data.main_alarm THEN
-				control_value := FALSE;
-			END_IF;
-		END_IF;
+		CASE case_counter OF
+			PC_IGNITION_P:
+				IF valve_data.open_state[pzk_1] AND valve_data.open_state[kz] AND burner_data.burner_start THEN
+					control_value := TRUE;
+				END_IF;
+				IF pilot_p_control_current OR pzk_2_ft.Q THEN
+					control_value := FALSE;
+				END_IF;
+			PC_AIR_BURNER_P:
+				IF p_air_control_delay_ton.Q THEN
+					control_value := TRUE;
+				END_IF;
+				IF pzk_2_ft.Q OR valve_data.closed_state[pzk_2] THEN
+					control_value := FALSE;
+				END_IF;
+			PC_GAS_BURNER_P:
+				IF p_gas_control_delay_ton.Q THEN
+					control_value := TRUE;
+				END_IF;
+				IF pzk_2_ft.Q OR valve_data.closed_state[pzk_2] THEN
+					control_value := FALSE;
+				END_IF;
+			PC_GAS_BURNER_UP_P:
+				IF p_gas_control_delay_ton.Q THEN
+					control_value := TRUE;
+				END_IF;
+				IF pzk_2_ft.Q OR valve_data.closed_state[pzk_2] THEN
+					control_value := FALSE;
+				END_IF;
+			PC_PILOT_P:
+				IF valve_data.control_out[pzk_2] AND flame_control_delay_ton.Q THEN
+					control_value := TRUE;
+				END_IF;
+				IF pzk_2_ft.Q OR protect_data.protect_alarm[PC_PILOT_P] THEN
+					control_value := FALSE;
+				END_IF;
+			PC_PZK_1_P:
+				IF ((burner_data.burner_start OR burner_data.boiler_run) AND valve_data.open_state[pzk_1]) OR SETTINGS.test_mode THEN
+					control_value := TRUE;
+				END_IF;
+				IF valve_data.down_out[pzk_1] THEN
+					control_value := FALSE;
+				END_IF;
+			PC_PZK_2_P:
+				IF ((burner_data.burner_start OR burner_data.boiler_run) AND valve_data.open_state[pzk_2]) OR SETTINGS.test_mode THEN
+					control_value := TRUE;
+				END_IF;
+				IF valve_data.down_out[pzk_2] THEN
+					control_value := FALSE;
+				END_IF;
+			PC_VENT_BURNER_P:
+				IF valve_data.closed_state[air_shiber] AND burner_data.burner_start THEN
+					control_value := TRUE;
+				END_IF;
+				IF burner_data.burner_stop OR ignition_data.stop OR protect_data.main_alarm THEN
+					control_value := FALSE;
+				END_IF;
+		END_CASE;
 
 		IF SETTINGS.test_mode THEN
 			control_value := TRUE;
