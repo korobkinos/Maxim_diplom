@@ -25,6 +25,19 @@ VAR
 	regulator      : FB_BURNER_REGULATOR;
 	armature       : FB_BURNER_ARMATURE;
 	protect        : FB_BURNER_PROTECT;
+	pressure_in_progress : BOOL;
+	ignition_in_progress : BOOL;
+END_VAR
+
+VAR CONSTANT
+	BURNER_STATE_DISABLED         : DWORD := DWORD#0;
+	BURNER_STATE_STOPPED          : DWORD := DWORD#1;
+	BURNER_STATE_READY            : DWORD := DWORD#2;
+	BURNER_STATE_PRESSURE_ACTIVE  : DWORD := DWORD#3;
+	BURNER_STATE_IGNITION_ACTIVE  : DWORD := DWORD#4;
+	BURNER_STATE_RUN              : DWORD := DWORD#5;
+	BURNER_STATE_WARNING          : DWORD := DWORD#6;
+	BURNER_STATE_ALARM            : DWORD := DWORD#7;
 END_VAR
 
 // === IMPLEMENTATION ===
@@ -47,6 +60,16 @@ hmi_sync(
 	regulator_data := regulator_data,
 	valve_data := valve_data
 );
+
+IF enable THEN
+	burner_data.burner_start := burner_data.start_cmd;
+	burner_data.burner_stop := burner_data.stop_cmd;
+	burner_data.boiler_run := ignition_data.ignition_flame AND NOT burner_data.burner_stop AND NOT protect_data.main_alarm;
+ELSE
+	burner_data.burner_start := FALSE;
+	burner_data.burner_stop := FALSE;
+	burner_data.boiler_run := FALSE;
+END_IF;
 
 pressure(
 	burner_id := burner_id,
@@ -97,11 +120,46 @@ IF NOT enable THEN
 	run := FALSE;
 	alarm := FALSE;
 	warning := FALSE;
-	state := 0;
+	state := BURNER_STATE_DISABLED;
+	burner_data.ready := FALSE;
+	burner_data.alarm := FALSE;
+	burner_data.warning := FALSE;
+	burner_data.state := BURNER_STATE_DISABLED;
 ELSE
+	pressure_in_progress := (pressure_data.state AND DWORD#16#00000002) <> DWORD#0;
+	ignition_in_progress := (ignition_data.state AND DWORD#16#00000001) <> DWORD#0;
+
+	burner_data.burner_start := burner_data.start_cmd;
+	burner_data.burner_stop := burner_data.stop_cmd;
+	burner_data.alarm := protect_data.main_alarm OR pressure_data.alarm OR ignition_data.alarm OR regulator_data.alarm;
+	burner_data.warning := protect_data.main_warning OR pressure_data.warning OR ignition_data.warning OR regulator_data.warning;
+	burner_data.boiler_run := ignition_data.ignition_flame AND NOT burner_data.burner_stop AND NOT burner_data.alarm;
+	burner_data.ready := pressure_data.ready
+		AND NOT burner_data.alarm
+		AND NOT burner_data.boiler_run
+		AND NOT burner_data.burner_start
+		AND NOT pressure_in_progress
+		AND NOT ignition_in_progress;
+
+	IF burner_data.alarm THEN
+		burner_data.state := BURNER_STATE_ALARM;
+	ELSIF burner_data.boiler_run THEN
+		burner_data.state := BURNER_STATE_RUN;
+	ELSIF ignition_in_progress THEN
+		burner_data.state := BURNER_STATE_IGNITION_ACTIVE;
+	ELSIF pressure_in_progress THEN
+		burner_data.state := BURNER_STATE_PRESSURE_ACTIVE;
+	ELSIF burner_data.ready THEN
+		burner_data.state := BURNER_STATE_READY;
+	ELSIF burner_data.warning THEN
+		burner_data.state := BURNER_STATE_WARNING;
+	ELSE
+		burner_data.state := BURNER_STATE_STOPPED;
+	END_IF;
+
 	ready := burner_data.ready;
 	run := burner_data.boiler_run;
-	alarm := burner_data.alarm OR protect_data.main_alarm;
-	warning := burner_data.warning OR protect_data.main_warning;
+	alarm := burner_data.alarm;
+	warning := burner_data.warning;
 	state := burner_data.state;
 END_IF;
