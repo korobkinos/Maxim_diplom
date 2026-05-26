@@ -33,6 +33,8 @@ VAR
 	cmd_block      : BOOL;
 	cmd_set_auto   : BOOL;
 	cmd_set_manual : BOOL;
+	cmd_set_special: BOOL;
+	cmd_imitation  : BOOL;
 
 	i : WORD;
 END_VAR
@@ -57,11 +59,6 @@ END_FOR;
 
 IF enable THEN
 	up_cmd[gas_shiber] := up_cmd[gas_shiber] OR regulator_data.min_power_impulse_up;
-
-	open_cmd[pilot] := open_cmd[pilot];
-	close_cmd[pilot] := close_cmd[pilot];
-	open_cmd[ignit] := open_cmd[ignit];
-	close_cmd[ignit] := close_cmd[ignit];
 
 	open_cmd[spark] := open_cmd[spark] OR ignition_data.spark_SET;
 	close_cmd[spark] := close_cmd[spark] OR ignition_data.spark_RESET;
@@ -111,8 +108,10 @@ FOR i := 0 TO counter_armature DO
 		cmd_closed := close_cmd[i];
 		cmd_stop := valve_data.stop[i];
 		cmd_block := block_cmd[i];
-		cmd_set_auto := reg_auto_set;
-		cmd_set_manual := valve_data.open[i] OR valve_data.closed[i] OR reg_manual_set;
+		cmd_set_auto := valve_data.set_auto[i] OR reg_auto_set;
+		cmd_set_manual := valve_data.open[i] OR valve_data.closed[i] OR valve_data.set_manual[i] OR reg_manual_set;
+		cmd_set_special := valve_data.set_special[i];
+		cmd_imitation := valve_data.imitation_mode[i] OR SETTINGS.armature_simulation;
 	ELSE
 		cmd_up := FALSE;
 		cmd_down := FALSE;
@@ -122,6 +121,8 @@ FOR i := 0 TO counter_armature DO
 		cmd_block := TRUE;
 		cmd_set_auto := FALSE;
 		cmd_set_manual := FALSE;
+		cmd_set_special := FALSE;
+		cmd_imitation := FALSE;
 	END_IF;
 
 	valves[i](
@@ -130,7 +131,7 @@ FOR i := 0 TO counter_armature DO
 		open := cmd_open,
 		closed := cmd_closed,
 		stop := cmd_stop,
-		set_special := FALSE,
+		set_special := cmd_set_special,
 		set_auto := cmd_set_auto,
 		set_manual := cmd_set_manual,
 		block := cmd_block,
@@ -141,7 +142,7 @@ FOR i := 0 TO counter_armature DO
 		pull_time := SETTINGS.pull_time[i],
 		off_time := SETTINGS.off_time_burner[i],
 		one_state := SETTINGS.BURNER_ONE_STATE[i],
-		imitation_mode := FALSE,
+		imitation_mode := cmd_imitation,
 		block_mode := SETTINGS.BURNER_BLOCK_MODE[i],
 		load_state := FALSE,
 		control_out => valve_data.control_out[i],

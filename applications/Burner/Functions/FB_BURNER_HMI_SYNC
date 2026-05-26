@@ -45,6 +45,13 @@ FOR local_idx := 0 TO counter_armature DO
 		valve_data.closed[local_idx] := GVL_BURNER_VALVE.closed[global_idx];
 		valve_data.stop[local_idx] := GVL_BURNER_VALVE.stop[global_idx];
 		valve_data.block[local_idx] := GVL_BURNER_VALVE.block[global_idx];
+		valve_data.set_special[local_idx] := GVL_BURNER_VALVE.set_special[global_idx];
+		valve_data.set_auto[local_idx] := GVL_BURNER_VALVE.set_auto[global_idx];
+		valve_data.set_manual[local_idx] := GVL_BURNER_VALVE.set_manual[global_idx];
+		valve_data.imitation_mode[local_idx] := GVL_BURNER_VALVE.imitation_mode[global_idx];
+		valve_data.open_state_di[local_idx] := GVL_BURNER_VALVE.open_state_di[global_idx];
+		valve_data.closed_state_di[local_idx] := GVL_BURNER_VALVE.closed_state_di[global_idx];
+		valve_data.special_state_di[local_idx] := GVL_BURNER_VALVE.special_state_di[global_idx];
 	END_IF;
 
 	GVL_BURNER_VALVE.open_state[global_idx] := valve_data.open_state[local_idx];

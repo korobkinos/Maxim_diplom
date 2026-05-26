@@ -13,6 +13,13 @@ VAR_GLOBAL
 	closed         : ARRAY[1..total_burner_valve_quantity] OF BOOL;
 	stop           : ARRAY[1..total_burner_valve_quantity] OF BOOL;
 	block          : ARRAY[1..total_burner_valve_quantity] OF BOOL;
+	set_special    : ARRAY[1..total_burner_valve_quantity] OF BOOL;
+	set_auto       : ARRAY[1..total_burner_valve_quantity] OF BOOL;
+	set_manual     : ARRAY[1..total_burner_valve_quantity] OF BOOL;
+	imitation_mode : ARRAY[1..total_burner_valve_quantity] OF BOOL;
+	open_state_di  : ARRAY[1..total_burner_valve_quantity] OF BOOL;
+	closed_state_di: ARRAY[1..total_burner_valve_quantity] OF BOOL;
+	special_state_di: ARRAY[1..total_burner_valve_quantity] OF BOOL;
 	open_state     : ARRAY[1..total_burner_valve_quantity] OF BOOL;
 	closed_state   : ARRAY[1..total_burner_valve_quantity] OF BOOL;
 	error_out      : ARRAY[1..total_burner_valve_quantity] OF BOOL;
