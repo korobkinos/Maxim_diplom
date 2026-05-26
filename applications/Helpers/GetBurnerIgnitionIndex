@@ -1,0 +1,14 @@
+FUNCTION GetBurnerIgnitionIndex : WORD
+VAR_INPUT
+	burner_id : WORD;
+	local_idx : WORD;
+END_VAR
+
+// === IMPLEMENTATION ===
+
+(*
+Горелки индексируются как 1..burner_quantity.
+Текущие локальные индексы розжига сохраняются 0-базными.
+Возвращаемый глобальный индекс является 1-базным для плоских массивов Weintek/OPC UA.
+*)
+GetBurnerIgnitionIndex := (burner_id - 1) * ignition_per_burner + local_idx + 1;

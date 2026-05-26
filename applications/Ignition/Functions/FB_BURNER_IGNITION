@@ -1,0 +1,130 @@
+FUNCTION_BLOCK FB_BURNER_IGNITION
+VAR_INPUT
+	burner_id : WORD;
+	enable    : BOOL;
+END_VAR
+
+VAR_IN_OUT
+	ignition_data : ST_BURNER_IGNITION_DATA;
+	valve_data    : ST_BURNER_VALVE_DATA;
+END_VAR
+
+VAR
+	ignition_control      : ignition_singl;
+	ignition_state_decoded: IGNITION_STATE_STRUCT;
+	ignition_alarm_tmp    : BOOL;
+	ignition_warning_tmp  : BOOL;
+	global_idx            : WORD;
+	local_idx             : WORD;
+	start_cmd             : BOOL;
+	stop_cmd              : BOOL;
+	start_block_cmd       : BOOL;
+END_VAR
+
+// === IMPLEMENTATION ===
+
+local_idx := 0;
+global_idx := GetBurnerIgnitionIndex(burner_id := burner_id, local_idx := local_idx);
+
+ignition_data.ignition_flame := valve_data.open_state[ignit];
+
+IF NOT enable THEN
+	ignition_control(
+		start := FALSE,
+		start_block := TRUE,
+		stop := TRUE,
+		ignition_flame := ignition_data.ignition_flame,
+		PZK_1_state := valve_data.open_state[pzk_1],
+		ignition_settings := SETTINGS.ignition_settings,
+		spark_on => ignition_data.spark_SET,
+		spark_off => ignition_data.spark_RESET,
+		KZ_on => ignition_data.KZ_SET,
+		KZ_off => ignition_data.KZ_RESET,
+		PZK_1_on => ignition_data.PZK_1_SET,
+		Ignition_state_decoded => ignition_state_decoded,
+		Ignition_state => ignition_data.state
+	);
+
+	ignition_data.start := FALSE;
+	ignition_data.stop := FALSE;
+	ignition_data.ready := FALSE;
+	ignition_data.alarm := FALSE;
+	ignition_data.warning := FALSE;
+	ignition_data.spark_SET := FALSE;
+	ignition_data.spark_RESET := FALSE;
+	ignition_data.PZK_1_SET := FALSE;
+	ignition_data.PZK_1_RESET := FALSE;
+	ignition_data.KZ_SET := FALSE;
+	ignition_data.KZ_RESET := FALSE;
+	ignition_data.step := 0;
+	ignition_data.state := 0;
+
+	GVL_BURNER_IGNITION.ready[global_idx] := FALSE;
+	GVL_BURNER_IGNITION.success[global_idx] := FALSE;
+	GVL_BURNER_IGNITION.in_progress[global_idx] := FALSE;
+	GVL_BURNER_IGNITION.alarm[global_idx] := FALSE;
+	GVL_BURNER_IGNITION.warning[global_idx] := FALSE;
+	GVL_BURNER_IGNITION.ignition_flame[global_idx] := FALSE;
+	GVL_BURNER_IGNITION.no_flame[global_idx] := FALSE;
+	GVL_BURNER_IGNITION.flame_lost[global_idx] := FALSE;
+	GVL_BURNER_IGNITION.repeat_msg[global_idx] := FALSE;
+	GVL_BURNER_IGNITION.stop_msg[global_idx] := FALSE;
+	GVL_BURNER_IGNITION.spark_SET[global_idx] := FALSE;
+	GVL_BURNER_IGNITION.spark_RESET[global_idx] := FALSE;
+	GVL_BURNER_IGNITION.KZ_SET[global_idx] := FALSE;
+	GVL_BURNER_IGNITION.KZ_RESET[global_idx] := FALSE;
+	GVL_BURNER_IGNITION.PZK_1_SET[global_idx] := FALSE;
+	GVL_BURNER_IGNITION.PZK_1_RESET[global_idx] := FALSE;
+	GVL_BURNER_IGNITION.step[global_idx] := 0;
+	GVL_BURNER_IGNITION.state[global_idx] := 0;
+ELSE
+	start_cmd := GVL_BURNER_IGNITION.start[global_idx];
+	stop_cmd := GVL_BURNER_IGNITION.stop[global_idx];
+	start_block_cmd := GVL_BURNER_IGNITION.start_block[global_idx] OR GVL_BURNER_IGNITION.block[global_idx];
+
+	ignition_data.start := start_cmd;
+	ignition_data.stop := stop_cmd;
+	ignition_data.PZK_1_RESET := FALSE;
+
+	ignition_control(
+		start := start_cmd,
+		start_block := start_block_cmd,
+		stop := stop_cmd,
+		ignition_flame := ignition_data.ignition_flame,
+		PZK_1_state := valve_data.open_state[pzk_1],
+		ignition_settings := SETTINGS.ignition_settings,
+		spark_on => ignition_data.spark_SET,
+		spark_off => ignition_data.spark_RESET,
+		KZ_on => ignition_data.KZ_SET,
+		KZ_off => ignition_data.KZ_RESET,
+		PZK_1_on => ignition_data.PZK_1_SET,
+		Ignition_state_decoded => ignition_state_decoded,
+		Ignition_state => ignition_data.state
+	);
+
+	ignition_data.ready := ignition_state_decoded.success_msg;
+	ignition_alarm_tmp := ignition_state_decoded.no_flame OR ignition_state_decoded.flame_lost;
+	ignition_warning_tmp := ignition_state_decoded.repeat_msg OR ignition_state_decoded.stop_msg;
+	ignition_data.alarm := ignition_alarm_tmp;
+	ignition_data.warning := ignition_warning_tmp;
+	ignition_data.step := 0;
+
+	GVL_BURNER_IGNITION.ready[global_idx] := ignition_data.ready;
+	GVL_BURNER_IGNITION.success[global_idx] := ignition_state_decoded.success_msg;
+	GVL_BURNER_IGNITION.in_progress[global_idx] := ignition_state_decoded.in_progress;
+	GVL_BURNER_IGNITION.alarm[global_idx] := ignition_data.alarm;
+	GVL_BURNER_IGNITION.warning[global_idx] := ignition_data.warning;
+	GVL_BURNER_IGNITION.ignition_flame[global_idx] := ignition_data.ignition_flame;
+	GVL_BURNER_IGNITION.no_flame[global_idx] := ignition_state_decoded.no_flame;
+	GVL_BURNER_IGNITION.flame_lost[global_idx] := ignition_state_decoded.flame_lost;
+	GVL_BURNER_IGNITION.repeat_msg[global_idx] := ignition_state_decoded.repeat_msg;
+	GVL_BURNER_IGNITION.stop_msg[global_idx] := ignition_state_decoded.stop_msg;
+	GVL_BURNER_IGNITION.spark_SET[global_idx] := ignition_data.spark_SET;
+	GVL_BURNER_IGNITION.spark_RESET[global_idx] := ignition_data.spark_RESET;
+	GVL_BURNER_IGNITION.KZ_SET[global_idx] := ignition_data.KZ_SET;
+	GVL_BURNER_IGNITION.KZ_RESET[global_idx] := ignition_data.KZ_RESET;
+	GVL_BURNER_IGNITION.PZK_1_SET[global_idx] := ignition_data.PZK_1_SET;
+	GVL_BURNER_IGNITION.PZK_1_RESET[global_idx] := ignition_data.PZK_1_RESET;
+	GVL_BURNER_IGNITION.step[global_idx] := ignition_data.step;
+	GVL_BURNER_IGNITION.state[global_idx] := ignition_data.state;
+END_IF;

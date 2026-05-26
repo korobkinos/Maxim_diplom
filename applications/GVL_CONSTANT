@@ -18,6 +18,8 @@ VAR_GLOBAL CONSTANT
 
 	pressure_per_burner						:		WORD:=1;			//Количество контуров опрессовки на горелку
 	total_burner_pressure_quantity			:		WORD:=burner_quantity*pressure_per_burner; //Плоский размер массива опрессовки для всех горелок
+	ignition_per_burner						:		WORD:=1;			//Количество контуров розжига на горелку
+	total_burner_ignition_quantity			:		WORD:=burner_quantity*ignition_per_burner; //Плоский размер массива розжига для всех горелок
 
 	(*
 	Пояснение по области миграции:
