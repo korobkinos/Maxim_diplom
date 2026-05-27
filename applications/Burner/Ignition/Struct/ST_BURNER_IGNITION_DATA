@@ -20,5 +20,7 @@ STRUCT
 	KZ_RESET          : BOOL;
 	step              : WORD;
 	state             : DWORD;
+	settings_local    : ignition_settings;
+	flame_feedback_idx : WORD;
 END_STRUCT
 END_TYPE

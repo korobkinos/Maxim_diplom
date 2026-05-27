@@ -19,6 +19,7 @@ VAR
 	start_cmd             : BOOL;
 	stop_cmd              : BOOL;
 	start_block_cmd       : BOOL;
+	flame_feedback_valid  : BOOL;
 END_VAR
 
 // === IMPLEMENTATION ===
@@ -26,7 +27,24 @@ END_VAR
 local_idx := 0;
 global_idx := GetBurnerIgnitionIndex(burner_id := burner_id, local_idx := local_idx);
 
-ignition_data.ignition_flame := valve_data.open_state[ignit];
+IF burner_quantity = 1 THEN
+	ignition_data.settings_local := SETTINGS.ignition_settings;
+	ignition_data.flame_feedback_idx := ignit;
+ELSE
+	ignition_data.settings_local.VALUE[1] := GVL_BURNER_IGNITION.cfg_mode[burner_id];
+	ignition_data.settings_local.VALUE[2] := GVL_BURNER_IGNITION.cfg_repeat[burner_id];
+	ignition_data.settings_local.VALUE[3] := GVL_BURNER_IGNITION.cfg_t_ignition[burner_id];
+	ignition_data.settings_local.VALUE[4] := GVL_BURNER_IGNITION.cfg_t_gas_spark[burner_id];
+	ignition_data.settings_local.VALUE[5] := GVL_BURNER_IGNITION.cfg_t_flame_check[burner_id];
+	ignition_data.flame_feedback_idx := GVL_BURNER_IGNITION.cfg_flame_feedback_idx[burner_id];
+END_IF;
+
+flame_feedback_valid := ignition_data.flame_feedback_idx <= counter_armature;
+IF flame_feedback_valid THEN
+	ignition_data.ignition_flame := valve_data.open_state[ignition_data.flame_feedback_idx];
+ELSE
+	ignition_data.ignition_flame := FALSE;
+END_IF;
 
 IF NOT enable THEN
 	ignition_control(
@@ -35,7 +53,7 @@ IF NOT enable THEN
 		stop := TRUE,
 		ignition_flame := ignition_data.ignition_flame,
 		PZK_1_state := valve_data.open_state[pzk_1],
-		ignition_settings := SETTINGS.ignition_settings,
+		ignition_settings := ignition_data.settings_local,
 		spark_on => ignition_data.spark_SET,
 		spark_off => ignition_data.spark_RESET,
 		KZ_on => ignition_data.KZ_SET,
@@ -92,7 +110,7 @@ ELSE
 		stop := stop_cmd,
 		ignition_flame := ignition_data.ignition_flame,
 		PZK_1_state := valve_data.open_state[pzk_1],
-		ignition_settings := SETTINGS.ignition_settings,
+		ignition_settings := ignition_data.settings_local,
 		spark_on => ignition_data.spark_SET,
 		spark_off => ignition_data.spark_RESET,
 		KZ_on => ignition_data.KZ_SET,

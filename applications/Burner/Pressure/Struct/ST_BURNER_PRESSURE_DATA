@@ -28,5 +28,8 @@ STRUCT
 	KO_RESET          : BOOL;
 	step              : WORD;
 	state             : DWORD;
+	settings_local    : pressure_settings;
+	pressure_ai_idx   : WORD;
+	pressure_source_mode : WORD;
 END_STRUCT
 END_TYPE
