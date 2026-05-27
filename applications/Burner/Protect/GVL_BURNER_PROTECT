@@ -9,6 +9,7 @@ VAR_GLOBAL
 	*)
 	input          : ARRAY[1..total_burner_protect_quantity] OF BOOL;
 	control        : ARRAY[1..total_burner_protect_quantity] OF BOOL;
+	protect_enable : ARRAY[1..total_burner_protect_quantity] OF BOOL;
 	warning        : ARRAY[1..total_burner_protect_quantity] OF BOOL;
 	alarm          : ARRAY[1..total_burner_protect_quantity] OF BOOL;
 	execute_state  : ARRAY[1..total_burner_protect_quantity] OF BOOL;

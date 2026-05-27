@@ -27,6 +27,7 @@ VAR
 	warning_value          : BOOL;
 	cmd_execute_set        : BOOL;
 	cmd_execute_reset      : BOOL;
+	cmd_protect_enable     : BOOL;
 	pilot_p_control_current: BOOL;
 	case_counter           : WORD;
 	i                      : WORD;
@@ -83,7 +84,9 @@ ELSE
 	IF SETTINGS.test_mode THEN
 		pilot_p_control_current := TRUE;
 	END_IF;
-	IF NOT SETTINGS.protect_enable[PC_PILOT_P] THEN
+	cmd_protect_enable := protect_data.protect_enable[PC_PILOT_P]
+		OR ((burner_quantity = 1) AND SETTINGS.protect_enable[PC_PILOT_P]);
+	IF NOT cmd_protect_enable THEN
 		pilot_p_control_current := FALSE;
 	END_IF;
 
@@ -172,6 +175,8 @@ ELSE
 			OR ((burner_quantity = 1) AND SETTINGS.protect_execute_set[i]);
 		cmd_execute_reset := protect_data.execute_reset_cmd[i]
 			OR ((burner_quantity = 1) AND SETTINGS.protect_execute_reset[i]);
+		cmd_protect_enable := protect_data.protect_enable[i]
+			OR ((burner_quantity = 1) AND SETTINGS.protect_enable[i]);
 
 		protect_on_off[i](
 			MAN_ON := cmd_execute_set,
@@ -193,7 +198,7 @@ ELSE
 			ALARM_ACTIVE => warning_value
 		);
 
-		IF NOT SETTINGS.protect_enable[i] THEN
+		IF NOT cmd_protect_enable THEN
 			control_value := FALSE;
 			alarm_value := FALSE;
 			warning_value := FALSE;

@@ -10,6 +10,7 @@ STRUCT
 	main_warning      : BOOL;
 	protect_input     : ARRAY[0..burner_protect_quantity] OF BOOL;
 	protect_control   : ARRAY[0..burner_protect_quantity] OF BOOL;
+	protect_enable    : ARRAY[0..burner_protect_quantity] OF BOOL;
 	protect_warning   : ARRAY[0..burner_protect_quantity] OF BOOL;
 	protect_alarm     : ARRAY[0..burner_protect_quantity] OF BOOL;
 	execute_state     : ARRAY[0..burner_protect_quantity] OF BOOL;
