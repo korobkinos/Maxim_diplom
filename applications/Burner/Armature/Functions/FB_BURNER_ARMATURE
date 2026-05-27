@@ -35,6 +35,7 @@ VAR
 	cmd_set_manual : BOOL;
 	cmd_set_special: BOOL;
 	cmd_imitation  : BOOL;
+	scoped_armature_simulation : BOOL;
 
 	i        : WORD;
 	pid_idx  : WORD;
@@ -110,6 +111,7 @@ END_FOR;
 
 FOR i := 0 TO counter_armature DO
 	IF enable THEN
+		scoped_armature_simulation := (burner_id >= 1) AND (burner_id <= burner_quantity) AND SETTINGS.burner_armature_simulation[burner_id][i];
 		cmd_up := up_cmd[i] OR reg_up_cmd[i];
 		cmd_down := down_cmd[i] OR reg_down_cmd[i];
 		cmd_open := open_cmd[i];
@@ -119,7 +121,7 @@ FOR i := 0 TO counter_armature DO
 		cmd_set_auto := valve_data.set_auto[i] OR reg_auto_cmd[i];
 		cmd_set_manual := valve_data.open[i] OR valve_data.closed[i] OR valve_data.set_manual[i] OR reg_man_cmd[i];
 		cmd_set_special := valve_data.set_special[i];
-		cmd_imitation := valve_data.imitation_mode[i] OR SETTINGS.armature_simulation;
+		cmd_imitation := valve_data.imitation_mode[i] OR scoped_armature_simulation;
 	ELSE
 		cmd_up := FALSE;
 		cmd_down := FALSE;
