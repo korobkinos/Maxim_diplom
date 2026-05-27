@@ -168,14 +168,10 @@ ELSE
 			control_value := TRUE;
 		END_IF;
 
-		cmd_execute_set := protect_data.execute_set_cmd[i];
-		cmd_execute_reset := protect_data.execute_reset_cmd[i];
-		IF NOT cmd_execute_set THEN
-			cmd_execute_set := SETTINGS.protect_execute_set[i];
-		END_IF;
-		IF NOT cmd_execute_reset THEN
-			cmd_execute_reset := SETTINGS.protect_execute_reset[i];
-		END_IF;
+		cmd_execute_set := protect_data.execute_set_cmd[i]
+			OR ((burner_quantity = 1) AND SETTINGS.protect_execute_set[i]);
+		cmd_execute_reset := protect_data.execute_reset_cmd[i]
+			OR ((burner_quantity = 1) AND SETTINGS.protect_execute_reset[i]);
 
 		protect_on_off[i](
 			MAN_ON := cmd_execute_set,
