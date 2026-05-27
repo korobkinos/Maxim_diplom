@@ -16,7 +16,6 @@ VAR_GLOBAL
 	manual_mode     : ARRAY[1..burner_quantity] OF BOOL;
 	start_cmd       : ARRAY[1..burner_quantity] OF BOOL;
 	stop_cmd        : ARRAY[1..burner_quantity] OF BOOL;
-	step            : ARRAY[1..burner_quantity] OF WORD;
 	state           : ARRAY[1..burner_quantity] OF DWORD;
 	load_setpoint   : ARRAY[1..burner_quantity] OF REAL;
 	load_feedback   : ARRAY[1..burner_quantity] OF REAL;
