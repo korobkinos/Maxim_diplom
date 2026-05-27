@@ -31,6 +31,10 @@ VAR
 	pilot_p_control_current: BOOL;
 	case_counter           : WORD;
 	i                      : WORD;
+	p_gas_control_delay_cfg: REAL;
+	p_air_control_delay_cfg: REAL;
+	flame_control_delay_cfg: REAL;
+	protect_delay_cfg      : REAL;
 END_VAR
 
 VAR CONSTANT
@@ -57,19 +61,29 @@ IF NOT enable THEN
 	protect_data.main_alarm := FALSE;
 	protect_data.state := 0;
 ELSE
+	p_gas_control_delay_cfg := protect_data.p_gas_control_delay;
+	p_air_control_delay_cfg := protect_data.p_air_control_delay;
+	flame_control_delay_cfg := protect_data.flame_control_delay;
+
+	IF burner_quantity = 1 THEN
+		p_gas_control_delay_cfg := SETTINGS.p_gas_control_delay;
+		p_air_control_delay_cfg := SETTINGS.p_air_control_delay;
+		flame_control_delay_cfg := SETTINGS.flame_control_delay;
+	END_IF;
+
 	p_air_control_delay_ton(
 		IN := burner_data.boiler_run,
-		PT := REAL_TO_TIME(SETTINGS.p_air_control_delay * 1000)
+		PT := REAL_TO_TIME(p_air_control_delay_cfg * 1000)
 	);
 
 	p_gas_control_delay_ton(
 		IN := burner_data.boiler_run,
-		PT := REAL_TO_TIME(SETTINGS.p_gas_control_delay * 1000)
+		PT := REAL_TO_TIME(p_gas_control_delay_cfg * 1000)
 	);
 
 	flame_control_delay_ton(
 		IN := burner_data.burner_start OR burner_data.boiler_run,
-		PT := REAL_TO_TIME(SETTINGS.flame_control_delay * 1000)
+		PT := REAL_TO_TIME(flame_control_delay_cfg * 1000)
 	);
 
 	pzk_2_ft(CLK := valve_data.control_out[pzk_2]);
@@ -187,13 +201,17 @@ ELSE
 
 		alarm_value := FALSE;
 		warning_value := FALSE;
+		protect_delay_cfg := protect_data.protect_delay_time[i];
+		IF burner_quantity = 1 THEN
+			protect_delay_cfg := SETTINGS.protect_delay_time[i];
+		END_IF;
 
 		protect[i](
 			Signal_groupe_param := signal_value,
 			CTRL_ON := control_value,
 			PROTECT_EXECUTE := protect_data.execute_state[i],
 			Sbros_Av := burner_data.burner_start OR burner_data.start_cmd,
-			delay_time := SETTINGS.protect_delay_time[i],
+			delay_time := protect_delay_cfg,
 			PROTECT_ACTIVE => alarm_value,
 			ALARM_ACTIVE => warning_value
 		);

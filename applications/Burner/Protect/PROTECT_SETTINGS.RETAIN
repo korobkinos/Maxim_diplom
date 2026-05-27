@@ -1,0 +1,8 @@
+{attribute 'qualified_only'}
+VAR_GLOBAL PERSISTENT RETAIN
+	protect_enable      : ARRAY[1..total_burner_protect_quantity] OF BOOL;
+	protect_delay_time  : ARRAY[1..total_burner_protect_quantity] OF REAL;
+	p_gas_control_delay : ARRAY[1..burner_quantity] OF REAL;
+	p_air_control_delay : ARRAY[1..burner_quantity] OF REAL;
+	flame_control_delay : ARRAY[1..burner_quantity] OF REAL;
+END_VAR

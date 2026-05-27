@@ -1,0 +1,14 @@
+{attribute 'qualified_only'}
+VAR_GLOBAL PERSISTENT RETAIN
+	cfg_p_min                : ARRAY[1..burner_quantity] OF REAL;
+	cfg_p_max                : ARRAY[1..burner_quantity] OF REAL;
+	cfg_t_wait_1             : ARRAY[1..burner_quantity] OF REAL;
+	cfg_t_wait_2             : ARRAY[1..burner_quantity] OF REAL;
+	cfg_t_wait_3             : ARRAY[1..burner_quantity] OF REAL;
+	cfg_t_fast               : ARRAY[1..burner_quantity] OF REAL;
+	cfg_t_termination        : ARRAY[1..burner_quantity] OF REAL;
+	cfg_kb_sensor            : ARRAY[1..burner_quantity] OF REAL;
+	cfg_press_mode           : ARRAY[1..burner_quantity] OF REAL;
+	cfg_pressure_ai_idx      : ARRAY[1..burner_quantity] OF WORD;
+	cfg_pressure_source_mode : ARRAY[1..burner_quantity] OF WORD;
+END_VAR

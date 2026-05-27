@@ -11,6 +11,10 @@ STRUCT
 	protect_input     : ARRAY[0..burner_protect_quantity] OF BOOL;
 	protect_control   : ARRAY[0..burner_protect_quantity] OF BOOL;
 	protect_enable    : ARRAY[0..burner_protect_quantity] OF BOOL;
+	protect_delay_time: ARRAY[0..burner_protect_quantity] OF REAL;
+	p_gas_control_delay: REAL;
+	p_air_control_delay: REAL;
+	flame_control_delay: REAL;
 	protect_warning   : ARRAY[0..burner_protect_quantity] OF BOOL;
 	protect_alarm     : ARRAY[0..burner_protect_quantity] OF BOOL;
 	execute_state     : ARRAY[0..burner_protect_quantity] OF BOOL;
