@@ -66,7 +66,7 @@ hmi_sync(
 IF enable THEN
 	burner_data.burner_start := burner_data.start_cmd;
 	burner_data.burner_stop := burner_data.stop_cmd;
-	burner_data.boiler_run := ignition_data.ignition_flame AND NOT burner_data.burner_stop AND NOT protect_data.main_alarm;
+	burner_data.boiler_run := valve_data.open_state[pzk_2] AND NOT burner_data.burner_stop AND NOT protect_data.main_alarm;
 ELSE
 	burner_data.burner_start := FALSE;
 	burner_data.burner_stop := FALSE;
@@ -135,7 +135,7 @@ ELSE
 	burner_data.burner_stop := burner_data.stop_cmd;
 	burner_data.alarm := protect_data.main_alarm OR pressure_data.alarm OR ignition_data.alarm OR regulator_data.alarm;
 	burner_data.warning := protect_data.main_warning OR pressure_data.warning OR ignition_data.warning OR regulator_data.warning;
-	burner_data.boiler_run := ignition_data.ignition_flame AND NOT burner_data.burner_stop AND NOT burner_data.alarm;
+	burner_data.boiler_run := valve_data.open_state[pzk_2] AND NOT burner_data.burner_stop AND NOT burner_data.alarm;
 	burner_data.ready := pressure_data.ready
 		AND NOT burner_data.alarm
 		AND NOT burner_data.boiler_run
