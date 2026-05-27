@@ -172,23 +172,14 @@ ELSE
 				IF valve_data.down_out[pzk_2] THEN
 					control_value := FALSE;
 				END_IF;
-			PC_VENT_BURNER_P:
-				IF valve_data.closed_state[air_shiber] AND burner_data.burner_start THEN
-					control_value := TRUE;
-				END_IF;
-				IF burner_data.burner_stop OR ignition_data.stop OR protect_data.main_alarm THEN
-					control_value := FALSE;
-				END_IF;
 		END_CASE;
 
 		IF SETTINGS.test_mode THEN
 			control_value := TRUE;
 		END_IF;
 
-		cmd_execute_set := protect_data.execute_set_cmd[i]
-			OR ((burner_quantity = 1) AND SETTINGS.protect_execute_set[i]);
-		cmd_execute_reset := protect_data.execute_reset_cmd[i]
-			OR ((burner_quantity = 1) AND SETTINGS.protect_execute_reset[i]);
+		cmd_execute_set := protect_data.execute_set_cmd[i];
+		cmd_execute_reset := protect_data.execute_reset_cmd[i];
 		cmd_protect_enable := protect_data.protect_enable[i]
 			OR ((burner_quantity = 1) AND SETTINGS.protect_enable[i]);
 
