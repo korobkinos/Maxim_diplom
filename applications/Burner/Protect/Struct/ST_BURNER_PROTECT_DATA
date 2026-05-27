@@ -13,6 +13,8 @@ STRUCT
 	protect_warning   : ARRAY[0..burner_protect_quantity] OF BOOL;
 	protect_alarm     : ARRAY[0..burner_protect_quantity] OF BOOL;
 	execute_state     : ARRAY[0..burner_protect_quantity] OF BOOL;
+	execute_set_cmd   : ARRAY[0..burner_protect_quantity] OF BOOL;
+	execute_reset_cmd : ARRAY[0..burner_protect_quantity] OF BOOL;
 	state             : DWORD;
 END_STRUCT
 END_TYPE

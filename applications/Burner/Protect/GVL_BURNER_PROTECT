@@ -12,4 +12,6 @@ VAR_GLOBAL
 	warning        : ARRAY[1..total_burner_protect_quantity] OF BOOL;
 	alarm          : ARRAY[1..total_burner_protect_quantity] OF BOOL;
 	execute_state  : ARRAY[1..total_burner_protect_quantity] OF BOOL;
+	execute_set_cmd   : ARRAY[1..total_burner_protect_quantity] OF BOOL;
+	execute_reset_cmd : ARRAY[1..total_burner_protect_quantity] OF BOOL;
 END_VAR

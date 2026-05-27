@@ -69,6 +69,8 @@ FOR local_idx := 0 TO burner_protect_quantity DO
 	IF enable THEN
 		protect_data.protect_input[local_idx] := GVL_BURNER_PROTECT.input[global_idx];
 		protect_data.protect_control[local_idx] := GVL_BURNER_PROTECT.control[global_idx];
+		protect_data.execute_set_cmd[local_idx] := GVL_BURNER_PROTECT.execute_set_cmd[global_idx];
+		protect_data.execute_reset_cmd[local_idx] := GVL_BURNER_PROTECT.execute_reset_cmd[global_idx];
 	END_IF;
 
 	GVL_BURNER_PROTECT.warning[global_idx] := protect_data.protect_warning[local_idx];
