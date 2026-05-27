@@ -31,10 +31,4 @@ VAR_GLOBAL
 	step         : ARRAY[1..total_burner_ignition_quantity] OF WORD;
 	state        : ARRAY[1..total_burner_ignition_quantity] OF DWORD;
 
-	cfg_mode             : ARRAY[1..burner_quantity] OF REAL;
-	cfg_repeat           : ARRAY[1..burner_quantity] OF REAL;
-	cfg_t_ignition       : ARRAY[1..burner_quantity] OF REAL;
-	cfg_t_gas_spark      : ARRAY[1..burner_quantity] OF REAL;
-	cfg_t_flame_check    : ARRAY[1..burner_quantity] OF REAL;
-	cfg_flame_feedback_idx : ARRAY[1..burner_quantity] OF WORD;
 END_VAR
