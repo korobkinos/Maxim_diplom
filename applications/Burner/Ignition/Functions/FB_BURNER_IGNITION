@@ -30,13 +30,6 @@ global_idx := GetBurnerIgnitionIndex(burner_id := burner_id, local_idx := local_
 IF burner_quantity = 1 THEN
 	ignition_data.settings_local := SETTINGS.ignition_settings;
 	ignition_data.flame_feedback_idx := ignit;
-ELSE
-	ignition_data.settings_local.VALUE[1] := GVL_BURNER_IGNITION.cfg_mode[burner_id];
-	ignition_data.settings_local.VALUE[2] := GVL_BURNER_IGNITION.cfg_repeat[burner_id];
-	ignition_data.settings_local.VALUE[3] := GVL_BURNER_IGNITION.cfg_t_ignition[burner_id];
-	ignition_data.settings_local.VALUE[4] := GVL_BURNER_IGNITION.cfg_t_gas_spark[burner_id];
-	ignition_data.settings_local.VALUE[5] := GVL_BURNER_IGNITION.cfg_t_flame_check[burner_id];
-	ignition_data.flame_feedback_idx := GVL_BURNER_IGNITION.cfg_flame_feedback_idx[burner_id];
 END_IF;
 
 flame_feedback_valid := (ignition_data.flame_feedback_idx >= 1) AND (ignition_data.flame_feedback_idx <= counter_armature);

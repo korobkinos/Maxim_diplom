@@ -30,20 +30,9 @@ global_idx := GetBurnerPressureIndex(burner_id := burner_id, local_idx := local_
 IF burner_quantity = 1 THEN
 	pressure_data.settings_local := SETTINGS.pres_settings;
 	pressure_data.pressure_ai_idx := pressure_sensor;
-	pressure_data.pressure_source_mode := 0;
-ELSE
-	pressure_data.settings_local.VALUE[1] := GVL_BURNER_PRESSURE.cfg_p_min[burner_id];
-	pressure_data.settings_local.VALUE[2] := GVL_BURNER_PRESSURE.cfg_p_max[burner_id];
-	pressure_data.settings_local.VALUE[3] := GVL_BURNER_PRESSURE.cfg_t_wait_1[burner_id];
-	pressure_data.settings_local.VALUE[4] := GVL_BURNER_PRESSURE.cfg_t_wait_2[burner_id];
-	pressure_data.settings_local.VALUE[5] := GVL_BURNER_PRESSURE.cfg_t_wait_3[burner_id];
-	pressure_data.settings_local.VALUE[6] := GVL_BURNER_PRESSURE.cfg_t_fast[burner_id];
-	pressure_data.settings_local.VALUE[7] := GVL_BURNER_PRESSURE.cfg_t_termination[burner_id];
-	pressure_data.settings_local.VALUE[8] := GVL_BURNER_PRESSURE.cfg_kb_sensor[burner_id];
-	pressure_data.settings_local.VALUE[9] := GVL_BURNER_PRESSURE.cfg_press_mode[burner_id];
-	pressure_data.pressure_ai_idx := GVL_BURNER_PRESSURE.cfg_pressure_ai_idx[burner_id];
-	pressure_data.pressure_source_mode := 0;
 END_IF;
+
+pressure_data.pressure_source_mode := 0;
 
 pressure_sensor_idx := pressure_data.pressure_ai_idx;
 pressure_sensor_valid := (pressure_sensor_idx >= 1) AND (pressure_sensor_idx <= in_out_quantity);
