@@ -58,7 +58,7 @@ IF enable THEN
 		pressure_data.settings_local.VALUE[8] := SETTINGS.pressure_cfg_kb_sensor[burner_id];
 		pressure_data.settings_local.VALUE[9] := SETTINGS.pressure_cfg_press_mode[burner_id];
 		pressure_data.pressure_ai_idx := SETTINGS.pressure_cfg_pressure_ai_idx[burner_id];
-		pressure_data.pressure_source_mode := SETTINGS.pressure_cfg_pressure_source_mode[burner_id];
+		pressure_data.pressure_source_mode := 0;
 
 		ignition_data.settings_local.VALUE[1] := SETTINGS.ignition_cfg_mode[burner_id];
 		ignition_data.settings_local.VALUE[2] := SETTINGS.ignition_cfg_repeat[burner_id];

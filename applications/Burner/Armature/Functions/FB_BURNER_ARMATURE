@@ -181,4 +181,3 @@ FOR i := 0 TO PID_quantity DO
 	END_IF;
 END_FOR;
 
-ignition_data.ignition_flame := valve_data.open_state[ignit];
