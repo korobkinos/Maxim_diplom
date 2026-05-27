@@ -39,7 +39,7 @@ ELSE
 	ignition_data.flame_feedback_idx := GVL_BURNER_IGNITION.cfg_flame_feedback_idx[burner_id];
 END_IF;
 
-flame_feedback_valid := ignition_data.flame_feedback_idx <= counter_armature;
+flame_feedback_valid := (ignition_data.flame_feedback_idx >= 1) AND (ignition_data.flame_feedback_idx <= counter_armature);
 IF flame_feedback_valid THEN
 	ignition_data.ignition_flame := valve_data.open_state[ignition_data.flame_feedback_idx];
 ELSE

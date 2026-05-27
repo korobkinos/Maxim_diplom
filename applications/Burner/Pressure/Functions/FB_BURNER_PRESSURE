@@ -42,15 +42,11 @@ ELSE
 	pressure_data.settings_local.VALUE[8] := GVL_BURNER_PRESSURE.cfg_kb_sensor[burner_id];
 	pressure_data.settings_local.VALUE[9] := GVL_BURNER_PRESSURE.cfg_press_mode[burner_id];
 	pressure_data.pressure_ai_idx := GVL_BURNER_PRESSURE.cfg_pressure_ai_idx[burner_id];
-	pressure_data.pressure_source_mode := GVL_BURNER_PRESSURE.cfg_pressure_source_mode[burner_id];
-END_IF;
-
-IF pressure_data.pressure_source_mode <> 0 THEN
 	pressure_data.pressure_source_mode := 0;
 END_IF;
 
 pressure_sensor_idx := pressure_data.pressure_ai_idx;
-pressure_sensor_valid := pressure_sensor_idx <= in_out_quantity;
+pressure_sensor_valid := (pressure_sensor_idx >= 1) AND (pressure_sensor_idx <= in_out_quantity);
 IF pressure_sensor_valid THEN
 	pressure_sensor_value := GVL_SCALE.AI_IN_SCALE[pressure_sensor_idx];
 ELSE
