@@ -27,11 +27,6 @@ END_VAR
 local_idx := 0;
 global_idx := GetBurnerIgnitionIndex(burner_id := burner_id, local_idx := local_idx);
 
-IF burner_quantity = 1 THEN
-	ignition_data.settings_local := SETTINGS.ignition_settings;
-	ignition_data.flame_feedback_idx := ignit;
-END_IF;
-
 flame_feedback_valid := (ignition_data.flame_feedback_idx >= 1) AND (ignition_data.flame_feedback_idx <= counter_armature);
 IF flame_feedback_valid THEN
 	ignition_data.ignition_flame := valve_data.open_state[ignition_data.flame_feedback_idx];

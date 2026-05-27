@@ -65,12 +65,6 @@ ELSE
 	p_air_control_delay_cfg := protect_data.p_air_control_delay;
 	flame_control_delay_cfg := protect_data.flame_control_delay;
 
-	IF burner_quantity = 1 THEN
-		p_gas_control_delay_cfg := SETTINGS.p_gas_control_delay;
-		p_air_control_delay_cfg := SETTINGS.p_air_control_delay;
-		flame_control_delay_cfg := SETTINGS.flame_control_delay;
-	END_IF;
-
 	p_air_control_delay_ton(
 		IN := burner_data.boiler_run,
 		PT := REAL_TO_TIME(p_air_control_delay_cfg * 1000)
@@ -98,8 +92,7 @@ ELSE
 	IF SETTINGS.test_mode THEN
 		pilot_p_control_current := TRUE;
 	END_IF;
-	cmd_protect_enable := protect_data.protect_enable[PC_PILOT_P]
-		OR ((burner_quantity = 1) AND SETTINGS.protect_enable[PC_PILOT_P]);
+	cmd_protect_enable := protect_data.protect_enable[PC_PILOT_P];
 	IF NOT cmd_protect_enable THEN
 		pilot_p_control_current := FALSE;
 	END_IF;
@@ -180,8 +173,7 @@ ELSE
 
 		cmd_execute_set := protect_data.execute_set_cmd[i];
 		cmd_execute_reset := protect_data.execute_reset_cmd[i];
-		cmd_protect_enable := protect_data.protect_enable[i]
-			OR ((burner_quantity = 1) AND SETTINGS.protect_enable[i]);
+		cmd_protect_enable := protect_data.protect_enable[i];
 
 		protect_on_off[i](
 			MAN_ON := cmd_execute_set,
@@ -193,9 +185,6 @@ ELSE
 		alarm_value := FALSE;
 		warning_value := FALSE;
 		protect_delay_cfg := protect_data.protect_delay_time[i];
-		IF burner_quantity = 1 THEN
-			protect_delay_cfg := SETTINGS.protect_delay_time[i];
-		END_IF;
 
 		protect[i](
 			Signal_groupe_param := signal_value,

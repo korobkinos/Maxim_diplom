@@ -27,11 +27,6 @@ END_VAR
 local_idx := 0;
 global_idx := GetBurnerPressureIndex(burner_id := burner_id, local_idx := local_idx);
 
-IF burner_quantity = 1 THEN
-	pressure_data.settings_local := SETTINGS.pres_settings;
-	pressure_data.pressure_ai_idx := pressure_sensor;
-END_IF;
-
 pressure_data.pressure_source_mode := 0;
 
 pressure_sensor_idx := pressure_data.pressure_ai_idx;

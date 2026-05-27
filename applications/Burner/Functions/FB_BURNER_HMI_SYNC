@@ -36,41 +36,28 @@ IF enable THEN
 	burner_data.manual_mode := GVL_BURNERS.manual_mode[burner_id];
 	regulator_data.load_setpoint := GVL_BURNERS.load_setpoint[burner_id];
 
-	IF burner_quantity = 1 THEN
-		pressure_data.settings_local := SETTINGS.pres_settings;
-		pressure_data.pressure_ai_idx := pressure_sensor;
-		pressure_data.pressure_source_mode := 0;
+	pressure_data.settings_local.VALUE[1] := SETTINGS.pressure_cfg_p_min[burner_id];
+	pressure_data.settings_local.VALUE[2] := SETTINGS.pressure_cfg_p_max[burner_id];
+	pressure_data.settings_local.VALUE[3] := SETTINGS.pressure_cfg_t_wait_1[burner_id];
+	pressure_data.settings_local.VALUE[4] := SETTINGS.pressure_cfg_t_wait_2[burner_id];
+	pressure_data.settings_local.VALUE[5] := SETTINGS.pressure_cfg_t_wait_3[burner_id];
+	pressure_data.settings_local.VALUE[6] := SETTINGS.pressure_cfg_t_fast[burner_id];
+	pressure_data.settings_local.VALUE[7] := SETTINGS.pressure_cfg_t_termination[burner_id];
+	pressure_data.settings_local.VALUE[8] := SETTINGS.pressure_cfg_kb_sensor[burner_id];
+	pressure_data.settings_local.VALUE[9] := SETTINGS.pressure_cfg_press_mode[burner_id];
+	pressure_data.pressure_ai_idx := SETTINGS.pressure_cfg_pressure_ai_idx[burner_id];
+	pressure_data.pressure_source_mode := 0;
 
-		ignition_data.settings_local := SETTINGS.ignition_settings;
-		ignition_data.flame_feedback_idx := ignit;
+	ignition_data.settings_local.VALUE[1] := SETTINGS.ignition_cfg_mode[burner_id];
+	ignition_data.settings_local.VALUE[2] := SETTINGS.ignition_cfg_repeat[burner_id];
+	ignition_data.settings_local.VALUE[3] := SETTINGS.ignition_cfg_t_ignition[burner_id];
+	ignition_data.settings_local.VALUE[4] := SETTINGS.ignition_cfg_t_gas_spark[burner_id];
+	ignition_data.settings_local.VALUE[5] := SETTINGS.ignition_cfg_t_flame_check[burner_id];
+	ignition_data.flame_feedback_idx := SETTINGS.ignition_cfg_flame_feedback_idx[burner_id];
 
-		protect_data.p_gas_control_delay := SETTINGS.p_gas_control_delay;
-		protect_data.p_air_control_delay := SETTINGS.p_air_control_delay;
-		protect_data.flame_control_delay := SETTINGS.flame_control_delay;
-	ELSE
-		pressure_data.settings_local.VALUE[1] := SETTINGS.pressure_cfg_p_min[burner_id];
-		pressure_data.settings_local.VALUE[2] := SETTINGS.pressure_cfg_p_max[burner_id];
-		pressure_data.settings_local.VALUE[3] := SETTINGS.pressure_cfg_t_wait_1[burner_id];
-		pressure_data.settings_local.VALUE[4] := SETTINGS.pressure_cfg_t_wait_2[burner_id];
-		pressure_data.settings_local.VALUE[5] := SETTINGS.pressure_cfg_t_wait_3[burner_id];
-		pressure_data.settings_local.VALUE[6] := SETTINGS.pressure_cfg_t_fast[burner_id];
-		pressure_data.settings_local.VALUE[7] := SETTINGS.pressure_cfg_t_termination[burner_id];
-		pressure_data.settings_local.VALUE[8] := SETTINGS.pressure_cfg_kb_sensor[burner_id];
-		pressure_data.settings_local.VALUE[9] := SETTINGS.pressure_cfg_press_mode[burner_id];
-		pressure_data.pressure_ai_idx := SETTINGS.pressure_cfg_pressure_ai_idx[burner_id];
-		pressure_data.pressure_source_mode := 0;
-
-		ignition_data.settings_local.VALUE[1] := SETTINGS.ignition_cfg_mode[burner_id];
-		ignition_data.settings_local.VALUE[2] := SETTINGS.ignition_cfg_repeat[burner_id];
-		ignition_data.settings_local.VALUE[3] := SETTINGS.ignition_cfg_t_ignition[burner_id];
-		ignition_data.settings_local.VALUE[4] := SETTINGS.ignition_cfg_t_gas_spark[burner_id];
-		ignition_data.settings_local.VALUE[5] := SETTINGS.ignition_cfg_t_flame_check[burner_id];
-		ignition_data.flame_feedback_idx := SETTINGS.ignition_cfg_flame_feedback_idx[burner_id];
-
-		protect_data.p_gas_control_delay := SETTINGS.burner_p_gas_control_delay[burner_id];
-		protect_data.p_air_control_delay := SETTINGS.burner_p_air_control_delay[burner_id];
-		protect_data.flame_control_delay := SETTINGS.burner_flame_control_delay[burner_id];
-	END_IF;
+	protect_data.p_gas_control_delay := SETTINGS.burner_p_gas_control_delay[burner_id];
+	protect_data.p_air_control_delay := SETTINGS.burner_p_air_control_delay[burner_id];
+	protect_data.flame_control_delay := SETTINGS.burner_flame_control_delay[burner_id];
 END_IF;
 
 FOR local_idx := 0 TO counter_armature DO
@@ -107,13 +94,8 @@ FOR local_idx := 0 TO burner_protect_quantity DO
 	IF enable THEN
 		protect_data.protect_input[local_idx] := GVL_BURNER_PROTECT.input[global_idx];
 		protect_data.protect_control[local_idx] := GVL_BURNER_PROTECT.control[global_idx];
-		IF burner_quantity = 1 THEN
-			protect_data.protect_enable[local_idx] := SETTINGS.protect_enable[local_idx];
-			protect_data.protect_delay_time[local_idx] := SETTINGS.protect_delay_time[local_idx];
-		ELSE
-			protect_data.protect_enable[local_idx] := SETTINGS.burner_protect_enable[global_idx];
-			protect_data.protect_delay_time[local_idx] := SETTINGS.burner_protect_delay_time[global_idx];
-		END_IF;
+		protect_data.protect_enable[local_idx] := SETTINGS.burner_protect_enable[global_idx];
+		protect_data.protect_delay_time[local_idx] := SETTINGS.burner_protect_delay_time[global_idx];
 		protect_data.execute_set_cmd[local_idx] := GVL_BURNER_PROTECT.execute_set_cmd[global_idx];
 		protect_data.execute_reset_cmd[local_idx] := GVL_BURNER_PROTECT.execute_reset_cmd[global_idx];
 	END_IF;
