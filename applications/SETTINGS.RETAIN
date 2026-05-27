@@ -15,12 +15,10 @@ VAR_GLOBAL PERSISTENT RETAIN
 	========================================================
 	*)
 	armature_simulation		: BOOL;		// Включение имитации всей арматуры
-	alarm_stop				: BOOL;		// Общий аварийный останов
 	test_mode				: BOOL;		// Режим испытания: все защиты ставятся на контроль
 
 	// Уставки и настройки алгоритмов
 	ignition_settings		: ignition_settings;	// Уставки блока запальника
-	burner_settings			: burner_settings;		// Настройки блока розжига
 	ignition_cfg_mode		: ARRAY[1..burner_quantity] OF REAL;
 	ignition_cfg_repeat		: ARRAY[1..burner_quantity] OF REAL;
 	ignition_cfg_t_ignition	: ARRAY[1..burner_quantity] OF REAL;
@@ -35,7 +33,6 @@ VAR_GLOBAL PERSISTENT RETAIN
 	========================================================
 	*)
 	min_power				: REAL := 10;	// Минимальная мощность горелки, кПа
-	shiber_percent			: REAL;			// Уставка задания для ШВ при регулировании по положению ШВ, %
 	max_reach_time			: REAL;			// Время выхода на минимальную мощность
 
 	pid_settings			: ARRAY[0..PID_quantity] OF PID_SETTINGS;
@@ -78,29 +75,6 @@ VAR_GLOBAL PERSISTENT RETAIN
 
 	Если значение 0 - данная арматура не влияет на соответствующий AI
 	*)
-	map_valve_ai_bind : ARRAY[0..counter_armature] OF ARRAY[0..4] OF WORD :=
-	[
-		// По умолчанию первые 5 задвижек не изменяют AI
-		[4(0)],
-		[4(0)],
-		[4(0)],
-		[1,0,0,0], //задвижка №3 - имитация AI#3
-		[4(0)],
-		[4(0)],		
-		// 6-я задвижка влияет на:
-		// AI №1 = air_shiber_position
-		// AI №2 = air_pressure_burner
-		[air_shiber_position, air_pressure_burner, 0, 0],
-
-		// 7-я задвижка влияет на:
-		// AI №1 = pressure_sensor
-		// AI №2 = gas_shiber_position
-		// AI №3 = gas_pressure_burner
-		[pressure_sensor, gas_shiber_position, gas_pressure_burner, 0],
-
-		// Остальная арматура пустая
-		23([4(0)])
-	];
 
 
 	(*
@@ -135,7 +109,6 @@ VAR_GLOBAL PERSISTENT RETAIN
 		МАСШТАБИРОВАНИЕ АНАЛОГОВЫХ СИГНАЛОВ
 	========================================================
 	*)
-	SENSOR_AI_SETTINGS	: SENSOR_AI_SETTINGS;
 
 
 	(*
