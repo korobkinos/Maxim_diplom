@@ -15,7 +15,7 @@ VAR_INPUT
 	P_max_active         : BOOL;   // Дискретный датчик "достигнуто максимальное давление"
 	P_min_active         : BOOL;   // Дискретный датчик "достигнуто минимальное давление"
 
-	pressure_source_mode : USINT;  // 0-аналог, 1-дискретные, 2-комбинированно
+	pressure_source_mode : WORD;  // 0-аналог, 1-дискретные, 2-комбинированно
 
 	Pressure_settings    : pressure_settings;
 	// Value[1] = P_min, минимальное давление опрессовки
