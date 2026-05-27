@@ -21,6 +21,12 @@ VAR_GLOBAL PERSISTENT RETAIN
 	// Уставки и настройки алгоритмов
 	ignition_settings		: ignition_settings;	// Уставки блока запальника
 	burner_settings			: burner_settings;		// Настройки блока розжига
+	ignition_cfg_mode		: ARRAY[1..burner_quantity] OF REAL;
+	ignition_cfg_repeat		: ARRAY[1..burner_quantity] OF REAL;
+	ignition_cfg_t_ignition	: ARRAY[1..burner_quantity] OF REAL;
+	ignition_cfg_t_gas_spark: ARRAY[1..burner_quantity] OF REAL;
+	ignition_cfg_t_flame_check: ARRAY[1..burner_quantity] OF REAL;
+	ignition_cfg_flame_feedback_idx : ARRAY[1..burner_quantity] OF WORD;
 
 
 	(*
@@ -140,6 +146,7 @@ VAR_GLOBAL PERSISTENT RETAIN
 
 	// Разрешение защит
 	protect_enable			: ARRAY[0..burner_protect_quantity] OF BOOL := [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1];
+	burner_protect_enable	: ARRAY[1..total_burner_protect_quantity] OF BOOL;
 
 	// Команды на ввод / вывод защит
 	protect_execute_set		: ARRAY[0..burner_protect_quantity] OF BOOL; // ввод защиты
@@ -147,11 +154,15 @@ VAR_GLOBAL PERSISTENT RETAIN
 
 	// Задержки срабатывания защит
 	protect_delay_time		: ARRAY[0..burner_protect_quantity] OF REAL := [0.5,3,5,5,3,5,5,1,0.5,0.5,0.3,2,2,2.5,3];
+	burner_protect_delay_time : ARRAY[1..total_burner_protect_quantity] OF REAL;
 
 	// Дополнительные задержки постановки на контроль
 	p_gas_control_delay		: REAL := 3;	// Задержка ввода защиты по давлению газа
 	p_air_control_delay		: REAL := 3;	// Задержка ввода защиты по давлению воздуха
 	flame_control_delay		: REAL := 15;	// Задержка ввода защиты по пламени горелки
+	burner_p_gas_control_delay : ARRAY[1..burner_quantity] OF REAL;
+	burner_p_air_control_delay : ARRAY[1..burner_quantity] OF REAL;
+	burner_flame_control_delay : ARRAY[1..burner_quantity] OF REAL;
 
 
 	(*
@@ -160,5 +171,16 @@ VAR_GLOBAL PERSISTENT RETAIN
 	========================================================
 	*)
 	pres_settings			: Pressure_settings; // Настройки опрессовки
+	pressure_cfg_p_min		: ARRAY[1..burner_quantity] OF REAL;
+	pressure_cfg_p_max		: ARRAY[1..burner_quantity] OF REAL;
+	pressure_cfg_t_wait_1	: ARRAY[1..burner_quantity] OF REAL;
+	pressure_cfg_t_wait_2	: ARRAY[1..burner_quantity] OF REAL;
+	pressure_cfg_t_wait_3	: ARRAY[1..burner_quantity] OF REAL;
+	pressure_cfg_t_fast		: ARRAY[1..burner_quantity] OF REAL;
+	pressure_cfg_t_termination : ARRAY[1..burner_quantity] OF REAL;
+	pressure_cfg_kb_sensor	: ARRAY[1..burner_quantity] OF REAL;
+	pressure_cfg_press_mode	: ARRAY[1..burner_quantity] OF REAL;
+	pressure_cfg_pressure_ai_idx : ARRAY[1..burner_quantity] OF WORD;
+	pressure_cfg_pressure_source_mode : ARRAY[1..burner_quantity] OF WORD;
 	
 END_VAR

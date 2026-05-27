@@ -1,9 +1,0 @@
-{attribute 'qualified_only'}
-VAR_GLOBAL PERSISTENT RETAIN
-	cfg_mode               : ARRAY[1..burner_quantity] OF REAL;
-	cfg_repeat             : ARRAY[1..burner_quantity] OF REAL;
-	cfg_t_ignition         : ARRAY[1..burner_quantity] OF REAL;
-	cfg_t_gas_spark        : ARRAY[1..burner_quantity] OF REAL;
-	cfg_t_flame_check      : ARRAY[1..burner_quantity] OF REAL;
-	cfg_flame_feedback_idx : ARRAY[1..burner_quantity] OF WORD;
-END_VAR
