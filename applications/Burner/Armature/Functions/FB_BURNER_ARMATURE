@@ -20,11 +20,11 @@ VAR
 	open_cmd     : ARRAY[0..counter_armature] OF BOOL;
 	close_cmd    : ARRAY[0..counter_armature] OF BOOL;
 	block_cmd    : ARRAY[0..counter_armature] OF BOOL;
+	reg_up_cmd   : ARRAY[0..counter_armature] OF BOOL;
+	reg_down_cmd : ARRAY[0..counter_armature] OF BOOL;
+	reg_auto_cmd : ARRAY[0..counter_armature] OF BOOL;
+	reg_man_cmd  : ARRAY[0..counter_armature] OF BOOL;
 
-	reg_up_out     : BOOL;
-	reg_down_out   : BOOL;
-	reg_auto_set   : BOOL;
-	reg_manual_set : BOOL;
 	cmd_up         : BOOL;
 	cmd_down       : BOOL;
 	cmd_open       : BOOL;
@@ -36,7 +36,9 @@ VAR
 	cmd_set_special: BOOL;
 	cmd_imitation  : BOOL;
 
-	i : WORD;
+	i        : WORD;
+	pid_idx  : WORD;
+	valve_idx: WORD;
 END_VAR
 
 // === IMPLEMENTATION ===
@@ -55,6 +57,10 @@ FOR i := 0 TO counter_armature DO
 	up_cmd[i] := valve_data.up[i];
 	down_cmd[i] := valve_data.down[i];
 	block_cmd[i] := valve_data.block[i];
+	reg_up_cmd[i] := FALSE;
+	reg_down_cmd[i] := FALSE;
+	reg_auto_cmd[i] := FALSE;
+	reg_man_cmd[i] := FALSE;
 END_FOR;
 
 IF enable THEN
@@ -88,28 +94,29 @@ IF enable THEN
 	close_cmd[ko] := close_cmd[ko] OR pressure_data.KO_RESET;
 END_IF;
 
-FOR i := 0 TO counter_armature DO
-	reg_up_out := FALSE;
-	reg_down_out := FALSE;
-	reg_auto_set := FALSE;
-	reg_manual_set := FALSE;
-
-	IF i <= PID_quantity THEN
-		reg_up_out := regulator_data.reg_valve[i].up_out;
-		reg_down_out := regulator_data.reg_valve[i].down_out;
-		reg_auto_set := regulator_data.reg_valve[i].auto_set;
-		reg_manual_set := regulator_data.reg_valve[i].man_set;
+FOR i := 0 TO PID_quantity DO
+	IF SETTINGS.reg_binding_map[i][0] = SETTINGS.reg_binding_on THEN
+		pid_idx := SETTINGS.reg_binding_map[i][1];
+		valve_idx := SETTINGS.reg_binding_map[i][2];
+		IF (pid_idx <= PID_quantity) AND (valve_idx <= counter_armature) THEN
+			reg_up_cmd[valve_idx] := reg_up_cmd[valve_idx] OR regulator_data.reg_valve[pid_idx].up_out;
+			reg_down_cmd[valve_idx] := reg_down_cmd[valve_idx] OR regulator_data.reg_valve[pid_idx].down_out;
+			reg_auto_cmd[valve_idx] := reg_auto_cmd[valve_idx] OR regulator_data.reg_valve[pid_idx].auto_set;
+			reg_man_cmd[valve_idx] := reg_man_cmd[valve_idx] OR regulator_data.reg_valve[pid_idx].man_set;
+		END_IF;
 	END_IF;
+END_FOR;
 
+FOR i := 0 TO counter_armature DO
 	IF enable THEN
-		cmd_up := up_cmd[i] OR reg_up_out;
-		cmd_down := down_cmd[i] OR reg_down_out;
+		cmd_up := up_cmd[i] OR reg_up_cmd[i];
+		cmd_down := down_cmd[i] OR reg_down_cmd[i];
 		cmd_open := open_cmd[i];
 		cmd_closed := close_cmd[i];
 		cmd_stop := valve_data.stop[i];
 		cmd_block := block_cmd[i];
-		cmd_set_auto := valve_data.set_auto[i] OR reg_auto_set;
-		cmd_set_manual := valve_data.open[i] OR valve_data.closed[i] OR valve_data.set_manual[i] OR reg_manual_set;
+		cmd_set_auto := valve_data.set_auto[i] OR reg_auto_cmd[i];
+		cmd_set_manual := valve_data.open[i] OR valve_data.closed[i] OR valve_data.set_manual[i] OR reg_man_cmd[i];
 		cmd_set_special := valve_data.set_special[i];
 		cmd_imitation := valve_data.imitation_mode[i] OR SETTINGS.armature_simulation;
 	ELSE
@@ -158,10 +165,19 @@ FOR i := 0 TO counter_armature DO
 	);
 END_FOR;
 
-FOR i := 0 TO counter_armature DO
-	IF i <= PID_quantity THEN
-		regulator_data.reg_valve[i].open_state := valve_data.open_state[i];
-		regulator_data.reg_valve[i].closed_state := valve_data.closed_state[i];
+FOR i := 0 TO PID_quantity DO
+	regulator_data.reg_valve[i].open_state := FALSE;
+	regulator_data.reg_valve[i].closed_state := FALSE;
+END_FOR;
+
+FOR i := 0 TO PID_quantity DO
+	IF SETTINGS.reg_binding_map[i][0] = SETTINGS.reg_binding_on THEN
+		pid_idx := SETTINGS.reg_binding_map[i][1];
+		valve_idx := SETTINGS.reg_binding_map[i][2];
+		IF (pid_idx <= PID_quantity) AND (valve_idx <= counter_armature) THEN
+			regulator_data.reg_valve[pid_idx].open_state := valve_data.open_state[valve_idx];
+			regulator_data.reg_valve[pid_idx].closed_state := valve_data.closed_state[valve_idx];
+		END_IF;
 	END_IF;
 END_FOR;
 

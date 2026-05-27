@@ -35,8 +35,8 @@ PID(
 	E_negative:= settings.value[E_negative],
 	E_positive:= settings.value[E_positive],
 	ON:= PID_EN,
-	luft:= SETTINGS.value[T_luft],
-	min_pause:= SETTINGS.value[min_pause],
+	luft:= settings.value[T_luft],
+	min_pause:= settings.value[min_pause],
 	);
 				
 	//инверсия
