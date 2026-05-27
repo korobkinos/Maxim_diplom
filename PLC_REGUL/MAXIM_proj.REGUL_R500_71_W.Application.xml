@@ -9,12 +9,6 @@
     <TypeSimple name="T_BOOL" size="1" swapsize="0" typeclass="Bool" iecname="BOOL" />
     <TypeSimple name="T_REAL" size="4" swapsize="4" typeclass="Real" iecname="REAL" />
     <TypeSimple name="T_WORD" size="2" swapsize="2" typeclass="Word" iecname="WORD" />
-    <TypeArray name="T_ARRAY__0__31__OF_BOOL" size="32" nativesize="32" typeclass="Array" iecname="ARRAY [0..31] OF BOOL" basetype="T_BOOL">
-      <ArrayDim minrange="0" maxrange="31" />
-    </TypeArray>
-    <TypeArray name="T_ARRAY__0__31__OF_REAL" size="128" nativesize="128" typeclass="Array" iecname="ARRAY [0..31] OF REAL" basetype="T_REAL">
-      <ArrayDim minrange="0" maxrange="31" />
-    </TypeArray>
     <TypeArray name="T_ARRAY__0__4__OF_WORD" size="10" nativesize="10" typeclass="Array" iecname="ARRAY [0..4] OF WORD" basetype="T_WORD">
       <ArrayDim minrange="0" maxrange="4" />
     </TypeArray>
@@ -23,6 +17,9 @@
     </TypeArray>
     <TypeArray name="T_ARRAY__1__15__OF_REAL" size="60" nativesize="60" typeclass="Array" iecname="ARRAY [1..15] OF REAL" basetype="T_REAL">
       <ArrayDim minrange="1" maxrange="15" />
+    </TypeArray>
+    <TypeArray name="T_ARRAY__1__32__OF_BOOL" size="32" nativesize="32" typeclass="Array" iecname="ARRAY [1..32] OF BOOL" basetype="T_BOOL">
+      <ArrayDim minrange="1" maxrange="32" />
     </TypeArray>
     <TypeArray name="T_ARRAY__0__10__OF_ARRAY__0__4__OF_WORD" size="110" nativesize="110" typeclass="Array" iecname="ARRAY [0..10] OF ARRAY [0..4] OF WORD" basetype="T_ARRAY__0__4__OF_WORD">
       <ArrayDim minrange="0" maxrange="10" />
@@ -42,18 +39,15 @@
   <NodeList>
     <Node name="Application">
       <Node name="SETTINGS">
-        <Node name="BURNER_BLOCK_MODE" type="T_ARRAY__0__31__OF_BOOL" access="ReadWrite" />
-        <Node name="BURNER_ONE_STATE" type="T_ARRAY__0__31__OF_BOOL" access="ReadWrite" />
+        <Node name="burner_block_mode" type="T_ARRAY__1__32__OF_BOOL" access="ReadWrite" />
+        <Node name="burner_one_state" type="T_ARRAY__1__32__OF_BOOL" access="ReadWrite" />
         <Node name="gas_air_map" type="T_GAS_AIR_PROPORTION" access="ReadWrite" />
         <Node name="max_reach_time" type="T_REAL" access="ReadWrite" />
         <Node name="min_power" type="T_REAL" access="ReadWrite" />
-        <Node name="off_time_burner" type="T_ARRAY__0__31__OF_REAL" access="ReadWrite" />
         <Node name="pid_settings" type="T_ARRAY__0__10__OF_PID_SETTINGS" access="ReadWrite" />
-        <Node name="pull_time" type="T_ARRAY__0__31__OF_REAL" access="ReadWrite" />
         <Node name="reg_binding_map" type="T_ARRAY__0__10__OF_ARRAY__0__4__OF_WORD" access="ReadWrite" />
         <Node name="reg_binding_off" type="T_WORD" access="ReadWrite" />
         <Node name="reg_binding_on" type="T_WORD" access="ReadWrite" />
-        <Node name="wait_time_burner" type="T_ARRAY__0__31__OF_REAL" access="ReadWrite" />
       </Node>
     </Node>
   </NodeList>

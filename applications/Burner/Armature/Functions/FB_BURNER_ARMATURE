@@ -1,4 +1,4 @@
-﻿FUNCTION_BLOCK FB_BURNER_ARMATURE
+FUNCTION_BLOCK FB_BURNER_ARMATURE
 VAR_INPUT
 	burner_id : WORD;
 	enable    : BOOL;
@@ -48,6 +48,7 @@ VAR
 	i        : WORD;
 	pid_idx  : WORD;
 	valve_idx: WORD;
+	binding_global_idx : WORD;
 END_VAR
 
 // === IMPLEMENTATION ===
@@ -72,6 +73,8 @@ FOR i := 0 TO counter_armature DO
 	reg_auto_cmd[i] := FALSE;
 	reg_man_cmd[i] := FALSE;
 END_FOR;
+
+burner_id_valid := (burner_id >= 1) AND (burner_id <= burner_quantity);
 
 IF enable THEN
 	up_cmd[gas_shiber] := up_cmd[gas_shiber] OR regulator_data.min_power_impulse_up;
@@ -105,20 +108,25 @@ IF enable THEN
 END_IF;
 
 FOR i := 0 TO PID_quantity DO
-	IF SETTINGS.reg_binding_map[i][0] = SETTINGS.reg_binding_on THEN
-		pid_idx := SETTINGS.reg_binding_map[i][1];
-		valve_idx := SETTINGS.reg_binding_map[i][2];
-		IF (pid_idx <= PID_quantity) AND (valve_idx <= counter_armature) THEN
-			reg_up_cmd[valve_idx] := reg_up_cmd[valve_idx] OR regulator_data.reg_valve[pid_idx].up_out;
-			reg_down_cmd[valve_idx] := reg_down_cmd[valve_idx] OR regulator_data.reg_valve[pid_idx].down_out;
-			reg_auto_cmd[valve_idx] := reg_auto_cmd[valve_idx] OR regulator_data.reg_valve[pid_idx].auto_set;
-			reg_man_cmd[valve_idx] := reg_man_cmd[valve_idx] OR regulator_data.reg_valve[pid_idx].man_set;
+	binding_global_idx := 0;
+	IF burner_id_valid THEN
+		binding_global_idx := GetBurnerRegulatorIndex(burner_id := burner_id, local_idx := i);
+	END_IF;
+	IF burner_id_valid AND (binding_global_idx >= 1) AND (binding_global_idx <= total_burner_regulator_quantity) THEN
+		IF SETTINGS.burner_reg_binding_map[binding_global_idx][0] = SETTINGS.reg_binding_on THEN
+			pid_idx := SETTINGS.burner_reg_binding_map[binding_global_idx][1];
+			valve_idx := SETTINGS.burner_reg_binding_map[binding_global_idx][2];
+			IF (pid_idx <= PID_quantity) AND (valve_idx <= counter_armature) THEN
+				reg_up_cmd[valve_idx] := reg_up_cmd[valve_idx] OR regulator_data.reg_valve[pid_idx].up_out;
+				reg_down_cmd[valve_idx] := reg_down_cmd[valve_idx] OR regulator_data.reg_valve[pid_idx].down_out;
+				reg_auto_cmd[valve_idx] := reg_auto_cmd[valve_idx] OR regulator_data.reg_valve[pid_idx].auto_set;
+				reg_man_cmd[valve_idx] := reg_man_cmd[valve_idx] OR regulator_data.reg_valve[pid_idx].man_set;
+			END_IF;
 		END_IF;
 	END_IF;
 END_FOR;
 
 FOR i := 0 TO counter_armature DO
-	burner_id_valid := (burner_id >= 1) AND (burner_id <= burner_quantity);
 	local_idx_valid := i <= counter_armature;
 	arm_idx := 0;
 	effective_armature_simulation := FALSE;
@@ -201,13 +209,18 @@ FOR i := 0 TO PID_quantity DO
 END_FOR;
 
 FOR i := 0 TO PID_quantity DO
-	IF SETTINGS.reg_binding_map[i][0] = SETTINGS.reg_binding_on THEN
-		pid_idx := SETTINGS.reg_binding_map[i][1];
-		valve_idx := SETTINGS.reg_binding_map[i][2];
-		IF (pid_idx <= PID_quantity) AND (valve_idx <= counter_armature) THEN
-			regulator_data.reg_valve[pid_idx].open_state := valve_data.open_state[valve_idx];
-			regulator_data.reg_valve[pid_idx].closed_state := valve_data.closed_state[valve_idx];
+	binding_global_idx := 0;
+	IF burner_id_valid THEN
+		binding_global_idx := GetBurnerRegulatorIndex(burner_id := burner_id, local_idx := i);
+	END_IF;
+	IF burner_id_valid AND (binding_global_idx >= 1) AND (binding_global_idx <= total_burner_regulator_quantity) THEN
+		IF SETTINGS.burner_reg_binding_map[binding_global_idx][0] = SETTINGS.reg_binding_on THEN
+			pid_idx := SETTINGS.burner_reg_binding_map[binding_global_idx][1];
+			valve_idx := SETTINGS.burner_reg_binding_map[binding_global_idx][2];
+			IF (pid_idx <= PID_quantity) AND (valve_idx <= counter_armature) THEN
+				regulator_data.reg_valve[pid_idx].open_state := valve_data.open_state[valve_idx];
+				regulator_data.reg_valve[pid_idx].closed_state := valve_data.closed_state[valve_idx];
+			END_IF;
 		END_IF;
 	END_IF;
 END_FOR;
-
