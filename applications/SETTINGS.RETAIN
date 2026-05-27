@@ -15,7 +15,7 @@ VAR_GLOBAL PERSISTENT RETAIN
 	========================================================
 	*)
 	burner_test_mode		: ARRAY[1..burner_quantity] OF BOOL;	// Режим испытания по горелкам
-	burner_armature_simulation : ARRAY[1..burner_quantity] OF ARRAY[0..counter_armature] OF BOOL;	// Имитация арматуры по горелкам
+	burner_armature_simulation : ARRAY[1..total_burner_armature_quantity] OF BOOL;	// Имитация арматуры по горелкам (плоский массив)
 
 	// Уставки и настройки алгоритмов
 	ignition_cfg_mode		: ARRAY[1..burner_quantity] OF REAL;

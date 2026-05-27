@@ -1,0 +1,18 @@
+FUNCTION GetBurnerArmatureIndex : WORD
+VAR_INPUT
+	burner_id : WORD;
+	local_idx : WORD;
+END_VAR
+VAR
+	armature_per_burner : WORD;
+END_VAR
+
+// === IMPLEMENTATION ===
+
+(*
+Burners are indexed as 1..burner_quantity.
+Local armature indexes remain 0-based (0..counter_armature).
+Returned global index is 1-based for flat Weintek/OPC UA arrays.
+*)
+armature_per_burner := counter_armature + 1;
+GetBurnerArmatureIndex := (burner_id - 1) * armature_per_burner + local_idx + 1;

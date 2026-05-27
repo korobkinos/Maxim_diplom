@@ -35,7 +35,10 @@ VAR
 	cmd_set_manual : BOOL;
 	cmd_set_special: BOOL;
 	cmd_imitation  : BOOL;
-	scoped_armature_simulation : BOOL;
+	effective_armature_simulation : BOOL;
+	burner_id_valid : BOOL;
+	local_idx_valid : BOOL;
+	sim_idx : WORD;
 
 	i        : WORD;
 	pid_idx  : WORD;
@@ -111,7 +114,16 @@ END_FOR;
 
 FOR i := 0 TO counter_armature DO
 	IF enable THEN
-		scoped_armature_simulation := (burner_id >= 1) AND (burner_id <= burner_quantity) AND SETTINGS.burner_armature_simulation[burner_id][i];
+		burner_id_valid := (burner_id >= 1) AND (burner_id <= burner_quantity);
+		local_idx_valid := i <= counter_armature;
+		sim_idx := 0;
+		effective_armature_simulation := FALSE;
+		IF burner_id_valid AND local_idx_valid THEN
+			sim_idx := GetBurnerArmatureIndex(burner_id := burner_id, local_idx := i);
+			IF (sim_idx >= 1) AND (sim_idx <= total_burner_armature_quantity) THEN
+				effective_armature_simulation := SETTINGS.burner_armature_simulation[sim_idx];
+			END_IF;
+		END_IF;
 		cmd_up := up_cmd[i] OR reg_up_cmd[i];
 		cmd_down := down_cmd[i] OR reg_down_cmd[i];
 		cmd_open := open_cmd[i];
@@ -121,7 +133,7 @@ FOR i := 0 TO counter_armature DO
 		cmd_set_auto := valve_data.set_auto[i] OR reg_auto_cmd[i];
 		cmd_set_manual := valve_data.open[i] OR valve_data.closed[i] OR valve_data.set_manual[i] OR reg_man_cmd[i];
 		cmd_set_special := valve_data.set_special[i];
-		cmd_imitation := valve_data.imitation_mode[i] OR scoped_armature_simulation;
+		cmd_imitation := valve_data.imitation_mode[i] OR effective_armature_simulation;
 	ELSE
 		cmd_up := FALSE;
 		cmd_down := FALSE;

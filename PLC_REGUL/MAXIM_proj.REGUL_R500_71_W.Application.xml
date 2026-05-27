@@ -42,7 +42,6 @@
   <NodeList>
     <Node name="Application">
       <Node name="SETTINGS">
-        <Node name="armature_simulation" type="T_BOOL" access="ReadWrite" />
         <Node name="BURNER_BLOCK_MODE" type="T_ARRAY__0__31__OF_BOOL" access="ReadWrite" />
         <Node name="BURNER_ONE_STATE" type="T_ARRAY__0__31__OF_BOOL" access="ReadWrite" />
         <Node name="gas_air_map" type="T_GAS_AIR_PROPORTION" access="ReadWrite" />
@@ -54,7 +53,6 @@
         <Node name="reg_binding_map" type="T_ARRAY__0__10__OF_ARRAY__0__4__OF_WORD" access="ReadWrite" />
         <Node name="reg_binding_off" type="T_WORD" access="ReadWrite" />
         <Node name="reg_binding_on" type="T_WORD" access="ReadWrite" />
-        <Node name="test_mode" type="T_BOOL" access="ReadWrite" />
         <Node name="wait_time_burner" type="T_ARRAY__0__31__OF_REAL" access="ReadWrite" />
       </Node>
     </Node>
