@@ -1,0 +1,26 @@
+FUNCTION_BLOCK FB_SCALE_RUNTIME
+VAR
+	ch_idx : WORD;
+	scale_settings_runtime : SENSOR_AI_SETTINGS;
+	scale_calc : ai_scale;
+END_VAR
+
+// === IMPLEMENTATION ===
+
+FOR ch_idx := 1 TO in_out_quantity DO
+	scale_settings_runtime.SENSOR[ch_idx] := SETTINGS.ai_scale_settings[ch_idx];
+END_FOR;
+
+scale_calc(
+	in := GVL_SCALE.AI_IN_RAW,
+	ch_err := GVL_SCALE.AI_IN_ERR,
+	settings := scale_settings_runtime
+);
+
+FOR ch_idx := 1 TO in_out_quantity DO
+	GVL_SCALE.AI_IN_SCALE[ch_idx] := scale_calc.out_r[ch_idx];
+	GVL_SCALE.AI_IN_WARN_MIN[ch_idx] := scale_calc.warning_min[ch_idx];
+	GVL_SCALE.AI_IN_WARN_MAX[ch_idx] := scale_calc.warning_max[ch_idx];
+	GVL_SCALE.AI_IN_ALARM_MIN[ch_idx] := scale_calc.alarm_min[ch_idx];
+	GVL_SCALE.AI_IN_ALARM_MAX[ch_idx] := scale_calc.alarm_max[ch_idx];
+END_FOR;

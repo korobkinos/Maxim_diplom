@@ -26,7 +26,7 @@ END_VAR
 
 // === IMPLEMENTATION ===
 
-FOR i:= 0 TO in_out_quantity DO
+FOR i:= 1 TO in_out_quantity DO
 	//фильтр сигнала 
 	ai_filter[i](
 			X:= in[i], 
