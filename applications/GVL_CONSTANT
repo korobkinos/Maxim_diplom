@@ -37,5 +37,7 @@ VAR_GLOBAL CONSTANT
 	*)
 
 	in_out_quantity							:		WORD:=16;			//кол-во физических аналоговых сигналов в системе
+	ai_scale_hmi_item_quantity				:		WORD:=11;			//Количество элементов SCALE_DATA.VALUE[0..10] для одного AI канала
+	total_ai_scale_hmi_quantity				:		WORD:=in_out_quantity*ai_scale_hmi_item_quantity; //Плоский размер HMI массива scale-настроек
 	//ai_quantity								:	WORD:=12; //всего AI в системе	
 END_VAR

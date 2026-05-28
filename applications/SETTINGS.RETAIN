@@ -108,6 +108,7 @@ VAR_GLOBAL PERSISTENT RETAIN
 		МАСШТАБИРОВАНИЕ АНАЛОГОВЫХ СИГНАЛОВ
 	========================================================
 	*)
+	ai_scale_settings : ARRAY[1..in_out_quantity] OF SCALE_DATA;
 
 
 	(*

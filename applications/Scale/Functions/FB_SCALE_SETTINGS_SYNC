@@ -1,0 +1,113 @@
+FUNCTION_BLOCK FB_SCALE_SETTINGS_SYNC
+VAR
+	ch_idx : WORD;
+	item_idx : WORD;
+	flat_idx : WORD;
+	apply_requested : BOOL;
+	reload_requested : BOOL;
+	apply_ok : BOOL;
+	error_code_local : WORD;
+	error_index_local : WORD;
+	settings_buffer : ARRAY[1..in_out_quantity] OF SCALE_DATA;
+END_VAR
+
+VAR CONSTANT
+	scale_value_min_index : WORD := 0;
+	scale_value_max_index : WORD := 10;
+	err_none : WORD := 0;
+	err_invalid_channel : WORD := 1;
+	err_invalid_item : WORD := 2;
+	err_invalid_range : WORD := 3;
+END_VAR
+
+// === IMPLEMENTATION ===
+
+apply_requested := GVL_SCALE_HMI.hmi_apply_settings;
+reload_requested := GVL_SCALE_HMI.hmi_reload_settings;
+
+IF apply_requested THEN
+	apply_ok := TRUE;
+	error_code_local := err_none;
+	error_index_local := 0;
+
+	FOR ch_idx := 1 TO in_out_quantity DO
+		IF apply_ok THEN
+			IF (ch_idx = 0) OR (ch_idx > in_out_quantity) THEN
+				apply_ok := FALSE;
+				error_code_local := err_invalid_channel;
+				error_index_local := ch_idx;
+			ELSE
+				FOR item_idx := scale_value_min_index TO scale_value_max_index DO
+					flat_idx := GetGroupedFlatIndex(
+						group_idx := ch_idx,
+						item_idx := item_idx,
+						item_count := ai_scale_hmi_item_quantity,
+						item_base := 0
+					);
+
+					IF (flat_idx < 1) OR (flat_idx > total_ai_scale_hmi_quantity) THEN
+						apply_ok := FALSE;
+						error_code_local := err_invalid_item;
+						error_index_local := flat_idx;
+					ELSE
+						settings_buffer[ch_idx].VALUE[item_idx] := GVL_SCALE_HMI.hmi_ai_scale_flat[flat_idx];
+					END_IF;
+				END_FOR;
+
+				IF apply_ok AND (settings_buffer[ch_idx].VALUE[max_value] = settings_buffer[ch_idx].VALUE[min_value]) THEN
+					apply_ok := FALSE;
+					error_code_local := err_invalid_range;
+					error_index_local := ch_idx;
+				END_IF;
+			END_IF;
+		END_IF;
+	END_FOR;
+
+	IF apply_ok THEN
+		FOR ch_idx := 1 TO in_out_quantity DO
+			SETTINGS.ai_scale_settings[ch_idx] := settings_buffer[ch_idx];
+		END_FOR;
+		GVL_SCALE_HMI.hmi_settings_version := GVL_SCALE_HMI.hmi_settings_version + 1;
+	END_IF;
+
+	GVL_SCALE_HMI.hmi_last_error := error_code_local;
+	GVL_SCALE_HMI.hmi_last_error_index := error_index_local;
+	GVL_SCALE_HMI.hmi_apply_settings := FALSE;
+END_IF;
+
+IF (NOT apply_requested) AND reload_requested THEN
+	apply_ok := TRUE;
+	error_code_local := err_none;
+	error_index_local := 0;
+
+	FOR ch_idx := 1 TO in_out_quantity DO
+		IF apply_ok THEN
+			IF (ch_idx = 0) OR (ch_idx > in_out_quantity) THEN
+				apply_ok := FALSE;
+				error_code_local := err_invalid_channel;
+				error_index_local := ch_idx;
+			ELSE
+				FOR item_idx := scale_value_min_index TO scale_value_max_index DO
+					flat_idx := GetGroupedFlatIndex(
+						group_idx := ch_idx,
+						item_idx := item_idx,
+						item_count := ai_scale_hmi_item_quantity,
+						item_base := 0
+					);
+
+					IF (flat_idx < 1) OR (flat_idx > total_ai_scale_hmi_quantity) THEN
+						apply_ok := FALSE;
+						error_code_local := err_invalid_item;
+						error_index_local := flat_idx;
+					ELSE
+						GVL_SCALE_HMI.hmi_ai_scale_flat[flat_idx] := SETTINGS.ai_scale_settings[ch_idx].VALUE[item_idx];
+					END_IF;
+				END_FOR;
+			END_IF;
+		END_IF;
+	END_FOR;
+
+	GVL_SCALE_HMI.hmi_last_error := error_code_local;
+	GVL_SCALE_HMI.hmi_last_error_index := error_index_local;
+	GVL_SCALE_HMI.hmi_reload_settings := FALSE;
+END_IF;
