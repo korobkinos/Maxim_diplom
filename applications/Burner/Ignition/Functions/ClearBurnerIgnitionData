@@ -1,0 +1,22 @@
+FUNCTION ClearBurnerIgnitionData : BOOL
+VAR_IN_OUT
+	ignition_data : ST_BURNER_IGNITION_DATA;
+END_VAR
+
+// === IMPLEMENTATION ===
+
+ignition_data.start := FALSE;
+ignition_data.stop := FALSE;
+ignition_data.ready := FALSE;
+ignition_data.alarm := FALSE;
+ignition_data.warning := FALSE;
+ignition_data.spark_SET := FALSE;
+ignition_data.spark_RESET := FALSE;
+ignition_data.PZK_1_SET := FALSE;
+ignition_data.PZK_1_RESET := FALSE;
+ignition_data.KZ_SET := FALSE;
+ignition_data.KZ_RESET := FALSE;
+ignition_data.step := 0;
+ignition_data.state := 0;
+
+ClearBurnerIgnitionData := TRUE;

@@ -108,6 +108,7 @@ ELSE
 		pilot_p_control_current := FALSE;
 	END_IF;
 	IF SETTINGS.boiler_simulation THEN
+		// В имитации основное пламя появляется по ignit + команде открытия PZK_2 и сбрасывается по closed_state[PZK_2].
 		IF valve_data.closed_state[pzk_2] THEN
 			pilot_flame_simulation := FALSE;
 		ELSIF valve_data.open_state[ignit] AND valve_data.control_out[pzk_2] THEN
@@ -138,6 +139,7 @@ ELSE
 			PC_IGNITION_P:
 				signal_value := valve_data.closed_state[ignit] OR NOT valve_data.open_state[ignit];
 			PC_PILOT_P:
+				// Защиты не отключаются: в имитации меняется только источник сигнала пламени.
 				IF SETTINGS.boiler_simulation THEN
 					signal_value := NOT pilot_flame_simulation;
 				ELSE

@@ -2,7 +2,7 @@
 FUNCTION ai_imitation_bind : BOOL
 VAR_INPUT
 	enable: BOOL;
-	//1..4 - № AI в массиве ai_in, 0 = нет привязки
+	// 1..4 - номер AI в массиве ai_in, 0 = нет привязки
 	map_bind: ARRAY[1..total_burner_armature_quantity] OF ARRAY[1..4] OF WORD;
 	percent_imitation: ARRAY[1..total_burner_armature_quantity] OF REAL;
 END_VAR
@@ -23,6 +23,7 @@ END_VAR
 
 ai_imitation_bind := FALSE;
 IF NOT enable THEN
+	// При выключенной имитации реальные AI_IN_RAW не изменяются.
 	RETURN;
 END_IF;
 
@@ -31,12 +32,12 @@ FOR ai_idx := 0 TO in_out_quantity DO
 	has_binding[ai_idx] := FALSE;
 END_FOR;
 
-//собираем сумму от всех арматур
+// Собираем сумму от всех арматур.
 FOR arm_idx := 1 TO total_burner_armature_quantity DO
 	FOR j := 1 TO 4 DO
 		ai_idx := map_bind[arm_idx][j];
 
-		//0 = нет привязки
+		// idx = 0 означает отсутствие привязки.
 		IF (ai_idx >= 1) AND (ai_idx <= in_out_quantity) THEN
 			sum_ai[ai_idx] := sum_ai[ai_idx] + percent_imitation[arm_idx];
 			has_binding[ai_idx] := TRUE;
@@ -44,10 +45,10 @@ FOR arm_idx := 1 TO total_burner_armature_quantity DO
 	END_FOR;
 END_FOR;
 
-
-//переносим результат в выходной массив с ограничением 0..100
+// Переносим результат в ai_in с ограничением 0..100.
 FOR ai_idx := 1 TO in_out_quantity DO
 	IF has_binding[ai_idx] THEN
+		// Запись разрешена только при валидном AI index 1..in_out_quantity.
 		IF sum_ai[ai_idx] > 100.0 THEN
 			ai_in[ai_idx] := 100.0;
 		ELSIF sum_ai[ai_idx] < 0.0 THEN
@@ -57,6 +58,5 @@ FOR ai_idx := 1 TO in_out_quantity DO
 		END_IF;
 	END_IF;
 END_FOR;
-
 
 ai_imitation_bind := TRUE;

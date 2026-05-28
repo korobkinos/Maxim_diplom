@@ -29,6 +29,7 @@ local_idx := 0;
 global_idx := GetBurnerIgnitionIndex(burner_id := burner_id, local_idx := local_idx);
 
 IF SETTINGS.boiler_simulation THEN
+	// Имитация пламени запальника повторяет legacy-семантику: set по KZ + spark, reset по closed_state[KZ].
 	IF valve_data.closed_state[kz] THEN
 		ignition_flame_simulation := FALSE;
 	ELSIF valve_data.open_state[kz] AND valve_data.open_state[spark] THEN
@@ -63,39 +64,10 @@ IF NOT enable THEN
 		Ignition_state => ignition_data.state
 	);
 
-	ignition_data.start := FALSE;
-	ignition_data.stop := FALSE;
-	ignition_data.ready := FALSE;
-	ignition_data.alarm := FALSE;
-	ignition_data.warning := FALSE;
-	ignition_data.spark_SET := FALSE;
-	ignition_data.spark_RESET := FALSE;
-	ignition_data.PZK_1_SET := FALSE;
-	ignition_data.PZK_1_RESET := FALSE;
-	ignition_data.KZ_SET := FALSE;
-	ignition_data.KZ_RESET := FALSE;
-	ignition_data.step := 0;
-	ignition_data.state := 0;
-
-	GVL_BURNER_IGNITION.ready[global_idx] := FALSE;
-	GVL_BURNER_IGNITION.success[global_idx] := FALSE;
-	GVL_BURNER_IGNITION.in_progress[global_idx] := FALSE;
-	GVL_BURNER_IGNITION.alarm[global_idx] := FALSE;
-	GVL_BURNER_IGNITION.warning[global_idx] := FALSE;
-	GVL_BURNER_IGNITION.ignition_flame[global_idx] := FALSE;
-	GVL_BURNER_IGNITION.no_flame[global_idx] := FALSE;
-	GVL_BURNER_IGNITION.flame_lost[global_idx] := FALSE;
-	GVL_BURNER_IGNITION.repeat_msg[global_idx] := FALSE;
-	GVL_BURNER_IGNITION.stop_msg[global_idx] := FALSE;
-	GVL_BURNER_IGNITION.spark_SET[global_idx] := FALSE;
-	GVL_BURNER_IGNITION.spark_RESET[global_idx] := FALSE;
-	GVL_BURNER_IGNITION.KZ_SET[global_idx] := FALSE;
-	GVL_BURNER_IGNITION.KZ_RESET[global_idx] := FALSE;
-	GVL_BURNER_IGNITION.PZK_1_SET[global_idx] := FALSE;
-	GVL_BURNER_IGNITION.PZK_1_RESET[global_idx] := FALSE;
-	GVL_BURNER_IGNITION.step[global_idx] := 0;
-	GVL_BURNER_IGNITION.state[global_idx] := 0;
+	ClearBurnerIgnitionData(ignition_data := ignition_data);
+	ClearBurnerIgnitionGvl(global_idx := global_idx);
 ELSE
+	// Реальный режим пламени работает через flame_feedback_idx без изменений.
 	start_cmd := GVL_BURNER_IGNITION.start[global_idx];
 	stop_cmd := GVL_BURNER_IGNITION.stop[global_idx];
 	start_block_cmd := GVL_BURNER_IGNITION.start_block[global_idx] OR GVL_BURNER_IGNITION.block[global_idx];

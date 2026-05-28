@@ -1,0 +1,37 @@
+FUNCTION ClearBurnerIgnitionGvl : BOOL
+VAR_INPUT
+	global_idx : WORD;
+END_VAR
+
+VAR
+	idx_valid : BOOL;
+END_VAR
+
+// === IMPLEMENTATION ===
+
+idx_valid := (global_idx >= 1) AND (global_idx <= burner_quantity);
+IF NOT idx_valid THEN
+	ClearBurnerIgnitionGvl := FALSE;
+	RETURN;
+END_IF;
+
+GVL_BURNER_IGNITION.ready[global_idx] := FALSE;
+GVL_BURNER_IGNITION.success[global_idx] := FALSE;
+GVL_BURNER_IGNITION.in_progress[global_idx] := FALSE;
+GVL_BURNER_IGNITION.alarm[global_idx] := FALSE;
+GVL_BURNER_IGNITION.warning[global_idx] := FALSE;
+GVL_BURNER_IGNITION.ignition_flame[global_idx] := FALSE;
+GVL_BURNER_IGNITION.no_flame[global_idx] := FALSE;
+GVL_BURNER_IGNITION.flame_lost[global_idx] := FALSE;
+GVL_BURNER_IGNITION.repeat_msg[global_idx] := FALSE;
+GVL_BURNER_IGNITION.stop_msg[global_idx] := FALSE;
+GVL_BURNER_IGNITION.spark_SET[global_idx] := FALSE;
+GVL_BURNER_IGNITION.spark_RESET[global_idx] := FALSE;
+GVL_BURNER_IGNITION.KZ_SET[global_idx] := FALSE;
+GVL_BURNER_IGNITION.KZ_RESET[global_idx] := FALSE;
+GVL_BURNER_IGNITION.PZK_1_SET[global_idx] := FALSE;
+GVL_BURNER_IGNITION.PZK_1_RESET[global_idx] := FALSE;
+GVL_BURNER_IGNITION.step[global_idx] := 0;
+GVL_BURNER_IGNITION.state[global_idx] := 0;
+
+ClearBurnerIgnitionGvl := TRUE;

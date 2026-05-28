@@ -13,6 +13,7 @@ FOR ch_idx := 1 TO in_out_quantity DO
 END_FOR;
 
 IF SETTINGS.boiler_simulation THEN
+	// Имитация AI выполняется до ai_scale: percent_imitation подменяет RAW выбранных каналов.
 	simulation_bind_applied := ai_imitation_bind(
 		enable := SETTINGS.boiler_simulation,
 		map_bind := SETTINGS.map_valve_ai_bind,
@@ -23,6 +24,7 @@ ELSE
 	simulation_bind_applied := FALSE;
 END_IF;
 
+// AI_IN_SCALE формируется только штатным масштабированием ai_scale.
 scale_calc(
 	in := GVL_SCALE.AI_IN_RAW,
 	ch_err := GVL_SCALE.AI_IN_ERR,

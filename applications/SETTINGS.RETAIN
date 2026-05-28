@@ -14,7 +14,7 @@ VAR_GLOBAL PERSISTENT RETAIN
 		ОБЩИЕ НАСТРОЙКИ И РЕЖИМЫ
 	========================================================
 	*)
-	boiler_simulation		: BOOL := FALSE;						// Общий режим имитации котла
+	boiler_simulation		: BOOL := FALSE;						// Общий режим имитации котла и всех горелок.
 	burner_test_mode		: ARRAY[1..burner_quantity] OF BOOL;	// Режим испытания по горелкам
 
 	// Уставки и настройки алгоритмов
@@ -48,7 +48,7 @@ VAR_GLOBAL PERSISTENT RETAIN
 		ИМИТАЦИЯ АРМАТУРЫ / ПРИВЯЗКА АИ
 	========================================================
 	*)
-	map_valve_ai_bind : ARRAY[1..total_burner_armature_quantity] OF ARRAY[1..4] OF WORD;
+	map_valve_ai_bind : ARRAY[1..total_burner_armature_quantity] OF ARRAY[1..4] OF WORD; // [1] - глобальный индекс арматуры через GetBurnerArmatureIndex; [2] - номер AI-привязки; 0 = нет привязки.
 
 	(*
 	Карта влияния арматуры на аналоговые сигналы при имитации
