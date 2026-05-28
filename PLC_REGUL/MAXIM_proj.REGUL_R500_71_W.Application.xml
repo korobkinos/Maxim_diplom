@@ -55,14 +55,14 @@
       <UserDefElement iecname="pv_idx" type="T_WORD" byteoffset="6" vartype="VAR" access="ReadWrite" />
       <UserDefElement iecname="proc_idx" type="T_WORD" byteoffset="8" vartype="VAR" access="ReadWrite" />
     </TypeUserDef>
-    <TypeArray name="T_ARRAY__1__11__OF_ST_REGULATOR_BINDING" size="110" nativesize="110" typeclass="Array" iecname="ARRAY [1..11] OF ST_REGULATOR_BINDING" basetype="T_ST_REGULATOR_BINDING">
-      <ArrayDim minrange="1" maxrange="11" />
+    <TypeArray name="T_ARRAY__1__128__OF_ST_ARMATURE_SETTINGS" size="2560" nativesize="2560" typeclass="Array" iecname="ARRAY [1..128] OF ST_ARMATURE_SETTINGS" basetype="T_ST_ARMATURE_SETTINGS">
+      <ArrayDim minrange="1" maxrange="128" />
     </TypeArray>
-    <TypeArray name="T_ARRAY__1__16__OF_ST_PROTECT_SETTINGS" size="320" nativesize="320" typeclass="Array" iecname="ARRAY [1..16] OF ST_PROTECT_SETTINGS" basetype="T_ST_PROTECT_SETTINGS">
-      <ArrayDim minrange="1" maxrange="16" />
+    <TypeArray name="T_ARRAY__1__44__OF_ST_REGULATOR_BINDING" size="440" nativesize="440" typeclass="Array" iecname="ARRAY [1..44] OF ST_REGULATOR_BINDING" basetype="T_ST_REGULATOR_BINDING">
+      <ArrayDim minrange="1" maxrange="44" />
     </TypeArray>
-    <TypeArray name="T_ARRAY__1__32__OF_ST_ARMATURE_SETTINGS" size="640" nativesize="640" typeclass="Array" iecname="ARRAY [1..32] OF ST_ARMATURE_SETTINGS" basetype="T_ST_ARMATURE_SETTINGS">
-      <ArrayDim minrange="1" maxrange="32" />
+    <TypeArray name="T_ARRAY__1__64__OF_ST_PROTECT_SETTINGS" size="1280" nativesize="1280" typeclass="Array" iecname="ARRAY [1..64] OF ST_PROTECT_SETTINGS" basetype="T_ST_PROTECT_SETTINGS">
+      <ArrayDim minrange="1" maxrange="64" />
     </TypeArray>
     <TypeUserDef name="T_GAS_AIR_PROPORTION" size="120" nativesize="120" typeclass="Userdef" pouclass="STRUCTURE" iecname="GAS_AIR_PROPORTION">
       <UserDefElement iecname="GAS_VALUE" type="T_ARRAY__1__10__OF_REAL" byteoffset="0" vartype="VAR" access="ReadWrite" />
@@ -81,11 +81,11 @@
     <TypeUserDef name="T_pressure_settings" size="36" nativesize="36" typeclass="Userdef" pouclass="STRUCTURE" iecname="pressure_settings">
       <UserDefElement iecname="VALUE" type="T_ARRAY__1__9__OF_REAL" byteoffset="0" vartype="VAR" access="ReadWrite" />
     </TypeUserDef>
-    <TypeArray name="T_ARRAY__1__11__OF_PID_SETTINGS" size="660" nativesize="660" typeclass="Array" iecname="ARRAY [1..11] OF PID_SETTINGS" basetype="T_PID_SETTINGS">
-      <ArrayDim minrange="1" maxrange="11" />
-    </TypeArray>
     <TypeArray name="T_ARRAY__1__16__OF_SCALE_DATA" size="704" nativesize="704" typeclass="Array" iecname="ARRAY [1..16] OF SCALE_DATA" basetype="T_SCALE_DATA">
       <ArrayDim minrange="1" maxrange="16" />
+    </TypeArray>
+    <TypeArray name="T_ARRAY__1__44__OF_PID_SETTINGS" size="2640" nativesize="2640" typeclass="Array" iecname="ARRAY [1..44] OF PID_SETTINGS" basetype="T_PID_SETTINGS">
+      <ArrayDim minrange="1" maxrange="44" />
     </TypeArray>
     <TypeArray name="T_ARRAY__1__4__OF_GAS_AIR_PROPORTION" size="480" nativesize="480" typeclass="Array" iecname="ARRAY [1..4] OF GAS_AIR_PROPORTION" basetype="T_GAS_AIR_PROPORTION">
       <ArrayDim minrange="1" maxrange="4" />
@@ -101,7 +101,7 @@
     <Node name="Application">
       <Node name="SETTINGS">
         <Node name="ai_scale_settings" type="T_ARRAY__1__16__OF_SCALE_DATA" access="ReadWrite" />
-        <Node name="armature_settings" type="T_ARRAY__1__32__OF_ST_ARMATURE_SETTINGS" access="ReadWrite" />
+        <Node name="armature_settings" type="T_ARRAY__1__128__OF_ST_ARMATURE_SETTINGS" access="ReadWrite" />
         <Node name="burner_max_reach_time" type="T_ARRAY__1__4__OF_REAL" access="ReadWrite" />
         <Node name="burner_min_power" type="T_ARRAY__1__4__OF_REAL" access="ReadWrite" />
         <Node name="burner_test_mode" type="T_ARRAY__1__4__OF_BOOL" access="ReadWrite" />
@@ -109,12 +109,12 @@
         <Node name="ignition_settings_flame_feedback_idx" type="T_ARRAY__1__4__OF_WORD" access="ReadWrite" />
         <Node name="pressure_settings" type="T_ARRAY__1__4__OF_pressure_settings" access="ReadWrite" />
         <Node name="pressure_settings_ai_idx" type="T_ARRAY__1__4__OF_WORD" access="ReadWrite" />
-        <Node name="protect_settings" type="T_ARRAY__1__16__OF_ST_PROTECT_SETTINGS" access="ReadWrite" />
+        <Node name="protect_settings" type="T_ARRAY__1__64__OF_ST_PROTECT_SETTINGS" access="ReadWrite" />
         <Node name="reg_binding_off" type="T_WORD" access="ReadWrite" />
         <Node name="reg_binding_on" type="T_WORD" access="ReadWrite" />
-        <Node name="regulator_binding_map" type="T_ARRAY__1__11__OF_ST_REGULATOR_BINDING" access="ReadWrite" />
+        <Node name="regulator_binding_map" type="T_ARRAY__1__44__OF_ST_REGULATOR_BINDING" access="ReadWrite" />
         <Node name="regulator_gas_air_map" type="T_ARRAY__1__4__OF_GAS_AIR_PROPORTION" access="ReadWrite" />
-        <Node name="regulator_pid_settings" type="T_ARRAY__1__11__OF_PID_SETTINGS" access="ReadWrite" />
+        <Node name="regulator_pid_settings" type="T_ARRAY__1__44__OF_PID_SETTINGS" access="ReadWrite" />
       </Node>
     </Node>
   </NodeList>

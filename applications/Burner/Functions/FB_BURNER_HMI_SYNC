@@ -43,11 +43,10 @@ IF enable THEN
 	ignition_data.settings_local := SETTINGS.ignition_settings[burner_id];
 	ignition_data.flame_feedback_idx := SETTINGS.ignition_settings_flame_feedback_idx[burner_id];
 
-	global_idx := GetBurnerProtectIndex(burner_id := burner_id, local_idx := 0);
-	IF (global_idx >= 1) AND (global_idx <= burner_quantity * burner_protect_quantity) THEN
-		protect_data.p_gas_control_delay := SETTINGS.protect_settings[global_idx].p_gas_control_delay;
-		protect_data.p_air_control_delay := SETTINGS.protect_settings[global_idx].p_air_control_delay;
-		protect_data.flame_control_delay := SETTINGS.protect_settings[global_idx].flame_control_delay;
+	IF (burner_id >= 1) AND (burner_id <= burner_quantity) THEN
+		protect_data.p_gas_control_delay := SETTINGS.protect_settings[burner_id].protect[0].p_gas_control_delay;
+		protect_data.p_air_control_delay := SETTINGS.protect_settings[burner_id].protect[0].p_air_control_delay;
+		protect_data.flame_control_delay := SETTINGS.protect_settings[burner_id].protect[0].flame_control_delay;
 	END_IF;
 END_IF;
 
@@ -85,8 +84,8 @@ FOR local_idx := 0 TO burner_protect_quantity - 1 DO
 	IF enable THEN
 		protect_data.protect_input[local_idx] := GVL_BURNER_PROTECT.input[global_idx];
 		protect_data.protect_control[local_idx] := GVL_BURNER_PROTECT.control[global_idx];
-		protect_data.protect_enable[local_idx] := SETTINGS.protect_settings[global_idx].enable;
-		protect_data.protect_delay_time[local_idx] := SETTINGS.protect_settings[global_idx].delay_time;
+		protect_data.protect_enable[local_idx] := SETTINGS.protect_settings[burner_id].protect[local_idx].enable;
+		protect_data.protect_delay_time[local_idx] := SETTINGS.protect_settings[burner_id].protect[local_idx].delay_time;
 		protect_data.execute_set_cmd[local_idx] := GVL_BURNER_PROTECT.execute_set_cmd[global_idx];
 		protect_data.execute_reset_cmd[local_idx] := GVL_BURNER_PROTECT.execute_reset_cmd[global_idx];
 	END_IF;

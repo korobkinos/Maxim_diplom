@@ -1,0 +1,7 @@
+TYPE ST_BURNER_REGULATOR_SETTINGS :
+STRUCT
+	pid         : ARRAY[0..burner_regulator_quantity - 1] OF PID_SETTINGS;
+	binding     : ARRAY[0..burner_regulator_quantity - 1] OF ST_REGULATOR_BINDING;
+	gas_air_map : GAS_AIR_PROPORTION;
+END_STRUCT
+END_TYPE
