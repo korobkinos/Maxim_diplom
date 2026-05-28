@@ -1,0 +1,15 @@
+FUNCTION GetGroupedFlatIndex : WORD
+VAR_INPUT
+	group_idx  : WORD;
+	item_idx   : WORD;
+	item_count : WORD;
+	item_base  : WORD;
+END_VAR
+
+// === IMPLEMENTATION ===
+
+IF item_base = 0 THEN
+	GetGroupedFlatIndex := (group_idx - 1) * item_count + item_idx + 1;
+ELSE
+	GetGroupedFlatIndex := (group_idx - 1) * item_count + item_idx;
+END_IF;

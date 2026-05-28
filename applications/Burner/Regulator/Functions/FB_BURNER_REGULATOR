@@ -19,6 +19,7 @@ VAR
 	pid_on            : ARRAY[0..PID_quantity] OF BOOL;
 	pid_trend         : ARRAY[0..PID_quantity] OF PID_TREND_DATA;
 	pid_settings_local: PID_SETTINGS;
+	gas_air_settings_local : GAS_AIR_PROPORTION;
 	air_set_point_tmp : REAL;
 	shiber_percent_tmp: REAL;
 	gas_sensor_value  : REAL;
@@ -35,6 +36,11 @@ VAR
 	global_idx        : WORD;
 	pid_global_idx    : WORD;
 	binding_global_idx: WORD;
+	binding_idx       : WORD;
+	pid_setting_idx   : WORD;
+	gas_air_idx       : WORD;
+	map_idx           : WORD;
+	setting_idx       : WORD;
 	burner_id_valid   : BOOL;
 	burner_min_power_cfg : REAL;
 	burner_max_reach_time_cfg : REAL;
@@ -110,10 +116,46 @@ ELSE
 	regulator_data.manual_mode := burner_data.manual_mode;
 	gas_sensor_value := GVL_SCALE.AI_IN_SCALE[gas_pressure_burner];
 
-	IF burner_id_valid THEN
+	IF burner_id_valid AND (gas_air_map_quantity > 0) THEN
+		FOR map_idx := 1 TO 10 DO
+			gas_air_settings_local.GAS_VALUE[map_idx] := 0.0;
+			gas_air_settings_local.AIR_VALUE[map_idx] := 0.0;
+			gas_air_settings_local.SHIBER_VALUE[map_idx] := 0.0;
+
+			gas_air_idx := GetGroupedFlatIndex(
+				group_idx := burner_id,
+				item_idx := map_idx,
+				item_count := gas_air_map_quantity,
+				item_base := 1
+			);
+			IF (gas_air_idx >= 1) AND (gas_air_idx <= total_burner_gas_air_map_quantity) THEN
+				gas_air_settings_local.GAS_VALUE[map_idx] := SETTINGS.burner_gas_air_map[gas_air_idx];
+			END_IF;
+
+			gas_air_idx := GetGroupedFlatIndex(
+				group_idx := burner_id,
+				item_idx := map_idx + 10,
+				item_count := gas_air_map_quantity,
+				item_base := 1
+			);
+			IF (gas_air_idx >= 1) AND (gas_air_idx <= total_burner_gas_air_map_quantity) THEN
+				gas_air_settings_local.AIR_VALUE[map_idx] := SETTINGS.burner_gas_air_map[gas_air_idx];
+			END_IF;
+
+			gas_air_idx := GetGroupedFlatIndex(
+				group_idx := burner_id,
+				item_idx := map_idx + 20,
+				item_count := gas_air_map_quantity,
+				item_base := 1
+			);
+			IF (gas_air_idx >= 1) AND (gas_air_idx <= total_burner_gas_air_map_quantity) THEN
+				gas_air_settings_local.SHIBER_VALUE[map_idx] := SETTINGS.burner_gas_air_map[gas_air_idx];
+			END_IF;
+		END_FOR;
+
 		air_from_gas(
 			gas_sensor := gas_sensor_value,
-			settings := SETTINGS.burner_gas_air_map[burner_id],
+			settings := gas_air_settings_local,
 			air_set_point => air_set_point_tmp,
 			shiber_percent => shiber_percent_tmp
 		);
@@ -154,12 +196,59 @@ ELSE
 			binding_global_idx := GetBurnerRegulatorIndex(burner_id := burner_id, local_idx := local_idx);
 		END_IF;
 
-		IF burner_id_valid AND (binding_global_idx >= 1) AND (binding_global_idx <= total_burner_regulator_quantity) THEN
-			IF SETTINGS.burner_reg_binding_map[binding_global_idx][0] = SETTINGS.reg_binding_on THEN
-				pid_idx := SETTINGS.burner_reg_binding_map[binding_global_idx][1];
-				valve_idx := SETTINGS.burner_reg_binding_map[binding_global_idx][2];
-				pv_idx := SETTINGS.burner_reg_binding_map[binding_global_idx][3];
-				proc_idx := SETTINGS.burner_reg_binding_map[binding_global_idx][4];
+		IF burner_id_valid AND (binding_global_idx >= 1) AND (binding_global_idx <= total_burner_regulator_quantity) AND (burner_reg_binding_item_quantity > 0) THEN
+			binding_idx := GetGroupedFlatIndex(
+				group_idx := binding_global_idx,
+				item_idx := 0,
+				item_count := burner_reg_binding_item_quantity,
+				item_base := 0
+			);
+			IF (binding_idx >= 1) AND (binding_idx <= total_burner_reg_binding_quantity) AND (SETTINGS.burner_reg_binding_map[binding_idx] = SETTINGS.reg_binding_on) THEN
+				pid_idx := 0;
+				valve_idx := 0;
+				pv_idx := 0;
+				proc_idx := 0;
+
+				binding_idx := GetGroupedFlatIndex(
+					group_idx := binding_global_idx,
+					item_idx := 1,
+					item_count := burner_reg_binding_item_quantity,
+					item_base := 0
+				);
+				IF (binding_idx >= 1) AND (binding_idx <= total_burner_reg_binding_quantity) THEN
+					pid_idx := SETTINGS.burner_reg_binding_map[binding_idx];
+				END_IF;
+
+				binding_idx := GetGroupedFlatIndex(
+					group_idx := binding_global_idx,
+					item_idx := 2,
+					item_count := burner_reg_binding_item_quantity,
+					item_base := 0
+				);
+				IF (binding_idx >= 1) AND (binding_idx <= total_burner_reg_binding_quantity) THEN
+					valve_idx := SETTINGS.burner_reg_binding_map[binding_idx];
+				END_IF;
+
+				binding_idx := GetGroupedFlatIndex(
+					group_idx := binding_global_idx,
+					item_idx := 3,
+					item_count := burner_reg_binding_item_quantity,
+					item_base := 0
+				);
+				IF (binding_idx >= 1) AND (binding_idx <= total_burner_reg_binding_quantity) THEN
+					pv_idx := SETTINGS.burner_reg_binding_map[binding_idx];
+				END_IF;
+
+				binding_idx := GetGroupedFlatIndex(
+					group_idx := binding_global_idx,
+					item_idx := 4,
+					item_count := burner_reg_binding_item_quantity,
+					item_base := 0
+				);
+				IF (binding_idx >= 1) AND (binding_idx <= total_burner_reg_binding_quantity) THEN
+					proc_idx := SETTINGS.burner_reg_binding_map[binding_idx];
+				END_IF;
+
 				pid_global_idx := 0;
 				IF pid_idx <= PID_quantity THEN
 					pid_global_idx := GetBurnerRegulatorIndex(burner_id := burner_id, local_idx := pid_idx);
@@ -182,7 +271,19 @@ ELSE
 					Q1 => pid_on[pid_idx]
 				);
 
-					pid_settings_local := SETTINGS.burner_pid_settings[pid_global_idx];
+					FOR setting_idx := 1 TO pid_settings_quantity DO
+						pid_setting_idx := GetGroupedFlatIndex(
+							group_idx := pid_global_idx,
+							item_idx := setting_idx,
+							item_count := pid_settings_quantity,
+							item_base := 1
+						);
+						IF (pid_setting_idx >= 1) AND (pid_setting_idx <= total_burner_pid_settings_quantity) THEN
+							pid_settings_local.VALUE[setting_idx] := SETTINGS.burner_pid_settings[pid_setting_idx];
+						ELSE
+							pid_settings_local.VALUE[setting_idx] := 0.0;
+						END_IF;
+					END_FOR;
 
 				IF regulator_data.reg_valve[pid_idx].setpoint > 0.0 THEN
 					pid_settings_local.VALUE[SP] := regulator_data.reg_valve[pid_idx].setpoint;

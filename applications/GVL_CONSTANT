@@ -16,6 +16,12 @@ VAR_GLOBAL CONSTANT
 
 	regulator_per_burner					:		WORD:=PID_quantity+1; //Количество регуляторов на горелку (локальная индексация 0..PID_quantity)
 	total_burner_regulator_quantity			:		WORD:=burner_quantity*regulator_per_burner; //Плоский размер массива регуляторов для всех горелок
+	pid_settings_quantity					:		WORD:=15;			//Количество параметров PID_SETTINGS.VALUE
+	total_burner_pid_settings_quantity		:		WORD:=total_burner_regulator_quantity*pid_settings_quantity; //Плоский размер PID-настроек
+	gas_air_map_quantity					:		WORD:=30;			//10 GAS + 10 AIR + 10 SHIBER
+	total_burner_gas_air_map_quantity		:		WORD:=burner_quantity*gas_air_map_quantity; //Плоский размер gas-air карты
+	burner_reg_binding_item_quantity		:		WORD:=5;			//Элементов в карте привязки [0..4]
+	total_burner_reg_binding_quantity		:		WORD:=total_burner_regulator_quantity*burner_reg_binding_item_quantity; //Плоский размер карты привязки
 
 	pressure_per_burner						:		WORD:=1;			//Количество контуров опрессовки на горелку
 	total_burner_pressure_quantity			:		WORD:=burner_quantity*pressure_per_burner; //Плоский размер массива опрессовки для всех горелок
