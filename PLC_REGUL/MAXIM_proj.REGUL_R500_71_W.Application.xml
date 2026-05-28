@@ -18,6 +18,9 @@
     <TypeArray name="T_ARRAY__1__15__OF_REAL" size="60" nativesize="60" typeclass="Array" iecname="ARRAY [1..15] OF REAL" basetype="T_REAL">
       <ArrayDim minrange="1" maxrange="15" />
     </TypeArray>
+    <TypeArray name="T_ARRAY__1__3__OF_WORD" size="6" nativesize="6" typeclass="Array" iecname="ARRAY [1..3] OF WORD" basetype="T_WORD">
+      <ArrayDim minrange="1" maxrange="3" />
+    </TypeArray>
     <TypeArray name="T_ARRAY__1__4__OF_BOOL" size="4" nativesize="4" typeclass="Array" iecname="ARRAY [1..4] OF BOOL" basetype="T_BOOL">
       <ArrayDim minrange="1" maxrange="4" />
     </TypeArray>
@@ -41,26 +44,6 @@
       <UserDefElement iecname="one_state" type="T_BOOL" byteoffset="16" vartype="VAR" access="ReadWrite" />
       <UserDefElement iecname="block_mode" type="T_BOOL" byteoffset="17" vartype="VAR" access="ReadWrite" />
     </TypeUserDef>
-    <TypeUserDef name="T_ST_PROTECT_SETTINGS" size="20" nativesize="20" typeclass="Userdef" pouclass="STRUCTURE" iecname="ST_PROTECT_SETTINGS">
-      <UserDefElement iecname="enable" type="T_BOOL" byteoffset="0" vartype="VAR" access="ReadWrite" />
-      <UserDefElement iecname="delay_time" type="T_REAL" byteoffset="4" vartype="VAR" access="ReadWrite" />
-      <UserDefElement iecname="p_gas_control_delay" type="T_REAL" byteoffset="8" vartype="VAR" access="ReadWrite" />
-      <UserDefElement iecname="p_air_control_delay" type="T_REAL" byteoffset="12" vartype="VAR" access="ReadWrite" />
-      <UserDefElement iecname="flame_control_delay" type="T_REAL" byteoffset="16" vartype="VAR" access="ReadWrite" />
-    </TypeUserDef>
-    <TypeUserDef name="T_ST_REGULATOR_BINDING" size="10" nativesize="10" typeclass="Userdef" pouclass="STRUCTURE" iecname="ST_REGULATOR_BINDING">
-      <UserDefElement iecname="enabled" type="T_WORD" byteoffset="0" vartype="VAR" access="ReadWrite" />
-      <UserDefElement iecname="pid_idx" type="T_WORD" byteoffset="2" vartype="VAR" access="ReadWrite" />
-      <UserDefElement iecname="valve_idx" type="T_WORD" byteoffset="4" vartype="VAR" access="ReadWrite" />
-      <UserDefElement iecname="pv_idx" type="T_WORD" byteoffset="6" vartype="VAR" access="ReadWrite" />
-      <UserDefElement iecname="proc_idx" type="T_WORD" byteoffset="8" vartype="VAR" access="ReadWrite" />
-    </TypeUserDef>
-    <TypeArray name="T_ARRAY__0__10__OF_ST_REGULATOR_BINDING" size="110" nativesize="110" typeclass="Array" iecname="ARRAY [0..10] OF ST_REGULATOR_BINDING" basetype="T_ST_REGULATOR_BINDING">
-      <ArrayDim minrange="0" maxrange="10" />
-    </TypeArray>
-    <TypeArray name="T_ARRAY__0__15__OF_ST_PROTECT_SETTINGS" size="320" nativesize="320" typeclass="Array" iecname="ARRAY [0..15] OF ST_PROTECT_SETTINGS" basetype="T_ST_PROTECT_SETTINGS">
-      <ArrayDim minrange="0" maxrange="15" />
-    </TypeArray>
     <TypeArray name="T_ARRAY__0__31__OF_ST_ARMATURE_SETTINGS" size="640" nativesize="640" typeclass="Array" iecname="ARRAY [0..31] OF ST_ARMATURE_SETTINGS" basetype="T_ST_ARMATURE_SETTINGS">
       <ArrayDim minrange="0" maxrange="31" />
     </TypeArray>
@@ -75,6 +58,24 @@
     <TypeUserDef name="T_SCALE_DATA" size="44" nativesize="44" typeclass="Userdef" pouclass="STRUCTURE" iecname="SCALE_DATA">
       <UserDefElement iecname="VALUE" type="T_ARRAY__0__10__OF_REAL" byteoffset="0" vartype="VAR" access="ReadWrite" />
     </TypeUserDef>
+    <TypeUserDef name="T_ST_PROTECT_SETTINGS" size="28" nativesize="28" typeclass="Userdef" pouclass="STRUCTURE" iecname="ST_PROTECT_SETTINGS">
+      <UserDefElement iecname="enable" type="T_BOOL" byteoffset="0" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="delay_time" type="T_REAL" byteoffset="4" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="p_gas_control_delay" type="T_REAL" byteoffset="8" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="p_air_control_delay" type="T_REAL" byteoffset="12" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="flame_control_delay" type="T_REAL" byteoffset="16" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="ai_idx" type="T_ARRAY__1__3__OF_WORD" byteoffset="20" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="vote_required" type="T_WORD" byteoffset="26" vartype="VAR" access="ReadWrite" />
+    </TypeUserDef>
+    <TypeUserDef name="T_ST_REGULATOR_BINDING" size="18" nativesize="18" typeclass="Userdef" pouclass="STRUCTURE" iecname="ST_REGULATOR_BINDING">
+      <UserDefElement iecname="enabled" type="T_WORD" byteoffset="0" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="pid_idx" type="T_WORD" byteoffset="2" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="valve_idx" type="T_WORD" byteoffset="4" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="pv_ai_idx" type="T_ARRAY__1__3__OF_WORD" byteoffset="6" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="position_ai_idx" type="T_WORD" byteoffset="12" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="pv_idx" type="T_WORD" byteoffset="14" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="proc_idx" type="T_WORD" byteoffset="16" vartype="VAR" access="ReadWrite" />
+    </TypeUserDef>
     <TypeUserDef name="T_ignition_settings" size="20" nativesize="20" typeclass="Userdef" pouclass="STRUCTURE" iecname="ignition_settings">
       <UserDefElement iecname="VALUE" type="T_ARRAY__1__5__OF_REAL" byteoffset="0" vartype="VAR" access="ReadWrite" />
     </TypeUserDef>
@@ -84,11 +85,14 @@
     <TypeArray name="T_ARRAY__0__10__OF_PID_SETTINGS" size="660" nativesize="660" typeclass="Array" iecname="ARRAY [0..10] OF PID_SETTINGS" basetype="T_PID_SETTINGS">
       <ArrayDim minrange="0" maxrange="10" />
     </TypeArray>
+    <TypeArray name="T_ARRAY__0__10__OF_ST_REGULATOR_BINDING" size="198" nativesize="198" typeclass="Array" iecname="ARRAY [0..10] OF ST_REGULATOR_BINDING" basetype="T_ST_REGULATOR_BINDING">
+      <ArrayDim minrange="0" maxrange="10" />
+    </TypeArray>
+    <TypeArray name="T_ARRAY__0__15__OF_ST_PROTECT_SETTINGS" size="448" nativesize="448" typeclass="Array" iecname="ARRAY [0..15] OF ST_PROTECT_SETTINGS" basetype="T_ST_PROTECT_SETTINGS">
+      <ArrayDim minrange="0" maxrange="15" />
+    </TypeArray>
     <TypeArray name="T_ARRAY__1__16__OF_SCALE_DATA" size="704" nativesize="704" typeclass="Array" iecname="ARRAY [1..16] OF SCALE_DATA" basetype="T_SCALE_DATA">
       <ArrayDim minrange="1" maxrange="16" />
-    </TypeArray>
-    <TypeArray name="T_ARRAY__1__4__OF_ignition_settings" size="80" nativesize="80" typeclass="Array" iecname="ARRAY [1..4] OF ignition_settings" basetype="T_ignition_settings">
-      <ArrayDim minrange="1" maxrange="4" />
     </TypeArray>
     <TypeArray name="T_ARRAY__1__4__OF_pressure_settings" size="144" nativesize="144" typeclass="Array" iecname="ARRAY [1..4] OF pressure_settings" basetype="T_pressure_settings">
       <ArrayDim minrange="1" maxrange="4" />
@@ -96,21 +100,28 @@
     <TypeUserDef name="T_ST_BURNER_ARMATURE_SETTINGS" size="640" nativesize="640" typeclass="Userdef" pouclass="STRUCTURE" iecname="ST_BURNER_ARMATURE_SETTINGS">
       <UserDefElement iecname="valve" type="T_ARRAY__0__31__OF_ST_ARMATURE_SETTINGS" byteoffset="0" vartype="VAR" access="ReadWrite" />
     </TypeUserDef>
-    <TypeUserDef name="T_ST_BURNER_PROTECT_SETTINGS" size="320" nativesize="320" typeclass="Userdef" pouclass="STRUCTURE" iecname="ST_BURNER_PROTECT_SETTINGS">
-      <UserDefElement iecname="protect" type="T_ARRAY__0__15__OF_ST_PROTECT_SETTINGS" byteoffset="0" vartype="VAR" access="ReadWrite" />
+    <TypeUserDef name="T_ST_BURNER_IGNITION_SETTINGS" size="22" nativesize="24" typeclass="Userdef" pouclass="STRUCTURE" iecname="ST_BURNER_IGNITION_SETTINGS">
+      <UserDefElement iecname="settings" type="T_ignition_settings" byteoffset="0" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="flame_feedback_idx" type="T_WORD" byteoffset="20" vartype="VAR" access="ReadWrite" />
     </TypeUserDef>
     <TypeArray name="T_ARRAY__1__4__OF_ST_BURNER_ARMATURE_SETTINGS" size="2560" nativesize="2560" typeclass="Array" iecname="ARRAY [1..4] OF ST_BURNER_ARMATURE_SETTINGS" basetype="T_ST_BURNER_ARMATURE_SETTINGS">
       <ArrayDim minrange="1" maxrange="4" />
     </TypeArray>
-    <TypeArray name="T_ARRAY__1__4__OF_ST_BURNER_PROTECT_SETTINGS" size="1280" nativesize="1280" typeclass="Array" iecname="ARRAY [1..4] OF ST_BURNER_PROTECT_SETTINGS" basetype="T_ST_BURNER_PROTECT_SETTINGS">
+    <TypeArray name="T_ARRAY__1__4__OF_ST_BURNER_IGNITION_SETTINGS" size="96" nativesize="96" typeclass="Array" iecname="ARRAY [1..4] OF ST_BURNER_IGNITION_SETTINGS" basetype="T_ST_BURNER_IGNITION_SETTINGS">
       <ArrayDim minrange="1" maxrange="4" />
     </TypeArray>
-    <TypeUserDef name="T_ST_BURNER_REGULATOR_SETTINGS" size="892" nativesize="892" typeclass="Userdef" pouclass="STRUCTURE" iecname="ST_BURNER_REGULATOR_SETTINGS">
+    <TypeUserDef name="T_ST_BURNER_PROTECT_SETTINGS" size="448" nativesize="448" typeclass="Userdef" pouclass="STRUCTURE" iecname="ST_BURNER_PROTECT_SETTINGS">
+      <UserDefElement iecname="protect" type="T_ARRAY__0__15__OF_ST_PROTECT_SETTINGS" byteoffset="0" vartype="VAR" access="ReadWrite" />
+    </TypeUserDef>
+    <TypeUserDef name="T_ST_BURNER_REGULATOR_SETTINGS" size="980" nativesize="980" typeclass="Userdef" pouclass="STRUCTURE" iecname="ST_BURNER_REGULATOR_SETTINGS">
       <UserDefElement iecname="pid" type="T_ARRAY__0__10__OF_PID_SETTINGS" byteoffset="0" vartype="VAR" access="ReadWrite" />
       <UserDefElement iecname="binding" type="T_ARRAY__0__10__OF_ST_REGULATOR_BINDING" byteoffset="660" vartype="VAR" access="ReadWrite" />
-      <UserDefElement iecname="gas_air_map" type="T_GAS_AIR_PROPORTION" byteoffset="772" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="gas_air_map" type="T_GAS_AIR_PROPORTION" byteoffset="860" vartype="VAR" access="ReadWrite" />
     </TypeUserDef>
-    <TypeArray name="T_ARRAY__1__4__OF_ST_BURNER_REGULATOR_SETTINGS" size="3568" nativesize="3568" typeclass="Array" iecname="ARRAY [1..4] OF ST_BURNER_REGULATOR_SETTINGS" basetype="T_ST_BURNER_REGULATOR_SETTINGS">
+    <TypeArray name="T_ARRAY__1__4__OF_ST_BURNER_PROTECT_SETTINGS" size="1792" nativesize="1792" typeclass="Array" iecname="ARRAY [1..4] OF ST_BURNER_PROTECT_SETTINGS" basetype="T_ST_BURNER_PROTECT_SETTINGS">
+      <ArrayDim minrange="1" maxrange="4" />
+    </TypeArray>
+    <TypeArray name="T_ARRAY__1__4__OF_ST_BURNER_REGULATOR_SETTINGS" size="3920" nativesize="3920" typeclass="Array" iecname="ARRAY [1..4] OF ST_BURNER_REGULATOR_SETTINGS" basetype="T_ST_BURNER_REGULATOR_SETTINGS">
       <ArrayDim minrange="1" maxrange="4" />
     </TypeArray>
   </TypeList>
@@ -122,8 +133,7 @@
         <Node name="burner_max_reach_time" type="T_ARRAY__1__4__OF_REAL" access="ReadWrite" />
         <Node name="burner_min_power" type="T_ARRAY__1__4__OF_REAL" access="ReadWrite" />
         <Node name="burner_test_mode" type="T_ARRAY__1__4__OF_BOOL" access="ReadWrite" />
-        <Node name="ignition_settings" type="T_ARRAY__1__4__OF_ignition_settings" access="ReadWrite" />
-        <Node name="ignition_settings_flame_feedback_idx" type="T_ARRAY__1__4__OF_WORD" access="ReadWrite" />
+        <Node name="ignition_settings" type="T_ARRAY__1__4__OF_ST_BURNER_IGNITION_SETTINGS" access="ReadWrite" />
         <Node name="pressure_settings" type="T_ARRAY__1__4__OF_pressure_settings" access="ReadWrite" />
         <Node name="pressure_settings_ai_idx" type="T_ARRAY__1__4__OF_WORD" access="ReadWrite" />
         <Node name="protect_settings" type="T_ARRAY__1__4__OF_ST_BURNER_PROTECT_SETTINGS" access="ReadWrite" />

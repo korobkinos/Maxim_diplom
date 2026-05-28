@@ -5,7 +5,5 @@ STRUCT
 	valve_idx: WORD := 0;
 	pv_ai_idx: ARRAY[1..3] OF WORD := [0,0,0];
 	position_ai_idx : WORD := 0;
-	pv_idx   : WORD := 0;    // legacy single-PV mirror (pv_ai_idx[1])
-	proc_idx : WORD := 0;    // legacy position mirror (position_ai_idx)
 END_STRUCT
 END_TYPE
