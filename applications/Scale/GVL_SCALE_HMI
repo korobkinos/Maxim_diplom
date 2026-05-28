@@ -2,9 +2,6 @@
 
 VAR_GLOBAL
 	hmi_ai_scale_flat		: ARRAY[1..total_ai_scale_hmi_quantity] OF REAL;
-	hmi_apply_settings		: BOOL;
-	hmi_reload_settings		: BOOL;
-	hmi_settings_version	: DWORD;
-	hmi_last_error			: WORD;
-	hmi_last_error_index	: WORD;
+	hmi_load_settings		: BOOL;
+	hmi_save_settings		: BOOL;
 END_VAR
