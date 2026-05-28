@@ -36,6 +36,7 @@ VAR
 	vote_alarm_count       : WORD;
 	vote_bound_count       : WORD;
 	vote_required_cfg      : WORD;
+	vote_required_effective: WORD;
 	protect_cfg            : ST_PROTECT_SETTINGS;
 	sensor_alarm           : BOOL;
 	p_gas_control_delay_cfg: REAL;
@@ -224,11 +225,16 @@ ELSE
 			END_IF;
 		END_FOR;
 
-		IF (vote_bound_count = 0) OR (vote_required_cfg = 0) OR (vote_required_cfg > vote_bound_count) THEN
+		vote_required_effective := vote_required_cfg;
+		IF (vote_bound_count > 0) AND (vote_required_effective = 0) THEN
+			vote_required_effective := 1;
+		END_IF;
+
+		IF vote_bound_count = 0 THEN
 			signal_value := FALSE;
 			control_value := FALSE;
 		ELSE
-			signal_value := vote_alarm_count >= vote_required_cfg;
+			signal_value := vote_alarm_count >= vote_required_effective;
 		END_IF;
 
 		cmd_execute_set := protect_data.execute_set_cmd[i];

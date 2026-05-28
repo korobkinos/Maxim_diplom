@@ -67,14 +67,12 @@
       <UserDefElement iecname="ai_idx" type="T_ARRAY__1__3__OF_WORD" byteoffset="20" vartype="VAR" access="ReadWrite" />
       <UserDefElement iecname="vote_required" type="T_WORD" byteoffset="26" vartype="VAR" access="ReadWrite" />
     </TypeUserDef>
-    <TypeUserDef name="T_ST_REGULATOR_BINDING" size="18" nativesize="18" typeclass="Userdef" pouclass="STRUCTURE" iecname="ST_REGULATOR_BINDING">
+    <TypeUserDef name="T_ST_REGULATOR_BINDING" size="14" nativesize="14" typeclass="Userdef" pouclass="STRUCTURE" iecname="ST_REGULATOR_BINDING">
       <UserDefElement iecname="enabled" type="T_WORD" byteoffset="0" vartype="VAR" access="ReadWrite" />
       <UserDefElement iecname="pid_idx" type="T_WORD" byteoffset="2" vartype="VAR" access="ReadWrite" />
       <UserDefElement iecname="valve_idx" type="T_WORD" byteoffset="4" vartype="VAR" access="ReadWrite" />
       <UserDefElement iecname="pv_ai_idx" type="T_ARRAY__1__3__OF_WORD" byteoffset="6" vartype="VAR" access="ReadWrite" />
       <UserDefElement iecname="position_ai_idx" type="T_WORD" byteoffset="12" vartype="VAR" access="ReadWrite" />
-      <UserDefElement iecname="pv_idx" type="T_WORD" byteoffset="14" vartype="VAR" access="ReadWrite" />
-      <UserDefElement iecname="proc_idx" type="T_WORD" byteoffset="16" vartype="VAR" access="ReadWrite" />
     </TypeUserDef>
     <TypeUserDef name="T_ignition_settings" size="20" nativesize="20" typeclass="Userdef" pouclass="STRUCTURE" iecname="ignition_settings">
       <UserDefElement iecname="VALUE" type="T_ARRAY__1__5__OF_REAL" byteoffset="0" vartype="VAR" access="ReadWrite" />
@@ -85,7 +83,7 @@
     <TypeArray name="T_ARRAY__0__10__OF_PID_SETTINGS" size="660" nativesize="660" typeclass="Array" iecname="ARRAY [0..10] OF PID_SETTINGS" basetype="T_PID_SETTINGS">
       <ArrayDim minrange="0" maxrange="10" />
     </TypeArray>
-    <TypeArray name="T_ARRAY__0__10__OF_ST_REGULATOR_BINDING" size="198" nativesize="198" typeclass="Array" iecname="ARRAY [0..10] OF ST_REGULATOR_BINDING" basetype="T_ST_REGULATOR_BINDING">
+    <TypeArray name="T_ARRAY__0__10__OF_ST_REGULATOR_BINDING" size="154" nativesize="154" typeclass="Array" iecname="ARRAY [0..10] OF ST_REGULATOR_BINDING" basetype="T_ST_REGULATOR_BINDING">
       <ArrayDim minrange="0" maxrange="10" />
     </TypeArray>
     <TypeArray name="T_ARRAY__0__15__OF_ST_PROTECT_SETTINGS" size="448" nativesize="448" typeclass="Array" iecname="ARRAY [0..15] OF ST_PROTECT_SETTINGS" basetype="T_ST_PROTECT_SETTINGS">
@@ -113,15 +111,15 @@
     <TypeUserDef name="T_ST_BURNER_PROTECT_SETTINGS" size="448" nativesize="448" typeclass="Userdef" pouclass="STRUCTURE" iecname="ST_BURNER_PROTECT_SETTINGS">
       <UserDefElement iecname="protect" type="T_ARRAY__0__15__OF_ST_PROTECT_SETTINGS" byteoffset="0" vartype="VAR" access="ReadWrite" />
     </TypeUserDef>
-    <TypeUserDef name="T_ST_BURNER_REGULATOR_SETTINGS" size="980" nativesize="980" typeclass="Userdef" pouclass="STRUCTURE" iecname="ST_BURNER_REGULATOR_SETTINGS">
+    <TypeUserDef name="T_ST_BURNER_REGULATOR_SETTINGS" size="936" nativesize="936" typeclass="Userdef" pouclass="STRUCTURE" iecname="ST_BURNER_REGULATOR_SETTINGS">
       <UserDefElement iecname="pid" type="T_ARRAY__0__10__OF_PID_SETTINGS" byteoffset="0" vartype="VAR" access="ReadWrite" />
       <UserDefElement iecname="binding" type="T_ARRAY__0__10__OF_ST_REGULATOR_BINDING" byteoffset="660" vartype="VAR" access="ReadWrite" />
-      <UserDefElement iecname="gas_air_map" type="T_GAS_AIR_PROPORTION" byteoffset="860" vartype="VAR" access="ReadWrite" />
+      <UserDefElement iecname="gas_air_map" type="T_GAS_AIR_PROPORTION" byteoffset="816" vartype="VAR" access="ReadWrite" />
     </TypeUserDef>
     <TypeArray name="T_ARRAY__1__4__OF_ST_BURNER_PROTECT_SETTINGS" size="1792" nativesize="1792" typeclass="Array" iecname="ARRAY [1..4] OF ST_BURNER_PROTECT_SETTINGS" basetype="T_ST_BURNER_PROTECT_SETTINGS">
       <ArrayDim minrange="1" maxrange="4" />
     </TypeArray>
-    <TypeArray name="T_ARRAY__1__4__OF_ST_BURNER_REGULATOR_SETTINGS" size="3920" nativesize="3920" typeclass="Array" iecname="ARRAY [1..4] OF ST_BURNER_REGULATOR_SETTINGS" basetype="T_ST_BURNER_REGULATOR_SETTINGS">
+    <TypeArray name="T_ARRAY__1__4__OF_ST_BURNER_REGULATOR_SETTINGS" size="3744" nativesize="3744" typeclass="Array" iecname="ARRAY [1..4] OF ST_BURNER_REGULATOR_SETTINGS" basetype="T_ST_BURNER_REGULATOR_SETTINGS">
       <ArrayDim minrange="1" maxrange="4" />
     </TypeArray>
   </TypeList>
