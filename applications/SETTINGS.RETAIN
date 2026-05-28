@@ -30,25 +30,24 @@ VAR_GLOBAL PERSISTENT RETAIN
 	burner_min_power		: ARRAY[1..burner_quantity] OF REAL := [burner_quantity(10)];	// Минимальная мощность горелки, кПа
 	burner_max_reach_time	: ARRAY[1..burner_quantity] OF REAL;							// Время выхода на минимальную мощность
 
-	burner_pid_settings		: ARRAY[1..total_burner_pid_settings_quantity] OF REAL;
-	burner_gas_air_map		: ARRAY[1..total_burner_gas_air_map_quantity] OF REAL;
+	regulator_pid_settings	: ARRAY[1..total_burner_regulator_quantity] OF PID_SETTINGS;
+	regulator_gas_air_map	: ARRAY[1..burner_quantity] OF GAS_AIR_PROPORTION;
 
 	(*
-	Карта привязки регулятора к исполнительному механизму
-
-	[x0] - состояние привязки:
-		   0 = выключена
-		   1 = включена
-	[x1] - номер регулятора в массиве pid_control
-	[x2] - номер задвижки / заслонки в массиве reg_valve
-	[x3] - номер аналогового сигнала PV
-	[x4] - номер аналогового сигнала положения ШВ, %
+	Карта привязки регулятора к исполнительному механизму:
+	enabled - состояние привязки:
+			  0 = выключена
+			  1 = включена
+	pid_idx  - номер регулятора в массиве pid_control
+	valve_idx - номер задвижки / заслонки в массиве reg_valve
+	pv_idx   - номер аналогового сигнала PV
+	proc_idx - номер аналогового сигнала положения ШВ, %
 	*)
-	burner_reg_binding_map : ARRAY[1..total_burner_reg_binding_quantity] OF WORD :=
+	regulator_binding_map : ARRAY[1..total_burner_regulator_quantity] OF ST_REGULATOR_BINDING :=
 	[
-		reg_binding_on,  burner_pGas,      gas_shiber, 5, 3, // Регулятор давления газа
-		reg_binding_on,  burner_pAir,      air_shiber, 4, 2, // Регулятор давления воздуха
-		reg_binding_off, burner_posShiber, air_shiber, 2, 2  // Регулятор положения ШВ, %
+		(enabled := reg_binding_on,  pid_idx := burner_pGas,      valve_idx := gas_shiber, pv_idx := 5, proc_idx := 3), // Регулятор давления газа
+		(enabled := reg_binding_on,  pid_idx := burner_pAir,      valve_idx := air_shiber, pv_idx := 4, proc_idx := 2), // Регулятор давления воздуха
+		(enabled := reg_binding_off, pid_idx := burner_posShiber, valve_idx := air_shiber, pv_idx := 2, proc_idx := 2)  // Регулятор положения ШВ, %
 	];
 
 

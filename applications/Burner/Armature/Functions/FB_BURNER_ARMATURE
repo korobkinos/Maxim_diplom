@@ -49,7 +49,7 @@ VAR
 	pid_idx  : WORD;
 	valve_idx: WORD;
 	binding_global_idx : WORD;
-	binding_idx : WORD;
+	binding_cfg : ST_REGULATOR_BINDING;
 END_VAR
 
 // === IMPLEMENTATION ===
@@ -113,35 +113,12 @@ FOR i := 0 TO PID_quantity DO
 	IF burner_id_valid THEN
 		binding_global_idx := GetBurnerRegulatorIndex(burner_id := burner_id, local_idx := i);
 	END_IF;
-	IF burner_id_valid AND (binding_global_idx >= 1) AND (binding_global_idx <= total_burner_regulator_quantity) AND (burner_reg_binding_item_quantity > 0) THEN
-		binding_idx := GetGroupedFlatIndex(
-			group_idx := binding_global_idx,
-			item_idx := 0,
-			item_count := burner_reg_binding_item_quantity,
-			item_base := 0
-		);
-		IF (binding_idx >= 1) AND (binding_idx <= total_burner_reg_binding_quantity) AND (SETTINGS.burner_reg_binding_map[binding_idx] = SETTINGS.reg_binding_on) THEN
-			pid_idx := 0;
-			valve_idx := 0;
-			binding_idx := GetGroupedFlatIndex(
-				group_idx := binding_global_idx,
-				item_idx := 1,
-				item_count := burner_reg_binding_item_quantity,
-				item_base := 0
-			);
-			IF (binding_idx >= 1) AND (binding_idx <= total_burner_reg_binding_quantity) THEN
-				pid_idx := SETTINGS.burner_reg_binding_map[binding_idx];
-			END_IF;
-			binding_idx := GetGroupedFlatIndex(
-				group_idx := binding_global_idx,
-				item_idx := 2,
-				item_count := burner_reg_binding_item_quantity,
-				item_base := 0
-			);
-			IF (binding_idx >= 1) AND (binding_idx <= total_burner_reg_binding_quantity) THEN
-				valve_idx := SETTINGS.burner_reg_binding_map[binding_idx];
-			END_IF;
-			IF (pid_idx <= PID_quantity) AND (valve_idx <= counter_armature) THEN
+	IF burner_id_valid AND (binding_global_idx >= 1) AND (binding_global_idx <= total_burner_regulator_quantity) THEN
+		binding_cfg := SETTINGS.regulator_binding_map[binding_global_idx];
+		IF binding_cfg.enabled = SETTINGS.reg_binding_on THEN
+			pid_idx := binding_cfg.pid_idx;
+			valve_idx := binding_cfg.valve_idx;
+			IF (pid_idx >= 1) AND (pid_idx <= PID_quantity) AND (valve_idx >= 1) AND (valve_idx <= counter_armature) THEN
 				reg_up_cmd[valve_idx] := reg_up_cmd[valve_idx] OR regulator_data.reg_valve[pid_idx].up_out;
 				reg_down_cmd[valve_idx] := reg_down_cmd[valve_idx] OR regulator_data.reg_valve[pid_idx].down_out;
 				reg_auto_cmd[valve_idx] := reg_auto_cmd[valve_idx] OR regulator_data.reg_valve[pid_idx].auto_set;
@@ -238,35 +215,12 @@ FOR i := 0 TO PID_quantity DO
 	IF burner_id_valid THEN
 		binding_global_idx := GetBurnerRegulatorIndex(burner_id := burner_id, local_idx := i);
 	END_IF;
-	IF burner_id_valid AND (binding_global_idx >= 1) AND (binding_global_idx <= total_burner_regulator_quantity) AND (burner_reg_binding_item_quantity > 0) THEN
-		binding_idx := GetGroupedFlatIndex(
-			group_idx := binding_global_idx,
-			item_idx := 0,
-			item_count := burner_reg_binding_item_quantity,
-			item_base := 0
-		);
-		IF (binding_idx >= 1) AND (binding_idx <= total_burner_reg_binding_quantity) AND (SETTINGS.burner_reg_binding_map[binding_idx] = SETTINGS.reg_binding_on) THEN
-			pid_idx := 0;
-			valve_idx := 0;
-			binding_idx := GetGroupedFlatIndex(
-				group_idx := binding_global_idx,
-				item_idx := 1,
-				item_count := burner_reg_binding_item_quantity,
-				item_base := 0
-			);
-			IF (binding_idx >= 1) AND (binding_idx <= total_burner_reg_binding_quantity) THEN
-				pid_idx := SETTINGS.burner_reg_binding_map[binding_idx];
-			END_IF;
-			binding_idx := GetGroupedFlatIndex(
-				group_idx := binding_global_idx,
-				item_idx := 2,
-				item_count := burner_reg_binding_item_quantity,
-				item_base := 0
-			);
-			IF (binding_idx >= 1) AND (binding_idx <= total_burner_reg_binding_quantity) THEN
-				valve_idx := SETTINGS.burner_reg_binding_map[binding_idx];
-			END_IF;
-			IF (pid_idx <= PID_quantity) AND (valve_idx <= counter_armature) THEN
+	IF burner_id_valid AND (binding_global_idx >= 1) AND (binding_global_idx <= total_burner_regulator_quantity) THEN
+		binding_cfg := SETTINGS.regulator_binding_map[binding_global_idx];
+		IF binding_cfg.enabled = SETTINGS.reg_binding_on THEN
+			pid_idx := binding_cfg.pid_idx;
+			valve_idx := binding_cfg.valve_idx;
+			IF (pid_idx >= 1) AND (pid_idx <= PID_quantity) AND (valve_idx >= 1) AND (valve_idx <= counter_armature) THEN
 				regulator_data.reg_valve[pid_idx].open_state := valve_data.open_state[valve_idx];
 				regulator_data.reg_valve[pid_idx].closed_state := valve_data.closed_state[valve_idx];
 			END_IF;

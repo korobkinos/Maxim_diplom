@@ -1,0 +1,9 @@
+TYPE ST_REGULATOR_BINDING :
+STRUCT
+	enabled  : WORD;
+	pid_idx  : WORD;
+	valve_idx: WORD;
+	pv_idx   : WORD;
+	proc_idx : WORD;
+END_STRUCT
+END_TYPE

@@ -1,0 +1,8 @@
+{attribute 'qualified_only'}
+VAR_GLOBAL
+	hmi_regulator_pid_flat		: ARRAY[1..total_burner_pid_settings_quantity] OF REAL;
+	hmi_regulator_gas_air_flat	: ARRAY[1..total_burner_gas_air_map_quantity] OF REAL;
+	hmi_regulator_binding_flat	: ARRAY[1..total_burner_reg_binding_quantity] OF WORD;
+	hmi_load_settings			: BOOL;
+	hmi_save_settings			: BOOL;
+END_VAR
