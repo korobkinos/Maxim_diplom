@@ -21,7 +21,7 @@ END_VAR
 // === IMPLEMENTATION ===
 
 IF NOT init_done THEN
-	FOR reg_global_idx := 1 TO total_burner_regulator_quantity DO
+	FOR reg_global_idx := 1 TO burner_quantity * burner_regulator_quantity DO
 		FOR item_idx := 1 TO pid_settings_quantity DO
 			flat_idx := GetGroupedFlatIndex(
 				group_idx := reg_global_idx,
@@ -30,7 +30,7 @@ IF NOT init_done THEN
 				item_base := 1
 			);
 
-			IF (flat_idx >= 1) AND (flat_idx <= total_burner_pid_settings_quantity) THEN
+			IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * burner_regulator_quantity * pid_settings_quantity) THEN
 				GVL_BURNER_REGULATOR_HMI.hmi_regulator_pid_flat[flat_idx] := SETTINGS.regulator_pid_settings[reg_global_idx].VALUE[item_idx];
 			END_IF;
 		END_FOR;
@@ -44,7 +44,7 @@ IF NOT init_done THEN
 				item_count := gas_air_map_quantity,
 				item_base := 1
 			);
-			IF (flat_idx >= 1) AND (flat_idx <= total_burner_gas_air_map_quantity) THEN
+			IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * gas_air_map_quantity) THEN
 				GVL_BURNER_REGULATOR_HMI.hmi_regulator_gas_air_flat[flat_idx] := SETTINGS.regulator_gas_air_map[burner_id].GAS_VALUE[item_idx];
 			END_IF;
 
@@ -54,7 +54,7 @@ IF NOT init_done THEN
 				item_count := gas_air_map_quantity,
 				item_base := 1
 			);
-			IF (flat_idx >= 1) AND (flat_idx <= total_burner_gas_air_map_quantity) THEN
+			IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * gas_air_map_quantity) THEN
 				GVL_BURNER_REGULATOR_HMI.hmi_regulator_gas_air_flat[flat_idx] := SETTINGS.regulator_gas_air_map[burner_id].AIR_VALUE[item_idx];
 			END_IF;
 
@@ -64,20 +64,20 @@ IF NOT init_done THEN
 				item_count := gas_air_map_quantity,
 				item_base := 1
 			);
-			IF (flat_idx >= 1) AND (flat_idx <= total_burner_gas_air_map_quantity) THEN
+			IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * gas_air_map_quantity) THEN
 				GVL_BURNER_REGULATOR_HMI.hmi_regulator_gas_air_flat[flat_idx] := SETTINGS.regulator_gas_air_map[burner_id].SHIBER_VALUE[item_idx];
 			END_IF;
 		END_FOR;
 	END_FOR;
 
-	FOR reg_global_idx := 1 TO total_burner_regulator_quantity DO
+	FOR reg_global_idx := 1 TO burner_quantity * burner_regulator_quantity DO
 		flat_idx := GetGroupedFlatIndex(
 			group_idx := reg_global_idx,
 			item_idx := binding_enabled_item_idx,
 			item_count := burner_reg_binding_item_quantity,
 			item_base := 1
 		);
-		IF (flat_idx >= 1) AND (flat_idx <= total_burner_reg_binding_quantity) THEN
+		IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * burner_regulator_quantity * burner_reg_binding_item_quantity) THEN
 			GVL_BURNER_REGULATOR_HMI.hmi_regulator_binding_flat[flat_idx] := SETTINGS.regulator_binding_map[reg_global_idx].enabled;
 		END_IF;
 
@@ -87,7 +87,7 @@ IF NOT init_done THEN
 			item_count := burner_reg_binding_item_quantity,
 			item_base := 1
 		);
-		IF (flat_idx >= 1) AND (flat_idx <= total_burner_reg_binding_quantity) THEN
+		IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * burner_regulator_quantity * burner_reg_binding_item_quantity) THEN
 			GVL_BURNER_REGULATOR_HMI.hmi_regulator_binding_flat[flat_idx] := SETTINGS.regulator_binding_map[reg_global_idx].pid_idx;
 		END_IF;
 
@@ -97,7 +97,7 @@ IF NOT init_done THEN
 			item_count := burner_reg_binding_item_quantity,
 			item_base := 1
 		);
-		IF (flat_idx >= 1) AND (flat_idx <= total_burner_reg_binding_quantity) THEN
+		IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * burner_regulator_quantity * burner_reg_binding_item_quantity) THEN
 			GVL_BURNER_REGULATOR_HMI.hmi_regulator_binding_flat[flat_idx] := SETTINGS.regulator_binding_map[reg_global_idx].valve_idx;
 		END_IF;
 
@@ -107,7 +107,7 @@ IF NOT init_done THEN
 			item_count := burner_reg_binding_item_quantity,
 			item_base := 1
 		);
-		IF (flat_idx >= 1) AND (flat_idx <= total_burner_reg_binding_quantity) THEN
+		IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * burner_regulator_quantity * burner_reg_binding_item_quantity) THEN
 			GVL_BURNER_REGULATOR_HMI.hmi_regulator_binding_flat[flat_idx] := SETTINGS.regulator_binding_map[reg_global_idx].pv_idx;
 		END_IF;
 
@@ -117,7 +117,7 @@ IF NOT init_done THEN
 			item_count := burner_reg_binding_item_quantity,
 			item_base := 1
 		);
-		IF (flat_idx >= 1) AND (flat_idx <= total_burner_reg_binding_quantity) THEN
+		IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * burner_regulator_quantity * burner_reg_binding_item_quantity) THEN
 			GVL_BURNER_REGULATOR_HMI.hmi_regulator_binding_flat[flat_idx] := SETTINGS.regulator_binding_map[reg_global_idx].proc_idx;
 		END_IF;
 	END_FOR;
@@ -129,7 +129,7 @@ load_requested := GVL_BURNER_REGULATOR_HMI.hmi_load_settings;
 save_requested := GVL_BURNER_REGULATOR_HMI.hmi_save_settings;
 
 IF load_requested THEN
-	FOR reg_global_idx := 1 TO total_burner_regulator_quantity DO
+	FOR reg_global_idx := 1 TO burner_quantity * burner_regulator_quantity DO
 		FOR item_idx := 1 TO pid_settings_quantity DO
 			flat_idx := GetGroupedFlatIndex(
 				group_idx := reg_global_idx,
@@ -138,7 +138,7 @@ IF load_requested THEN
 				item_base := 1
 			);
 
-			IF (flat_idx >= 1) AND (flat_idx <= total_burner_pid_settings_quantity) THEN
+			IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * burner_regulator_quantity * pid_settings_quantity) THEN
 				GVL_BURNER_REGULATOR_HMI.hmi_regulator_pid_flat[flat_idx] := SETTINGS.regulator_pid_settings[reg_global_idx].VALUE[item_idx];
 			END_IF;
 		END_FOR;
@@ -152,7 +152,7 @@ IF load_requested THEN
 				item_count := gas_air_map_quantity,
 				item_base := 1
 			);
-			IF (flat_idx >= 1) AND (flat_idx <= total_burner_gas_air_map_quantity) THEN
+			IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * gas_air_map_quantity) THEN
 				GVL_BURNER_REGULATOR_HMI.hmi_regulator_gas_air_flat[flat_idx] := SETTINGS.regulator_gas_air_map[burner_id].GAS_VALUE[item_idx];
 			END_IF;
 
@@ -162,7 +162,7 @@ IF load_requested THEN
 				item_count := gas_air_map_quantity,
 				item_base := 1
 			);
-			IF (flat_idx >= 1) AND (flat_idx <= total_burner_gas_air_map_quantity) THEN
+			IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * gas_air_map_quantity) THEN
 				GVL_BURNER_REGULATOR_HMI.hmi_regulator_gas_air_flat[flat_idx] := SETTINGS.regulator_gas_air_map[burner_id].AIR_VALUE[item_idx];
 			END_IF;
 
@@ -172,20 +172,20 @@ IF load_requested THEN
 				item_count := gas_air_map_quantity,
 				item_base := 1
 			);
-			IF (flat_idx >= 1) AND (flat_idx <= total_burner_gas_air_map_quantity) THEN
+			IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * gas_air_map_quantity) THEN
 				GVL_BURNER_REGULATOR_HMI.hmi_regulator_gas_air_flat[flat_idx] := SETTINGS.regulator_gas_air_map[burner_id].SHIBER_VALUE[item_idx];
 			END_IF;
 		END_FOR;
 	END_FOR;
 
-	FOR reg_global_idx := 1 TO total_burner_regulator_quantity DO
+	FOR reg_global_idx := 1 TO burner_quantity * burner_regulator_quantity DO
 		flat_idx := GetGroupedFlatIndex(
 			group_idx := reg_global_idx,
 			item_idx := binding_enabled_item_idx,
 			item_count := burner_reg_binding_item_quantity,
 			item_base := 1
 		);
-		IF (flat_idx >= 1) AND (flat_idx <= total_burner_reg_binding_quantity) THEN
+		IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * burner_regulator_quantity * burner_reg_binding_item_quantity) THEN
 			GVL_BURNER_REGULATOR_HMI.hmi_regulator_binding_flat[flat_idx] := SETTINGS.regulator_binding_map[reg_global_idx].enabled;
 		END_IF;
 
@@ -195,7 +195,7 @@ IF load_requested THEN
 			item_count := burner_reg_binding_item_quantity,
 			item_base := 1
 		);
-		IF (flat_idx >= 1) AND (flat_idx <= total_burner_reg_binding_quantity) THEN
+		IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * burner_regulator_quantity * burner_reg_binding_item_quantity) THEN
 			GVL_BURNER_REGULATOR_HMI.hmi_regulator_binding_flat[flat_idx] := SETTINGS.regulator_binding_map[reg_global_idx].pid_idx;
 		END_IF;
 
@@ -205,7 +205,7 @@ IF load_requested THEN
 			item_count := burner_reg_binding_item_quantity,
 			item_base := 1
 		);
-		IF (flat_idx >= 1) AND (flat_idx <= total_burner_reg_binding_quantity) THEN
+		IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * burner_regulator_quantity * burner_reg_binding_item_quantity) THEN
 			GVL_BURNER_REGULATOR_HMI.hmi_regulator_binding_flat[flat_idx] := SETTINGS.regulator_binding_map[reg_global_idx].valve_idx;
 		END_IF;
 
@@ -215,7 +215,7 @@ IF load_requested THEN
 			item_count := burner_reg_binding_item_quantity,
 			item_base := 1
 		);
-		IF (flat_idx >= 1) AND (flat_idx <= total_burner_reg_binding_quantity) THEN
+		IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * burner_regulator_quantity * burner_reg_binding_item_quantity) THEN
 			GVL_BURNER_REGULATOR_HMI.hmi_regulator_binding_flat[flat_idx] := SETTINGS.regulator_binding_map[reg_global_idx].pv_idx;
 		END_IF;
 
@@ -225,14 +225,14 @@ IF load_requested THEN
 			item_count := burner_reg_binding_item_quantity,
 			item_base := 1
 		);
-		IF (flat_idx >= 1) AND (flat_idx <= total_burner_reg_binding_quantity) THEN
+		IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * burner_regulator_quantity * burner_reg_binding_item_quantity) THEN
 			GVL_BURNER_REGULATOR_HMI.hmi_regulator_binding_flat[flat_idx] := SETTINGS.regulator_binding_map[reg_global_idx].proc_idx;
 		END_IF;
 	END_FOR;
 
 	GVL_BURNER_REGULATOR_HMI.hmi_load_settings := FALSE;
 ELSIF save_requested THEN
-	FOR reg_global_idx := 1 TO total_burner_regulator_quantity DO
+	FOR reg_global_idx := 1 TO burner_quantity * burner_regulator_quantity DO
 		FOR item_idx := 1 TO pid_settings_quantity DO
 			flat_idx := GetGroupedFlatIndex(
 				group_idx := reg_global_idx,
@@ -241,7 +241,7 @@ ELSIF save_requested THEN
 				item_base := 1
 			);
 
-			IF (flat_idx >= 1) AND (flat_idx <= total_burner_pid_settings_quantity) THEN
+			IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * burner_regulator_quantity * pid_settings_quantity) THEN
 				SETTINGS.regulator_pid_settings[reg_global_idx].VALUE[item_idx] := GVL_BURNER_REGULATOR_HMI.hmi_regulator_pid_flat[flat_idx];
 			END_IF;
 		END_FOR;
@@ -255,7 +255,7 @@ ELSIF save_requested THEN
 				item_count := gas_air_map_quantity,
 				item_base := 1
 			);
-			IF (flat_idx >= 1) AND (flat_idx <= total_burner_gas_air_map_quantity) THEN
+			IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * gas_air_map_quantity) THEN
 				SETTINGS.regulator_gas_air_map[burner_id].GAS_VALUE[item_idx] := GVL_BURNER_REGULATOR_HMI.hmi_regulator_gas_air_flat[flat_idx];
 			END_IF;
 
@@ -265,7 +265,7 @@ ELSIF save_requested THEN
 				item_count := gas_air_map_quantity,
 				item_base := 1
 			);
-			IF (flat_idx >= 1) AND (flat_idx <= total_burner_gas_air_map_quantity) THEN
+			IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * gas_air_map_quantity) THEN
 				SETTINGS.regulator_gas_air_map[burner_id].AIR_VALUE[item_idx] := GVL_BURNER_REGULATOR_HMI.hmi_regulator_gas_air_flat[flat_idx];
 			END_IF;
 
@@ -275,20 +275,20 @@ ELSIF save_requested THEN
 				item_count := gas_air_map_quantity,
 				item_base := 1
 			);
-			IF (flat_idx >= 1) AND (flat_idx <= total_burner_gas_air_map_quantity) THEN
+			IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * gas_air_map_quantity) THEN
 				SETTINGS.regulator_gas_air_map[burner_id].SHIBER_VALUE[item_idx] := GVL_BURNER_REGULATOR_HMI.hmi_regulator_gas_air_flat[flat_idx];
 			END_IF;
 		END_FOR;
 	END_FOR;
 
-	FOR reg_global_idx := 1 TO total_burner_regulator_quantity DO
+	FOR reg_global_idx := 1 TO burner_quantity * burner_regulator_quantity DO
 		flat_idx := GetGroupedFlatIndex(
 			group_idx := reg_global_idx,
 			item_idx := binding_enabled_item_idx,
 			item_count := burner_reg_binding_item_quantity,
 			item_base := 1
 		);
-		IF (flat_idx >= 1) AND (flat_idx <= total_burner_reg_binding_quantity) THEN
+		IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * burner_regulator_quantity * burner_reg_binding_item_quantity) THEN
 			SETTINGS.regulator_binding_map[reg_global_idx].enabled := GVL_BURNER_REGULATOR_HMI.hmi_regulator_binding_flat[flat_idx];
 		END_IF;
 
@@ -298,7 +298,7 @@ ELSIF save_requested THEN
 			item_count := burner_reg_binding_item_quantity,
 			item_base := 1
 		);
-		IF (flat_idx >= 1) AND (flat_idx <= total_burner_reg_binding_quantity) THEN
+		IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * burner_regulator_quantity * burner_reg_binding_item_quantity) THEN
 			SETTINGS.regulator_binding_map[reg_global_idx].pid_idx := GVL_BURNER_REGULATOR_HMI.hmi_regulator_binding_flat[flat_idx];
 		END_IF;
 
@@ -308,7 +308,7 @@ ELSIF save_requested THEN
 			item_count := burner_reg_binding_item_quantity,
 			item_base := 1
 		);
-		IF (flat_idx >= 1) AND (flat_idx <= total_burner_reg_binding_quantity) THEN
+		IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * burner_regulator_quantity * burner_reg_binding_item_quantity) THEN
 			SETTINGS.regulator_binding_map[reg_global_idx].valve_idx := GVL_BURNER_REGULATOR_HMI.hmi_regulator_binding_flat[flat_idx];
 		END_IF;
 
@@ -318,7 +318,7 @@ ELSIF save_requested THEN
 			item_count := burner_reg_binding_item_quantity,
 			item_base := 1
 		);
-		IF (flat_idx >= 1) AND (flat_idx <= total_burner_reg_binding_quantity) THEN
+		IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * burner_regulator_quantity * burner_reg_binding_item_quantity) THEN
 			SETTINGS.regulator_binding_map[reg_global_idx].pv_idx := GVL_BURNER_REGULATOR_HMI.hmi_regulator_binding_flat[flat_idx];
 		END_IF;
 
@@ -328,7 +328,7 @@ ELSIF save_requested THEN
 			item_count := burner_reg_binding_item_quantity,
 			item_base := 1
 		);
-		IF (flat_idx >= 1) AND (flat_idx <= total_burner_reg_binding_quantity) THEN
+		IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * burner_regulator_quantity * burner_reg_binding_item_quantity) THEN
 			SETTINGS.regulator_binding_map[reg_global_idx].proc_idx := GVL_BURNER_REGULATOR_HMI.hmi_regulator_binding_flat[flat_idx];
 		END_IF;
 	END_FOR;

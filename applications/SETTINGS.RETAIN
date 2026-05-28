@@ -1,4 +1,4 @@
-﻿{attribute 'qualified_only'}
+{attribute 'qualified_only'}
 
 VAR_GLOBAL CONSTANT
 	// Состояние привязки регулятора
@@ -29,7 +29,7 @@ VAR_GLOBAL PERSISTENT RETAIN
 	burner_min_power		: ARRAY[1..burner_quantity] OF REAL;							// Минимальная мощность горелки, кПа
 	burner_max_reach_time	: ARRAY[1..burner_quantity] OF REAL;							// Время выхода на минимальную мощность
 
-	regulator_pid_settings	: ARRAY[1..total_burner_regulator_quantity] OF PID_SETTINGS;
+	regulator_pid_settings	: ARRAY[1..burner_quantity * burner_regulator_quantity] OF PID_SETTINGS;
 	regulator_gas_air_map	: ARRAY[1..burner_quantity] OF GAS_AIR_PROPORTION;
 
 	(*
@@ -42,7 +42,7 @@ VAR_GLOBAL PERSISTENT RETAIN
 	pv_idx   - номер аналогового сигнала PV
 	proc_idx - номер аналогового сигнала положения ШВ, %
 	*)
-	regulator_binding_map : ARRAY[1..total_burner_regulator_quantity] OF ST_REGULATOR_BINDING;
+	regulator_binding_map : ARRAY[1..burner_quantity * burner_regulator_quantity] OF ST_REGULATOR_BINDING;
 
 
 	(*
@@ -70,7 +70,7 @@ VAR_GLOBAL PERSISTENT RETAIN
 		НАСТРОЙКИ АРМАТУРЫ
 	========================================================
 	*)
-	armature_settings : ARRAY[1..total_burner_armature_quantity] OF ST_ARMATURE_SETTINGS;
+	armature_settings : ARRAY[1..burner_quantity * burner_valve_quantity] OF ST_ARMATURE_SETTINGS;
 
 
 	(*
@@ -86,7 +86,7 @@ VAR_GLOBAL PERSISTENT RETAIN
 		ЗАЩИТЫ
 	========================================================
 	*)
-	protect_settings : ARRAY[1..total_burner_protect_quantity] OF ST_PROTECT_SETTINGS;
+	protect_settings : ARRAY[1..burner_quantity * burner_protect_quantity] OF ST_PROTECT_SETTINGS;
 
 
 	(*

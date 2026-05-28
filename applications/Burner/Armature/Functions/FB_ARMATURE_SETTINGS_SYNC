@@ -16,21 +16,21 @@ END_VAR
 // === IMPLEMENTATION ===
 
 IF NOT init_done THEN
-	FOR arm_idx := 1 TO total_burner_armature_quantity DO
+	FOR arm_idx := 1 TO burner_quantity * burner_valve_quantity DO
 		GVL_BURNER_ARMATURE_HMI.hmi_armature_simulation[arm_idx] := SETTINGS.armature_settings[arm_idx].simulation;
 		GVL_BURNER_ARMATURE_HMI.hmi_armature_one_state[arm_idx] := SETTINGS.armature_settings[arm_idx].one_state;
 		GVL_BURNER_ARMATURE_HMI.hmi_armature_block_mode[arm_idx] := SETTINGS.armature_settings[arm_idx].block_mode;
 
 		flat_idx := GetGroupedFlatIndex(group_idx := arm_idx, item_idx := armature_wait_item_idx, item_count := armature_time_hmi_item_quantity, item_base := 1);
-		IF (flat_idx >= 1) AND (flat_idx <= total_burner_armature_time_hmi_quantity) THEN
+		IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * burner_valve_quantity * armature_time_hmi_item_quantity) THEN
 			GVL_BURNER_ARMATURE_HMI.hmi_armature_time_flat[flat_idx] := SETTINGS.armature_settings[arm_idx].wait_time;
 		END_IF;
 		flat_idx := GetGroupedFlatIndex(group_idx := arm_idx, item_idx := armature_pull_item_idx, item_count := armature_time_hmi_item_quantity, item_base := 1);
-		IF (flat_idx >= 1) AND (flat_idx <= total_burner_armature_time_hmi_quantity) THEN
+		IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * burner_valve_quantity * armature_time_hmi_item_quantity) THEN
 			GVL_BURNER_ARMATURE_HMI.hmi_armature_time_flat[flat_idx] := SETTINGS.armature_settings[arm_idx].pull_time;
 		END_IF;
 		flat_idx := GetGroupedFlatIndex(group_idx := arm_idx, item_idx := armature_off_item_idx, item_count := armature_time_hmi_item_quantity, item_base := 1);
-		IF (flat_idx >= 1) AND (flat_idx <= total_burner_armature_time_hmi_quantity) THEN
+		IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * burner_valve_quantity * armature_time_hmi_item_quantity) THEN
 			GVL_BURNER_ARMATURE_HMI.hmi_armature_time_flat[flat_idx] := SETTINGS.armature_settings[arm_idx].off_time;
 		END_IF;
 	END_FOR;
@@ -41,41 +41,41 @@ load_requested := GVL_BURNER_ARMATURE_HMI.hmi_load_settings;
 save_requested := GVL_BURNER_ARMATURE_HMI.hmi_save_settings;
 
 IF load_requested THEN
-	FOR arm_idx := 1 TO total_burner_armature_quantity DO
+	FOR arm_idx := 1 TO burner_quantity * burner_valve_quantity DO
 		GVL_BURNER_ARMATURE_HMI.hmi_armature_simulation[arm_idx] := SETTINGS.armature_settings[arm_idx].simulation;
 		GVL_BURNER_ARMATURE_HMI.hmi_armature_one_state[arm_idx] := SETTINGS.armature_settings[arm_idx].one_state;
 		GVL_BURNER_ARMATURE_HMI.hmi_armature_block_mode[arm_idx] := SETTINGS.armature_settings[arm_idx].block_mode;
 
 		flat_idx := GetGroupedFlatIndex(group_idx := arm_idx, item_idx := armature_wait_item_idx, item_count := armature_time_hmi_item_quantity, item_base := 1);
-		IF (flat_idx >= 1) AND (flat_idx <= total_burner_armature_time_hmi_quantity) THEN
+		IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * burner_valve_quantity * armature_time_hmi_item_quantity) THEN
 			GVL_BURNER_ARMATURE_HMI.hmi_armature_time_flat[flat_idx] := SETTINGS.armature_settings[arm_idx].wait_time;
 		END_IF;
 		flat_idx := GetGroupedFlatIndex(group_idx := arm_idx, item_idx := armature_pull_item_idx, item_count := armature_time_hmi_item_quantity, item_base := 1);
-		IF (flat_idx >= 1) AND (flat_idx <= total_burner_armature_time_hmi_quantity) THEN
+		IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * burner_valve_quantity * armature_time_hmi_item_quantity) THEN
 			GVL_BURNER_ARMATURE_HMI.hmi_armature_time_flat[flat_idx] := SETTINGS.armature_settings[arm_idx].pull_time;
 		END_IF;
 		flat_idx := GetGroupedFlatIndex(group_idx := arm_idx, item_idx := armature_off_item_idx, item_count := armature_time_hmi_item_quantity, item_base := 1);
-		IF (flat_idx >= 1) AND (flat_idx <= total_burner_armature_time_hmi_quantity) THEN
+		IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * burner_valve_quantity * armature_time_hmi_item_quantity) THEN
 			GVL_BURNER_ARMATURE_HMI.hmi_armature_time_flat[flat_idx] := SETTINGS.armature_settings[arm_idx].off_time;
 		END_IF;
 	END_FOR;
 	GVL_BURNER_ARMATURE_HMI.hmi_load_settings := FALSE;
 ELSIF save_requested THEN
-	FOR arm_idx := 1 TO total_burner_armature_quantity DO
+	FOR arm_idx := 1 TO burner_quantity * burner_valve_quantity DO
 		SETTINGS.armature_settings[arm_idx].simulation := GVL_BURNER_ARMATURE_HMI.hmi_armature_simulation[arm_idx];
 		SETTINGS.armature_settings[arm_idx].one_state := GVL_BURNER_ARMATURE_HMI.hmi_armature_one_state[arm_idx];
 		SETTINGS.armature_settings[arm_idx].block_mode := GVL_BURNER_ARMATURE_HMI.hmi_armature_block_mode[arm_idx];
 
 		flat_idx := GetGroupedFlatIndex(group_idx := arm_idx, item_idx := armature_wait_item_idx, item_count := armature_time_hmi_item_quantity, item_base := 1);
-		IF (flat_idx >= 1) AND (flat_idx <= total_burner_armature_time_hmi_quantity) THEN
+		IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * burner_valve_quantity * armature_time_hmi_item_quantity) THEN
 			SETTINGS.armature_settings[arm_idx].wait_time := GVL_BURNER_ARMATURE_HMI.hmi_armature_time_flat[flat_idx];
 		END_IF;
 		flat_idx := GetGroupedFlatIndex(group_idx := arm_idx, item_idx := armature_pull_item_idx, item_count := armature_time_hmi_item_quantity, item_base := 1);
-		IF (flat_idx >= 1) AND (flat_idx <= total_burner_armature_time_hmi_quantity) THEN
+		IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * burner_valve_quantity * armature_time_hmi_item_quantity) THEN
 			SETTINGS.armature_settings[arm_idx].pull_time := GVL_BURNER_ARMATURE_HMI.hmi_armature_time_flat[flat_idx];
 		END_IF;
 		flat_idx := GetGroupedFlatIndex(group_idx := arm_idx, item_idx := armature_off_item_idx, item_count := armature_time_hmi_item_quantity, item_base := 1);
-		IF (flat_idx >= 1) AND (flat_idx <= total_burner_armature_time_hmi_quantity) THEN
+		IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * burner_valve_quantity * armature_time_hmi_item_quantity) THEN
 			SETTINGS.armature_settings[arm_idx].off_time := GVL_BURNER_ARMATURE_HMI.hmi_armature_time_flat[flat_idx];
 		END_IF;
 	END_FOR;

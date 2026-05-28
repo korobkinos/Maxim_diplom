@@ -1,4 +1,4 @@
-﻿FUNCTION_BLOCK FB_BURNER_HMI_SYNC
+FUNCTION_BLOCK FB_BURNER_HMI_SYNC
 VAR_INPUT
 	burner_id : WORD;
 	enable    : BOOL;
@@ -44,14 +44,14 @@ IF enable THEN
 	ignition_data.flame_feedback_idx := SETTINGS.ignition_settings_flame_feedback_idx[burner_id];
 
 	global_idx := GetBurnerProtectIndex(burner_id := burner_id, local_idx := 0);
-	IF (global_idx >= 1) AND (global_idx <= total_burner_protect_quantity) THEN
+	IF (global_idx >= 1) AND (global_idx <= burner_quantity * burner_protect_quantity) THEN
 		protect_data.p_gas_control_delay := SETTINGS.protect_settings[global_idx].p_gas_control_delay;
 		protect_data.p_air_control_delay := SETTINGS.protect_settings[global_idx].p_air_control_delay;
 		protect_data.flame_control_delay := SETTINGS.protect_settings[global_idx].flame_control_delay;
 	END_IF;
 END_IF;
 
-FOR local_idx := 0 TO counter_armature DO
+FOR local_idx := 0 TO burner_valve_quantity - 1 DO
 	global_idx := GetBurnerValveIndex(burner_id := burner_id, local_idx := local_idx);
 
 	IF enable THEN
@@ -79,7 +79,7 @@ FOR local_idx := 0 TO counter_armature DO
 	GVL_BURNER_VALVE.percent[global_idx] := valve_data.percent[local_idx];
 END_FOR;
 
-FOR local_idx := 0 TO burner_protect_quantity DO
+FOR local_idx := 0 TO burner_protect_quantity - 1 DO
 	global_idx := GetBurnerProtectIndex(burner_id := burner_id, local_idx := local_idx);
 
 	IF enable THEN

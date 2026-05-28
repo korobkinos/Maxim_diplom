@@ -1,4 +1,4 @@
-﻿FUNCTION reg_valve_bind : BOOL
+FUNCTION reg_valve_bind : BOOL
 VAR CONSTANT
 	pid_bind_enabled: WORD:= 0;
 	pid_bind: WORD:= 1;
@@ -18,7 +18,7 @@ END_VAR
 VAR_IN_OUT
 	ai_in_scale : ARRAY[0..in_out_quantity]	OF REAL;
 	pid_control: ARRAY[0..PID_quantity] OF PID_CONTROL;
-	value_control: ARRAY[0..counter_armature] OF PID_CONTROL;	
+	value_control: ARRAY[0..burner_valve_quantity - 1] OF PID_CONTROL;	
 END_VAR
 VAR
     i: WORD;

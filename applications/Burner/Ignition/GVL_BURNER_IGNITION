@@ -5,30 +5,30 @@ VAR_GLOBAL
 	Вложенные массивы не используются из-за ограничений Weintek/OPC UA.
 	Глобальные индексы 1-базные и должны формироваться через GetBurnerIgnitionIndex.
 	*)
-	start        : ARRAY[1..total_burner_ignition_quantity] OF BOOL;
-	stop         : ARRAY[1..total_burner_ignition_quantity] OF BOOL;
-	start_block  : ARRAY[1..total_burner_ignition_quantity] OF BOOL;
-	block        : ARRAY[1..total_burner_ignition_quantity] OF BOOL;
+	start        : ARRAY[1..burner_quantity] OF BOOL;
+	stop         : ARRAY[1..burner_quantity] OF BOOL;
+	start_block  : ARRAY[1..burner_quantity] OF BOOL;
+	block        : ARRAY[1..burner_quantity] OF BOOL;
 
-	ready        : ARRAY[1..total_burner_ignition_quantity] OF BOOL;
-	success      : ARRAY[1..total_burner_ignition_quantity] OF BOOL;
-	in_progress  : ARRAY[1..total_burner_ignition_quantity] OF BOOL;
-	alarm        : ARRAY[1..total_burner_ignition_quantity] OF BOOL;
-	warning      : ARRAY[1..total_burner_ignition_quantity] OF BOOL;
-	ignition_flame : ARRAY[1..total_burner_ignition_quantity] OF BOOL;
-	no_flame     : ARRAY[1..total_burner_ignition_quantity] OF BOOL;
-	flame_lost   : ARRAY[1..total_burner_ignition_quantity] OF BOOL;
-	repeat_msg   : ARRAY[1..total_burner_ignition_quantity] OF BOOL;
-	stop_msg     : ARRAY[1..total_burner_ignition_quantity] OF BOOL;
+	ready        : ARRAY[1..burner_quantity] OF BOOL;
+	success      : ARRAY[1..burner_quantity] OF BOOL;
+	in_progress  : ARRAY[1..burner_quantity] OF BOOL;
+	alarm        : ARRAY[1..burner_quantity] OF BOOL;
+	warning      : ARRAY[1..burner_quantity] OF BOOL;
+	ignition_flame : ARRAY[1..burner_quantity] OF BOOL;
+	no_flame     : ARRAY[1..burner_quantity] OF BOOL;
+	flame_lost   : ARRAY[1..burner_quantity] OF BOOL;
+	repeat_msg   : ARRAY[1..burner_quantity] OF BOOL;
+	stop_msg     : ARRAY[1..burner_quantity] OF BOOL;
 
-	spark_SET    : ARRAY[1..total_burner_ignition_quantity] OF BOOL;
-	spark_RESET  : ARRAY[1..total_burner_ignition_quantity] OF BOOL;
-	KZ_SET       : ARRAY[1..total_burner_ignition_quantity] OF BOOL;
-	KZ_RESET     : ARRAY[1..total_burner_ignition_quantity] OF BOOL;
-	PZK_1_SET    : ARRAY[1..total_burner_ignition_quantity] OF BOOL;
-	PZK_1_RESET  : ARRAY[1..total_burner_ignition_quantity] OF BOOL;
+	spark_SET    : ARRAY[1..burner_quantity] OF BOOL;
+	spark_RESET  : ARRAY[1..burner_quantity] OF BOOL;
+	KZ_SET       : ARRAY[1..burner_quantity] OF BOOL;
+	KZ_RESET     : ARRAY[1..burner_quantity] OF BOOL;
+	PZK_1_SET    : ARRAY[1..burner_quantity] OF BOOL;
+	PZK_1_RESET  : ARRAY[1..burner_quantity] OF BOOL;
 
-	step         : ARRAY[1..total_burner_ignition_quantity] OF WORD;
-	state        : ARRAY[1..total_burner_ignition_quantity] OF DWORD;
+	step         : ARRAY[1..burner_quantity] OF WORD;
+	state        : ARRAY[1..burner_quantity] OF DWORD;
 
 END_VAR

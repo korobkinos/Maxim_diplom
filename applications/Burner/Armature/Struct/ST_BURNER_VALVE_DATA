@@ -1,33 +1,33 @@
-﻿TYPE ST_BURNER_VALVE_DATA :
+TYPE ST_BURNER_VALVE_DATA :
 STRUCT
 	// Внутренняя память для будущего FB_BURNER_UNIT.
 	// К текущей логике одной горелки пока не подключено.
-	// Локальная 0-базная индексация внутренних массивов сохранена (арматура 0..counter_armature, защиты 0..burner_protect_quantity, регуляторы 0..PID_quantity).
+	// Локальная 0-базная индексация внутренних массивов сохранена (арматура 0..burner_valve_quantity - 1, защиты 0..burner_protect_quantity, регуляторы 0..PID_quantity).
 	// Визуализация и OPC UA используют отдельные плоские карты GVL_BURNER_*.
 	// Вентиляция остается логикой уровня котла и в эти типы не входит.
 	// Логика AutoBurner и общая автопоследовательность здесь не описываются.
-	up                : ARRAY[0..counter_armature] OF BOOL;
-	down              : ARRAY[0..counter_armature] OF BOOL;
-	open              : ARRAY[0..counter_armature] OF BOOL;
-	closed            : ARRAY[0..counter_armature] OF BOOL;
-	stop              : ARRAY[0..counter_armature] OF BOOL;
-	block             : ARRAY[0..counter_armature] OF BOOL;
-	set_special       : ARRAY[0..counter_armature] OF BOOL;
-	set_auto          : ARRAY[0..counter_armature] OF BOOL;
-	set_manual        : ARRAY[0..counter_armature] OF BOOL;
-	imitation_mode    : ARRAY[0..counter_armature] OF BOOL;
-	open_state_di     : ARRAY[0..counter_armature] OF BOOL;
-	closed_state_di   : ARRAY[0..counter_armature] OF BOOL;
-	special_state_di  : ARRAY[0..counter_armature] OF BOOL;
-	open_state        : ARRAY[0..counter_armature] OF BOOL;
-	closed_state      : ARRAY[0..counter_armature] OF BOOL;
-	auto_mode         : ARRAY[0..counter_armature] OF BOOL;
-	up_out            : ARRAY[0..counter_armature] OF BOOL;
-	down_out          : ARRAY[0..counter_armature] OF BOOL;
-	error_out         : ARRAY[0..counter_armature] OF BOOL;
-	control_out       : ARRAY[0..counter_armature] OF BOOL;
-	move_out          : ARRAY[0..counter_armature] OF BOOL;
-	state             : ARRAY[0..counter_armature] OF DWORD;
-	percent           : ARRAY[0..counter_armature] OF REAL;
+	up                : ARRAY[0..burner_valve_quantity - 1] OF BOOL;
+	down              : ARRAY[0..burner_valve_quantity - 1] OF BOOL;
+	open              : ARRAY[0..burner_valve_quantity - 1] OF BOOL;
+	closed            : ARRAY[0..burner_valve_quantity - 1] OF BOOL;
+	stop              : ARRAY[0..burner_valve_quantity - 1] OF BOOL;
+	block             : ARRAY[0..burner_valve_quantity - 1] OF BOOL;
+	set_special       : ARRAY[0..burner_valve_quantity - 1] OF BOOL;
+	set_auto          : ARRAY[0..burner_valve_quantity - 1] OF BOOL;
+	set_manual        : ARRAY[0..burner_valve_quantity - 1] OF BOOL;
+	imitation_mode    : ARRAY[0..burner_valve_quantity - 1] OF BOOL;
+	open_state_di     : ARRAY[0..burner_valve_quantity - 1] OF BOOL;
+	closed_state_di   : ARRAY[0..burner_valve_quantity - 1] OF BOOL;
+	special_state_di  : ARRAY[0..burner_valve_quantity - 1] OF BOOL;
+	open_state        : ARRAY[0..burner_valve_quantity - 1] OF BOOL;
+	closed_state      : ARRAY[0..burner_valve_quantity - 1] OF BOOL;
+	auto_mode         : ARRAY[0..burner_valve_quantity - 1] OF BOOL;
+	up_out            : ARRAY[0..burner_valve_quantity - 1] OF BOOL;
+	down_out          : ARRAY[0..burner_valve_quantity - 1] OF BOOL;
+	error_out         : ARRAY[0..burner_valve_quantity - 1] OF BOOL;
+	control_out       : ARRAY[0..burner_valve_quantity - 1] OF BOOL;
+	move_out          : ARRAY[0..burner_valve_quantity - 1] OF BOOL;
+	state             : ARRAY[0..burner_valve_quantity - 1] OF DWORD;
+	percent           : ARRAY[0..burner_valve_quantity - 1] OF REAL;
 END_STRUCT
 END_TYPE

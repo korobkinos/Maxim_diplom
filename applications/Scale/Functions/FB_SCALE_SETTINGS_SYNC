@@ -21,11 +21,11 @@ IF NOT init_done THEN
 			flat_idx := GetGroupedFlatIndex(
 				group_idx := ch_idx,
 				item_idx := item_idx,
-				item_count := ai_scale_hmi_item_quantity,
+				item_count := ai_scale_hmi_quantity,
 				item_base := 0
 			);
 
-			IF (flat_idx >= 1) AND (flat_idx <= total_ai_scale_hmi_quantity) THEN
+			IF (flat_idx >= 1) AND (flat_idx <= in_out_quantity * ai_scale_hmi_quantity) THEN
 				GVL_SCALE_HMI.hmi_ai_scale_flat[flat_idx] := SETTINGS.ai_scale_settings[ch_idx].VALUE[item_idx];
 			END_IF;
 		END_FOR;
@@ -43,11 +43,11 @@ IF load_requested THEN
 			flat_idx := GetGroupedFlatIndex(
 				group_idx := ch_idx,
 				item_idx := item_idx,
-				item_count := ai_scale_hmi_item_quantity,
+				item_count := ai_scale_hmi_quantity,
 				item_base := 0
 			);
 
-			IF (flat_idx >= 1) AND (flat_idx <= total_ai_scale_hmi_quantity) THEN
+			IF (flat_idx >= 1) AND (flat_idx <= in_out_quantity * ai_scale_hmi_quantity) THEN
 				GVL_SCALE_HMI.hmi_ai_scale_flat[flat_idx] := SETTINGS.ai_scale_settings[ch_idx].VALUE[item_idx];
 			END_IF;
 		END_FOR;
@@ -60,11 +60,11 @@ ELSIF save_requested THEN
 			flat_idx := GetGroupedFlatIndex(
 				group_idx := ch_idx,
 				item_idx := item_idx,
-				item_count := ai_scale_hmi_item_quantity,
+				item_count := ai_scale_hmi_quantity,
 				item_base := 0
 			);
 
-			IF (flat_idx >= 1) AND (flat_idx <= total_ai_scale_hmi_quantity) THEN
+			IF (flat_idx >= 1) AND (flat_idx <= in_out_quantity * ai_scale_hmi_quantity) THEN
 				SETTINGS.ai_scale_settings[ch_idx].VALUE[item_idx] := GVL_SCALE_HMI.hmi_ai_scale_flat[flat_idx];
 			END_IF;
 		END_FOR;

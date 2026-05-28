@@ -1,14 +1,14 @@
-﻿//привязка % арматуры к аналогам с суммированием и ограничением 0..100
+//привязка % арматуры к аналогам с суммированием и ограничением 0..100
 FUNCTION ai_imitation_bind : BOOL
 VAR_INPUT
-	enable: ARRAY[0..counter_armature] OF BOOL; //включить имитацию аналогов
+	enable: ARRAY[0..burner_valve_quantity - 1] OF BOOL; //включить имитацию аналогов
 	//0..4 - № AI в массиве ai_in, 0 = нет привязки
-	map_bind: ARRAY[0..counter_armature] OF ARRAY[0..4] OF WORD;
+	map_bind: ARRAY[0..burner_valve_quantity - 1] OF ARRAY[0..4] OF WORD;
 END_VAR
 
 VAR_IN_OUT
 	ai_in: ARRAY[0..in_out_quantity] OF REAL;
-	percent_imitation: ARRAY[0..counter_armature] OF REAL;
+	percent_imitation: ARRAY[0..burner_valve_quantity - 1] OF REAL;
 END_VAR
 
 VAR
@@ -27,7 +27,7 @@ END_FOR
 
 
 //собираем сумму от всех арматур
-FOR i := 0 TO counter_armature DO
+FOR i := 0 TO burner_valve_quantity - 1 DO
 	IF enable[i] THEN
 		FOR j := 0 TO 4 DO
 			ai_idx := map_bind[i][j];

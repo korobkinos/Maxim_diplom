@@ -21,11 +21,11 @@ IF NOT init_done THEN
 			flat_idx := GetGroupedFlatIndex(
 				group_idx := burner_id,
 				item_idx := item_idx,
-				item_count := pressure_hmi_item_quantity,
+				item_count := pressure_hmi_quantity,
 				item_base := 1
 			);
 
-			IF (flat_idx >= 1) AND (flat_idx <= total_pressure_hmi_quantity) THEN
+			IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * pressure_hmi_quantity) THEN
 				GVL_BURNER_PRESSURE_HMI.hmi_pressure_flat[flat_idx] := SETTINGS.pressure_settings[burner_id].VALUE[item_idx];
 			END_IF;
 		END_FOR;
@@ -45,11 +45,11 @@ IF load_requested THEN
 			flat_idx := GetGroupedFlatIndex(
 				group_idx := burner_id,
 				item_idx := item_idx,
-				item_count := pressure_hmi_item_quantity,
+				item_count := pressure_hmi_quantity,
 				item_base := 1
 			);
 
-			IF (flat_idx >= 1) AND (flat_idx <= total_pressure_hmi_quantity) THEN
+			IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * pressure_hmi_quantity) THEN
 				GVL_BURNER_PRESSURE_HMI.hmi_pressure_flat[flat_idx] := SETTINGS.pressure_settings[burner_id].VALUE[item_idx];
 			END_IF;
 		END_FOR;
@@ -64,11 +64,11 @@ ELSIF save_requested THEN
 			flat_idx := GetGroupedFlatIndex(
 				group_idx := burner_id,
 				item_idx := item_idx,
-				item_count := pressure_hmi_item_quantity,
+				item_count := pressure_hmi_quantity,
 				item_base := 1
 			);
 
-			IF (flat_idx >= 1) AND (flat_idx <= total_pressure_hmi_quantity) THEN
+			IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * pressure_hmi_quantity) THEN
 				SETTINGS.pressure_settings[burner_id].VALUE[item_idx] := GVL_BURNER_PRESSURE_HMI.hmi_pressure_flat[flat_idx];
 			END_IF;
 		END_FOR;

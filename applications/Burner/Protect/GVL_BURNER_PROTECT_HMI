@@ -1,7 +1,7 @@
 {attribute 'qualified_only'}
 VAR_GLOBAL
-	hmi_protect_enable		: ARRAY[1..total_burner_protect_quantity] OF BOOL;
-	hmi_protect_delay_flat	: ARRAY[1..total_burner_protect_delay_hmi_quantity] OF REAL;
+	hmi_protect_enable		: ARRAY[1..burner_quantity * burner_protect_quantity] OF BOOL;
+	hmi_protect_delay_flat	: ARRAY[1..burner_quantity * protect_delay_hmi_item_quantity] OF REAL;
 	hmi_load_settings		: BOOL;
 	hmi_save_settings		: BOOL;
 END_VAR

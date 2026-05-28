@@ -1,7 +1,7 @@
 {attribute 'qualified_only'}
 
 VAR_GLOBAL
-	hmi_ai_scale_flat		: ARRAY[1..total_ai_scale_hmi_quantity] OF REAL;
+	hmi_ai_scale_flat		: ARRAY[1..in_out_quantity * ai_scale_hmi_quantity] OF REAL;
 	hmi_load_settings		: BOOL;
 	hmi_save_settings		: BOOL;
 END_VAR

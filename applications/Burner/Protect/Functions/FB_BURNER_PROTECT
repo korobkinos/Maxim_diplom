@@ -13,14 +13,14 @@ VAR_IN_OUT
 END_VAR
 
 VAR
-	protect                : ARRAY[0..burner_protect_quantity] OF protect_singl;
-	protect_on_off         : ARRAY[0..burner_protect_quantity] OF protect_on_off_singl;
+	protect                : ARRAY[0..burner_protect_quantity - 1] OF protect_singl;
+	protect_on_off         : ARRAY[0..burner_protect_quantity - 1] OF protect_on_off_singl;
 	p_gas_control_delay_ton: TON;
 	p_air_control_delay_ton: TON;
 	flame_control_delay_ton: TON;
 	pzk_2_ft               : F_TRIG;
-	protect_alarm_tmp      : ARRAY[0..burner_protect_quantity] OF BOOL;
-	protect_warning_tmp    : ARRAY[0..burner_protect_quantity] OF BOOL;
+	protect_alarm_tmp      : ARRAY[0..burner_protect_quantity - 1] OF BOOL;
+	protect_warning_tmp    : ARRAY[0..burner_protect_quantity - 1] OF BOOL;
 	signal_value           : BOOL;
 	control_value          : BOOL;
 	alarm_value            : BOOL;
@@ -52,7 +52,7 @@ END_VAR
 // === IMPLEMENTATION ===
 
 IF NOT enable THEN
-	FOR i := 0 TO burner_protect_quantity DO
+	FOR i := 0 TO burner_protect_quantity - 1 DO
 		protect_data.protect_control[i] := FALSE;
 		protect_data.protect_warning[i] := FALSE;
 		protect_data.protect_alarm[i] := FALSE;
@@ -100,7 +100,7 @@ ELSE
 		pilot_p_control_current := FALSE;
 	END_IF;
 
-	FOR i := 0 TO burner_protect_quantity DO
+	FOR i := 0 TO burner_protect_quantity - 1 DO
 		signal_value := protect_data.protect_input[i];
 		control_value := protect_data.protect_control[i];
 		case_counter := i;
@@ -217,7 +217,7 @@ ELSE
 		CountElements(
 			arrData := protect_alarm_tmp,
 			startIdx := 0,
-			endIdx := burner_protect_quantity
+			endIdx := burner_protect_quantity - 1
 		)
 	);
 
@@ -225,7 +225,7 @@ ELSE
 		CountElements(
 			arrData := protect_warning_tmp,
 			startIdx := 0,
-			endIdx := burner_protect_quantity
+			endIdx := burner_protect_quantity - 1
 		)
 	);
 

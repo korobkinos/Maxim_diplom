@@ -87,7 +87,7 @@ IF NOT enable THEN
 		local_idx := i;
 		IF burner_id_valid THEN
 			global_idx := GetBurnerRegulatorIndex(burner_id := burner_id, local_idx := local_idx);
-			IF (global_idx >= 1) AND (global_idx <= total_burner_regulator_quantity) THEN
+			IF (global_idx >= 1) AND (global_idx <= burner_quantity * burner_regulator_quantity) THEN
 				GVL_BURNER_REGULATOR.up_out[global_idx] := FALSE;
 				GVL_BURNER_REGULATOR.down_out[global_idx] := FALSE;
 				GVL_BURNER_REGULATOR.feedback[global_idx] := 0.0;
@@ -139,7 +139,7 @@ ELSE
 		local_idx := i;
 		IF burner_id_valid THEN
 			global_idx := GetBurnerRegulatorIndex(burner_id := burner_id, local_idx := local_idx);
-			IF (global_idx >= 1) AND (global_idx <= total_burner_regulator_quantity) THEN
+			IF (global_idx >= 1) AND (global_idx <= burner_quantity * burner_regulator_quantity) THEN
 				GVL_BURNER_REGULATOR.up_out[global_idx] := FALSE;
 				GVL_BURNER_REGULATOR.down_out[global_idx] := FALSE;
 				GVL_BURNER_REGULATOR.feedback[global_idx] := regulator_data.reg_valve[i].feedback;
@@ -157,7 +157,7 @@ ELSE
 			binding_global_idx := GetBurnerRegulatorIndex(burner_id := burner_id, local_idx := local_idx);
 		END_IF;
 
-		IF burner_id_valid AND (binding_global_idx >= 1) AND (binding_global_idx <= total_burner_regulator_quantity) THEN
+		IF burner_id_valid AND (binding_global_idx >= 1) AND (binding_global_idx <= burner_quantity * burner_regulator_quantity) THEN
 			binding_cfg := SETTINGS.regulator_binding_map[binding_global_idx];
 			IF binding_cfg.enabled = SETTINGS.reg_binding_on THEN
 				pid_idx := binding_cfg.pid_idx;
@@ -170,7 +170,7 @@ ELSE
 					pid_global_idx := GetBurnerRegulatorIndex(burner_id := burner_id, local_idx := pid_idx);
 				END_IF;
 
-				IF (pid_idx >= 1) AND (pid_idx <= PID_quantity) AND (valve_idx >= 1) AND (valve_idx <= counter_armature) AND (pv_idx >= 1) AND (pv_idx <= in_out_quantity) AND (proc_idx >= 1) AND (proc_idx <= in_out_quantity) AND (pid_global_idx >= 1) AND (pid_global_idx <= total_burner_regulator_quantity) THEN
+				IF (pid_idx >= 1) AND (pid_idx <= PID_quantity) AND (valve_idx >= 1) AND (valve_idx < burner_valve_quantity) AND (pv_idx >= 1) AND (pv_idx <= in_out_quantity) AND (proc_idx >= 1) AND (proc_idx <= in_out_quantity) AND (pid_global_idx >= 1) AND (pid_global_idx <= burner_quantity * burner_regulator_quantity) THEN
 				auto_set_cmd := regulator_data.reg_valve[pid_idx].auto_set;
 				auto_reset_cmd := regulator_data.reg_valve[pid_idx].man_set;
 
@@ -226,7 +226,7 @@ ELSE
 
 				local_idx := pid_idx;
 					global_idx := GetBurnerRegulatorIndex(burner_id := burner_id, local_idx := local_idx);
-					IF (global_idx >= 1) AND (global_idx <= total_burner_regulator_quantity) THEN
+					IF (global_idx >= 1) AND (global_idx <= burner_quantity * burner_regulator_quantity) THEN
 						GVL_BURNER_REGULATOR.up_out[global_idx] := regulator_data.reg_valve[pid_idx].up_out;
 						GVL_BURNER_REGULATOR.down_out[global_idx] := regulator_data.reg_valve[pid_idx].down_out;
 						GVL_BURNER_REGULATOR.feedback[global_idx] := regulator_data.reg_valve[pid_idx].feedback;

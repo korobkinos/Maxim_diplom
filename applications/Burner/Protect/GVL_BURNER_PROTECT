@@ -1,4 +1,4 @@
-﻿{attribute 'qualified_only'}
+{attribute 'qualified_only'}
 VAR_GLOBAL
 	(*
 	Плоская карта HMI/OPC UA для горелочных защит.
@@ -7,12 +7,12 @@ VAR_GLOBAL
 	На текущую логику одной горелки карта пока не подключена.
 	Глобальные индексы 1-базные и должны формироваться через GetBurnerProtectIndex.
 	*)
-	input          : ARRAY[1..total_burner_protect_quantity] OF BOOL;
-	control        : ARRAY[1..total_burner_protect_quantity] OF BOOL;
-	protect_enable : ARRAY[1..total_burner_protect_quantity] OF BOOL;
-	warning        : ARRAY[1..total_burner_protect_quantity] OF BOOL;
-	alarm          : ARRAY[1..total_burner_protect_quantity] OF BOOL;
-	execute_state  : ARRAY[1..total_burner_protect_quantity] OF BOOL;
-	execute_set_cmd   : ARRAY[1..total_burner_protect_quantity] OF BOOL;
-	execute_reset_cmd : ARRAY[1..total_burner_protect_quantity] OF BOOL;
+	input          : ARRAY[1..burner_quantity * burner_protect_quantity] OF BOOL;
+	control        : ARRAY[1..burner_quantity * burner_protect_quantity] OF BOOL;
+	protect_enable : ARRAY[1..burner_quantity * burner_protect_quantity] OF BOOL;
+	warning        : ARRAY[1..burner_quantity * burner_protect_quantity] OF BOOL;
+	alarm          : ARRAY[1..burner_quantity * burner_protect_quantity] OF BOOL;
+	execute_state  : ARRAY[1..burner_quantity * burner_protect_quantity] OF BOOL;
+	execute_set_cmd   : ARRAY[1..burner_quantity * burner_protect_quantity] OF BOOL;
+	execute_reset_cmd : ARRAY[1..burner_quantity * burner_protect_quantity] OF BOOL;
 END_VAR
