@@ -1,6 +1,6 @@
 ﻿TYPE SCALE_DATA :
 STRUCT
-	VALUE:	ARRAY[0..10] OF REAL;
+	VALUE:	ARRAY[0..10] OF REAL := [0,100,0,100,0,0,0,0,0,0,0];
 	(*
 	min_value:REAL;//Минимальное входное значение
 	max_value:REAL;//Максимальное входное значение

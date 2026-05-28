@@ -1,9 +1,9 @@
 TYPE ST_PROTECT_SETTINGS :
 STRUCT
-	enable               : BOOL;
-	delay_time           : REAL;
-	p_gas_control_delay  : REAL;
-	p_air_control_delay  : REAL;
-	flame_control_delay  : REAL;
+	enable               : BOOL := FALSE;
+	delay_time           : REAL := 0.0;
+	p_gas_control_delay  : REAL := 0.0;
+	p_air_control_delay  : REAL := 0.0;
+	flame_control_delay  : REAL := 0.0;
 END_STRUCT
 END_TYPE

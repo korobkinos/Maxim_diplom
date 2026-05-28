@@ -18,12 +18,6 @@
     <TypeArray name="T_ARRAY__1__15__OF_REAL" size="60" nativesize="60" typeclass="Array" iecname="ARRAY [1..15] OF REAL" basetype="T_REAL">
       <ArrayDim minrange="1" maxrange="15" />
     </TypeArray>
-    <TypeArray name="T_ARRAY__1__16__OF_BOOL" size="16" nativesize="16" typeclass="Array" iecname="ARRAY [1..16] OF BOOL" basetype="T_BOOL">
-      <ArrayDim minrange="1" maxrange="16" />
-    </TypeArray>
-    <TypeArray name="T_ARRAY__1__16__OF_REAL" size="64" nativesize="64" typeclass="Array" iecname="ARRAY [1..16] OF REAL" basetype="T_REAL">
-      <ArrayDim minrange="1" maxrange="16" />
-    </TypeArray>
     <TypeArray name="T_ARRAY__1__1__OF_BOOL" size="1" nativesize="1" typeclass="Array" iecname="ARRAY [1..1] OF BOOL" basetype="T_BOOL">
       <ArrayDim minrange="1" maxrange="1" />
     </TypeArray>
@@ -32,12 +26,6 @@
     </TypeArray>
     <TypeArray name="T_ARRAY__1__1__OF_WORD" size="2" nativesize="2" typeclass="Array" iecname="ARRAY [1..1] OF WORD" basetype="T_WORD">
       <ArrayDim minrange="1" maxrange="1" />
-    </TypeArray>
-    <TypeArray name="T_ARRAY__1__32__OF_BOOL" size="32" nativesize="32" typeclass="Array" iecname="ARRAY [1..32] OF BOOL" basetype="T_BOOL">
-      <ArrayDim minrange="1" maxrange="32" />
-    </TypeArray>
-    <TypeArray name="T_ARRAY__1__32__OF_REAL" size="128" nativesize="128" typeclass="Array" iecname="ARRAY [1..32] OF REAL" basetype="T_REAL">
-      <ArrayDim minrange="1" maxrange="32" />
     </TypeArray>
     <TypeArray name="T_ARRAY__1__5__OF_REAL" size="20" nativesize="20" typeclass="Array" iecname="ARRAY [1..5] OF REAL" basetype="T_REAL">
       <ArrayDim minrange="1" maxrange="5" />
@@ -92,20 +80,9 @@
     <Node name="Application">
       <Node name="SETTINGS">
         <Node name="ai_scale_settings" type="T_ARRAY__1__16__OF_SCALE_DATA" access="ReadWrite" />
-        <Node name="burner_armature_simulation" type="T_ARRAY__1__32__OF_BOOL" access="ReadWrite" />
-        <Node name="burner_block_mode" type="T_ARRAY__1__32__OF_BOOL" access="ReadWrite" />
-        <Node name="burner_flame_control_delay" type="T_ARRAY__1__1__OF_REAL" access="ReadWrite" />
         <Node name="burner_max_reach_time" type="T_ARRAY__1__1__OF_REAL" access="ReadWrite" />
         <Node name="burner_min_power" type="T_ARRAY__1__1__OF_REAL" access="ReadWrite" />
-        <Node name="burner_off_time" type="T_ARRAY__1__32__OF_REAL" access="ReadWrite" />
-        <Node name="burner_one_state" type="T_ARRAY__1__32__OF_BOOL" access="ReadWrite" />
-        <Node name="burner_p_air_control_delay" type="T_ARRAY__1__1__OF_REAL" access="ReadWrite" />
-        <Node name="burner_p_gas_control_delay" type="T_ARRAY__1__1__OF_REAL" access="ReadWrite" />
-        <Node name="burner_protect_delay_time" type="T_ARRAY__1__16__OF_REAL" access="ReadWrite" />
-        <Node name="burner_protect_enable" type="T_ARRAY__1__16__OF_BOOL" access="ReadWrite" />
-        <Node name="burner_pull_time" type="T_ARRAY__1__32__OF_REAL" access="ReadWrite" />
         <Node name="burner_test_mode" type="T_ARRAY__1__1__OF_BOOL" access="ReadWrite" />
-        <Node name="burner_wait_time" type="T_ARRAY__1__32__OF_REAL" access="ReadWrite" />
         <Node name="ignition_settings" type="T_ARRAY__1__1__OF_ignition_settings" access="ReadWrite" />
         <Node name="ignition_settings_flame_feedback_idx" type="T_ARRAY__1__1__OF_WORD" access="ReadWrite" />
         <Node name="pressure_settings" type="T_ARRAY__1__1__OF_pressure_settings" access="ReadWrite" />
