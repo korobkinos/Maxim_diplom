@@ -1,80 +1,36 @@
 ﻿{attribute 'global_init_slot' := '400'}
 VAR_GLOBAL CONSTANT
-	(*
-	Архитектурные константы для будущей миграции на несколько горелок:
-	- горелки индексируются как 1..burner_quantity;
-	- массивы для визуализации/интеграции должны быть плоскими;
-	- Weintek/OPC UA не должны опираться на вложенные массивы.
-	*)
+	
+	burner_quantity							:		WORD:=4; (* Количество горелок в проекте *)
+	burner_valve_quantity					:		WORD:=32; (* Количество позиций арматуры на горелку при локальной индексации 0..31 *)
+	total_burner_valve_quantity				:		WORD:=32; (* Общее количество позиций арматуры: burner_quantity * burner_valve_quantity *)	
+	total_burner_armature_quantity			:		WORD:=32; (* Общее количество настроек арматуры: burner_quantity * (counter_armature + 1) *)	
+	armature_time_hmi_item_quantity			:		WORD:=3; (* Количество HMI-полей времени на одну позицию арматуры: wait_time, pull_time, off_time *)	
+	total_burner_armature_time_hmi_quantity	:		WORD:=96; (* Общее количество HMI-полей времени арматуры: total_burner_armature_quantity * armature_time_hmi_item_quantity*)
+	burner_protect_quantity					:		WORD:=15; (* Количество локальных защит на горелку при индексации 0..15 *)
+	total_burner_protect_quantity			:		WORD:=16; (* Общее количество настроек защит: burner_quantity * (burner_protect_quantity + 1)*)
+	protect_delay_hmi_item_quantity			:		WORD:=19; (* Количество HMI-полей задержек защит на горелку: (burner_protect_quantity + 1) + 3 *)
+	total_burner_protect_delay_hmi_quantity	:		WORD:=19; (* Общее количество HMI-полей задержек защит: burner_quantity * protect_delay_hmi_item_quantity*)	
+	regulator_per_burner					:		WORD:=11; (* Количество регуляторов на горелку при локальной индексации 0..PID_quantity *)	
+	total_burner_regulator_quantity			:		WORD:=11; (* Общее количество регуляторов: burner_quantity * regulator_per_burner*)	
+	pid_settings_quantity					:		WORD:=15; (* Количество параметров PID_SETTINGS.VALUE *)	
+	total_burner_pid_settings_quantity		:		WORD:=165; (* Общее количество параметров PID для всех регуляторов: total_burner_regulator_quantity * pid_settings_quantity*)
+	gas_air_map_quantity					:		WORD:=30; (* Количество элементов газовоздушной карты на горелку: 10 GAS + 10 AIR + 10 SHIBER *)
+	total_burner_gas_air_map_quantity		:		WORD:=30; (* Общее количество элементов газовоздушной карты: burner_quantity * gas_air_map_quantity *)
+	burner_reg_binding_item_quantity		:		WORD:=5; (* Количество полей в одной записи привязки регулятора: enabled, pid_idx, valve_idx, pv_idx, proc_idx *)	
+	total_burner_reg_binding_quantity		:		WORD:=55; (* Общее количество полей карты привязки: total_burner_regulator_quantity * burner_reg_binding_item_quantity*)
+	
+	pressure_per_burner						:		WORD:=1; (* Количество контуров опрессовки на горелку *)	
+	total_burner_pressure_quantity			:		WORD:=1; (* Общее количество контуров опрессовки: burner_quantity * pressure_per_burner*)	
+	pressure_hmi_item_quantity				:		WORD:=9; (* Количество HMI-полей pressure_settings.VALUE на горелку *)	
+	total_pressure_hmi_quantity				:		WORD:=9; (* Общее количество HMI-полей опрессовки: burner_quantity * pressure_hmi_item_quantity *)	
+	ignition_per_burner						:		WORD:=1; (* Количество контуров розжига на горелку *)	
+	total_burner_ignition_quantity			:		WORD:=1; (* Общее количество контуров розжига: burner_quantity * ignition_per_burner*)	
+	ignition_hmi_item_quantity				:		WORD:=5; (* Количество HMI-полей ignition_settings.VALUE на горелку *)	
+	total_ignition_hmi_quantity				:		WORD:=5; (* Общее количество HMI-полей розжига: burner_quantity * ignition_hmi_item_quantity *)
 
-	(* Количество горелок в проекте *)
-	burner_quantity							:		WORD:=1;
-	(* Количество позиций арматуры на горелку при локальной индексации 0..31 *)
-	burner_valve_quantity					:		WORD:=32;
-	(* Общее количество позиций арматуры: burner_quantity * burner_valve_quantity = 1 * 32 *)
-	total_burner_valve_quantity				:		WORD:=32;
-	(* Общее количество настроек арматуры: burner_quantity * (counter_armature + 1) = 1 * 32 *)
-	total_burner_armature_quantity			:		WORD:=32;
-	(* Количество HMI-полей времени на одну позицию арматуры: wait_time, pull_time, off_time *)
-	armature_time_hmi_item_quantity			:		WORD:=3;
-	(* Общее количество HMI-полей времени арматуры: total_burner_armature_quantity * armature_time_hmi_item_quantity = 32 * 3 *)
-	total_burner_armature_time_hmi_quantity	:		WORD:=96;
-
-	(* Количество локальных защит на горелку при индексации 0..15 *)
-	burner_protect_quantity					:		WORD:=15;
-	(* Общее количество настроек защит: burner_quantity * (burner_protect_quantity + 1) = 1 * 16 *)
-	total_burner_protect_quantity			:		WORD:=16;
-	(* Количество HMI-полей задержек защит на горелку: (burner_protect_quantity + 1) + 3 = 16 + 3 *)
-	protect_delay_hmi_item_quantity			:		WORD:=19;
-	(* Общее количество HMI-полей задержек защит: burner_quantity * protect_delay_hmi_item_quantity = 1 * 19 *)
-	total_burner_protect_delay_hmi_quantity	:		WORD:=19;
-
-	(* Количество регуляторов на горелку при локальной индексации 0..PID_quantity *)
-	regulator_per_burner					:		WORD:=11;
-	(* Общее количество регуляторов: burner_quantity * regulator_per_burner = 1 * 11 *)
-	total_burner_regulator_quantity			:		WORD:=11;
-	(* Количество параметров PID_SETTINGS.VALUE *)
-	pid_settings_quantity					:		WORD:=15;
-	(* Общее количество параметров PID для всех регуляторов: total_burner_regulator_quantity * pid_settings_quantity = 11 * 15 *)
-	total_burner_pid_settings_quantity		:		WORD:=165;
-	(* Количество элементов газовоздушной карты на горелку: 10 GAS + 10 AIR + 10 SHIBER *)
-	gas_air_map_quantity					:		WORD:=30;
-	(* Общее количество элементов газовоздушной карты: burner_quantity * gas_air_map_quantity = 1 * 30 *)
-	total_burner_gas_air_map_quantity		:		WORD:=30;
-	(* Количество полей в одной записи привязки регулятора: enabled, pid_idx, valve_idx, pv_idx, proc_idx *)
-	burner_reg_binding_item_quantity		:		WORD:=5;
-	(* Общее количество полей карты привязки: total_burner_regulator_quantity * burner_reg_binding_item_quantity = 11 * 5 *)
-	total_burner_reg_binding_quantity		:		WORD:=55;
-
-	(* Количество контуров опрессовки на горелку *)
-	pressure_per_burner						:		WORD:=1;
-	(* Общее количество контуров опрессовки: burner_quantity * pressure_per_burner = 1 * 1 *)
-	total_burner_pressure_quantity			:		WORD:=1;
-	(* Количество HMI-полей pressure_settings.VALUE на горелку *)
-	pressure_hmi_item_quantity				:		WORD:=9;
-	(* Общее количество HMI-полей опрессовки: burner_quantity * pressure_hmi_item_quantity = 1 * 9 *)
-	total_pressure_hmi_quantity				:		WORD:=9;
-	(* Количество контуров розжига на горелку *)
-	ignition_per_burner						:		WORD:=1;
-	(* Общее количество контуров розжига: burner_quantity * ignition_per_burner = 1 * 1 *)
-	total_burner_ignition_quantity			:		WORD:=1;
-	(* Количество HMI-полей ignition_settings.VALUE на горелку *)
-	ignition_hmi_item_quantity				:		WORD:=5;
-	(* Общее количество HMI-полей розжига: burner_quantity * ignition_hmi_item_quantity = 1 * 5 *)
-	total_ignition_hmi_quantity				:		WORD:=5;
-
-	(*
-	Пояснение по области миграции:
-	- функции индексации переводят локальные индексы горелки в плоский глобальный индекс;
-	- текущие локальные индексы арматуры остаются 0-базными, возможный переход на 1-базные выполняется позже;
-	- вентиляция остается логикой уровня котла и не переносится в FB_BURNER_UNIT;
-	- логика AutoBurner (авторозжиг и общая автоматическая цепочка) исключена из миграции в FB_BURNER_UNIT.
-	*)
-
-	(* Количество физических аналоговых сигналов в системе *)
-	in_out_quantity							:		WORD:=16;
-	(* Количество элементов SCALE_DATA.VALUE на один AI-канал *)
-	ai_scale_hmi_item_quantity				:		WORD:=11;
-	(* Общее количество HMI-полей scale-настроек: in_out_quantity * ai_scale_hmi_item_quantity = 16 * 11 *)
-	total_ai_scale_hmi_quantity				:		WORD:=176;
+	
+	in_out_quantity							:		WORD:=16; (* Количество физических аналоговых сигналов в системе *)	
+	ai_scale_hmi_item_quantity				:		WORD:=11; (* Количество элементов SCALE_DATA.VALUE на один AI-канал *)	
+	total_ai_scale_hmi_quantity				:		WORD:=176; (* Общее количество HMI-полей scale-настроек: in_out_quantity * ai_scale_hmi_item_quantity*)
 END_VAR
