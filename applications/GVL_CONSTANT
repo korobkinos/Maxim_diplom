@@ -2,6 +2,7 @@
 VAR_GLOBAL CONSTANT
 	burner_quantity                     : WORD := 4;   (* burners count *)
 	burner_valve_quantity               : WORD := 32;  (* valves per burner, local index 0..31 *)
+	total_burner_armature_quantity      : WORD := burner_quantity * burner_valve_quantity;
 	armature_time_hmi_item_quantity     : WORD := 3;   (* wait/pull/off fields per valve *)
 
 	burner_protect_quantity             : WORD := 16;  (* protects per burner, local index 0..15 *)

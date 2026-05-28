@@ -45,6 +45,7 @@ VAR
 	protect_delay_cfg      : REAL;
 	effective_test_mode    : BOOL;
 	burner_id_valid        : BOOL;
+	pilot_flame_simulation : BOOL;
 END_VAR
 
 VAR CONSTANT
@@ -61,6 +62,7 @@ END_VAR
 // === IMPLEMENTATION ===
 
 IF NOT enable THEN
+	pilot_flame_simulation := FALSE;
 	FOR i := 0 TO burner_protect_quantity - 1 DO
 		protect_data.protect_control[i] := FALSE;
 		protect_data.protect_warning[i] := FALSE;
@@ -105,6 +107,16 @@ ELSE
 	IF pzk_2_ft.Q OR protect_data.protect_alarm[PC_PILOT_P] THEN
 		pilot_p_control_current := FALSE;
 	END_IF;
+	IF SETTINGS.boiler_simulation THEN
+		IF valve_data.closed_state[pzk_2] THEN
+			pilot_flame_simulation := FALSE;
+		ELSIF valve_data.open_state[ignit] AND valve_data.control_out[pzk_2] THEN
+			pilot_flame_simulation := TRUE;
+		END_IF;
+		pilot_p_control_current := pilot_flame_simulation;
+	ELSE
+		pilot_flame_simulation := FALSE;
+	END_IF;
 	IF effective_test_mode THEN
 		pilot_p_control_current := TRUE;
 	END_IF;
@@ -126,7 +138,11 @@ ELSE
 			PC_IGNITION_P:
 				signal_value := valve_data.closed_state[ignit] OR NOT valve_data.open_state[ignit];
 			PC_PILOT_P:
-				signal_value := valve_data.closed_state[pilot] OR NOT valve_data.open_state[pilot];
+				IF SETTINGS.boiler_simulation THEN
+					signal_value := NOT pilot_flame_simulation;
+				ELSE
+					signal_value := valve_data.closed_state[pilot] OR NOT valve_data.open_state[pilot];
+				END_IF;
 			PC_VENT_BURNER_P:
 				signal_value := valve_data.closed_state[vent_burner] OR NOT valve_data.open_state[vent_burner];
 		END_CASE;

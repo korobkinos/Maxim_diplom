@@ -3,6 +3,7 @@ VAR
 	ch_idx : WORD;
 	scale_settings_runtime : SENSOR_AI_SETTINGS;
 	scale_calc : ai_scale;
+	simulation_bind_applied : BOOL;
 END_VAR
 
 // === IMPLEMENTATION ===
@@ -10,6 +11,17 @@ END_VAR
 FOR ch_idx := 1 TO in_out_quantity DO
 	scale_settings_runtime.SENSOR[ch_idx] := SETTINGS.ai_scale_settings[ch_idx];
 END_FOR;
+
+IF SETTINGS.boiler_simulation THEN
+	simulation_bind_applied := ai_imitation_bind(
+		enable := SETTINGS.boiler_simulation,
+		map_bind := SETTINGS.map_valve_ai_bind,
+		percent_imitation := GVL_BURNER_VALVE.percent,
+		ai_in := GVL_SCALE.AI_IN_RAW
+	);
+ELSE
+	simulation_bind_applied := FALSE;
+END_IF;
 
 scale_calc(
 	in := GVL_SCALE.AI_IN_RAW,

@@ -20,6 +20,7 @@ VAR
 	stop_cmd              : BOOL;
 	start_block_cmd       : BOOL;
 	flame_feedback_valid  : BOOL;
+	ignition_flame_simulation: BOOL;
 END_VAR
 
 // === IMPLEMENTATION ===
@@ -27,14 +28,25 @@ END_VAR
 local_idx := 0;
 global_idx := GetBurnerIgnitionIndex(burner_id := burner_id, local_idx := local_idx);
 
-flame_feedback_valid := (ignition_data.flame_feedback_idx >= 1) AND (ignition_data.flame_feedback_idx < burner_valve_quantity);
-IF flame_feedback_valid THEN
-	ignition_data.ignition_flame := valve_data.open_state[ignition_data.flame_feedback_idx];
+IF SETTINGS.boiler_simulation THEN
+	IF valve_data.closed_state[kz] THEN
+		ignition_flame_simulation := FALSE;
+	ELSIF valve_data.open_state[kz] AND valve_data.open_state[spark] THEN
+		ignition_flame_simulation := TRUE;
+	END_IF;
+	ignition_data.ignition_flame := ignition_flame_simulation;
 ELSE
-	ignition_data.ignition_flame := FALSE;
+	ignition_flame_simulation := FALSE;
+	flame_feedback_valid := (ignition_data.flame_feedback_idx >= 1) AND (ignition_data.flame_feedback_idx < burner_valve_quantity);
+	IF flame_feedback_valid THEN
+		ignition_data.ignition_flame := valve_data.open_state[ignition_data.flame_feedback_idx];
+	ELSE
+		ignition_data.ignition_flame := FALSE;
+	END_IF;
 END_IF;
 
 IF NOT enable THEN
+	ignition_flame_simulation := FALSE;
 	ignition_control(
 		start := FALSE,
 		start_block := TRUE,
