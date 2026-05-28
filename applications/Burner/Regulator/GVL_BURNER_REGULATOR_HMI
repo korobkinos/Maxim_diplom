@@ -3,6 +3,8 @@ VAR_GLOBAL
 	hmi_regulator_pid_flat		: ARRAY[1..burner_quantity * burner_regulator_quantity * pid_settings_quantity] OF REAL;
 	hmi_regulator_gas_air_flat	: ARRAY[1..burner_quantity * gas_air_map_quantity] OF REAL;
 	hmi_regulator_binding_flat	: ARRAY[1..burner_quantity * burner_regulator_quantity * burner_reg_binding_item_quantity] OF WORD;
+	hmi_regulator_pv_ai_idx_flat: ARRAY[1..burner_quantity * burner_regulator_quantity * 3] OF WORD;
+	hmi_regulator_position_ai_idx: ARRAY[1..burner_quantity * burner_regulator_quantity] OF WORD;
 	hmi_load_settings			: BOOL;
 	hmi_save_settings			: BOOL;
 END_VAR

@@ -30,15 +30,23 @@ VAR
 	auto_reset_cmd    : BOOL;
 	pid_idx           : WORD;
 	valve_idx         : WORD;
-	pv_idx            : WORD;
-	proc_idx          : WORD;
+	position_ai_idx   : WORD;
 	local_idx         : WORD;
 	global_idx        : WORD;
 	binding_cfg       : ST_REGULATOR_BINDING;
 	burner_id_valid   : BOOL;
 	burner_min_power_cfg : REAL;
 	burner_max_reach_time_cfg : REAL;
+	pv_sensor_idx     : ARRAY[1..3] OF WORD;
+	pv_sensor_value   : ARRAY[1..3] OF REAL;
+	pv_sensor_valid   : ARRAY[1..3] OF BOOL;
+	pv_sensor_bound   : BOOL;
+	pv_error          : BOOL;
+	position_error    : BOOL;
+	pv_value          : REAL;
+	pid_enable_effective : BOOL;
 	i                 : WORD;
+	sensor_idx        : WORD;
 END_VAR
 
 // === IMPLEMENTATION ===
@@ -155,64 +163,110 @@ ELSE
 			IF binding_cfg.enabled = SETTINGS.reg_binding_on THEN
 				pid_idx := binding_cfg.pid_idx;
 				valve_idx := binding_cfg.valve_idx;
-				pv_idx := binding_cfg.pv_idx;
-				proc_idx := binding_cfg.proc_idx;
 
-				IF (pid_idx >= 1) AND (pid_idx <= PID_quantity) AND (valve_idx >= 1) AND (valve_idx < burner_valve_quantity) AND (pv_idx >= 1) AND (pv_idx <= in_out_quantity) AND (proc_idx >= 1) AND (proc_idx <= in_out_quantity) THEN
-				auto_set_cmd := regulator_data.reg_valve[pid_idx].auto_set;
-				auto_reset_cmd := regulator_data.reg_valve[pid_idx].man_set;
+				IF (pid_idx >= 1) AND (pid_idx <= PID_quantity) AND (valve_idx >= 1) AND (valve_idx < burner_valve_quantity) THEN
+					auto_set_cmd := regulator_data.reg_valve[pid_idx].auto_set;
+					auto_reset_cmd := regulator_data.reg_valve[pid_idx].man_set;
 
-				IF regulator_data.auto_mode THEN
-					auto_set_cmd := TRUE;
-				END_IF;
-				IF regulator_data.manual_mode THEN
-					auto_reset_cmd := TRUE;
-				END_IF;
+					IF regulator_data.auto_mode THEN
+						auto_set_cmd := TRUE;
+					END_IF;
+					IF regulator_data.manual_mode THEN
+						auto_reset_cmd := TRUE;
+					END_IF;
 
-				pid_on_rs[pid_idx](
-					SET := auto_set_cmd,
-					RESET1 := auto_reset_cmd,
-					Q1 => pid_on[pid_idx]
-				);
+					pid_on_rs[pid_idx](
+						SET := auto_set_cmd,
+						RESET1 := auto_reset_cmd,
+						Q1 => pid_on[pid_idx]
+					);
 
 					pid_settings_local := SETTINGS.regulator_settings[burner_id].pid[pid_idx];
 
-				IF regulator_data.reg_valve[pid_idx].setpoint > 0.0 THEN
-					pid_settings_local.VALUE[SP] := regulator_data.reg_valve[pid_idx].setpoint;
-				END_IF;
-
-				IF pid_idx = burner_pGas THEN
-					IF regulator_data.load_setpoint > 0.0 THEN
-						pid_settings_local.VALUE[SP] := regulator_data.load_setpoint;
+					IF regulator_data.reg_valve[pid_idx].setpoint > 0.0 THEN
+						pid_settings_local.VALUE[SP] := regulator_data.reg_valve[pid_idx].setpoint;
 					END_IF;
-				ELSIF pid_idx = burner_pAir THEN
-					pid_settings_local.VALUE[SP] := air_set_point_tmp;
-				ELSIF pid_idx = burner_posShiber THEN
-					pid_settings_local.VALUE[SP] := shiber_percent_tmp;
-				END_IF;
 
-				burner_pid[pid_idx](
-					sensor := GVL_SCALE.AI_IN_SCALE[pv_idx],
-					settings := pid_settings_local,
-					up_block := FALSE,
-					down_block := FALSE,
-					PID_EN := pid_on[pid_idx] AND NOT protect_data.main_alarm,
-					up_man := valve_data.up[valve_idx],
-					down_man := valve_data.down[valve_idx],
-					up_out => regulator_data.reg_valve[pid_idx].up_out,
-					down_out => regulator_data.reg_valve[pid_idx].down_out,
-					data_trend => pid_trend[pid_idx]
-				);
+					IF pid_idx = burner_pGas THEN
+						IF regulator_data.load_setpoint > 0.0 THEN
+							pid_settings_local.VALUE[SP] := regulator_data.load_setpoint;
+						END_IF;
+					ELSIF pid_idx = burner_pAir THEN
+						pid_settings_local.VALUE[SP] := air_set_point_tmp;
+					ELSIF pid_idx = burner_posShiber THEN
+						pid_settings_local.VALUE[SP] := shiber_percent_tmp;
+					END_IF;
 
-				regulator_data.reg_valve[pid_idx].open_state := valve_data.open_state[valve_idx];
-				regulator_data.reg_valve[pid_idx].closed_state := valve_data.closed_state[valve_idx];
-				regulator_data.reg_valve[pid_idx].feedback := pid_trend[pid_idx].DATA[PID_TREND_PV];
-				regulator_data.reg_valve[pid_idx].output := GVL_SCALE.AI_IN_SCALE[proc_idx];
-				regulator_data.reg_valve[pid_idx].alarm := valve_data.error_out[valve_idx];
-				alarm_accum := alarm_accum OR regulator_data.reg_valve[pid_idx].alarm;
-				warning_accum := warning_accum OR regulator_data.reg_valve[pid_idx].warning;
+					pv_sensor_bound := FALSE;
+					FOR sensor_idx := 1 TO 3 DO
+						pv_sensor_idx[sensor_idx] := binding_cfg.pv_ai_idx[sensor_idx];
+						pv_sensor_value[sensor_idx] := 0.0;
+						pv_sensor_valid[sensor_idx] := FALSE;
 
-				local_idx := pid_idx;
+						IF pv_sensor_idx[sensor_idx] <> 0 THEN
+							pv_sensor_bound := TRUE;
+							IF (pv_sensor_idx[sensor_idx] >= 1) AND (pv_sensor_idx[sensor_idx] <= in_out_quantity) THEN
+								IF GVL_SCALE.AI_IN_ERR[pv_sensor_idx[sensor_idx]] = 0 THEN
+									pv_sensor_value[sensor_idx] := GVL_SCALE.AI_IN_SCALE[pv_sensor_idx[sensor_idx]];
+									pv_sensor_valid[sensor_idx] := TRUE;
+								END_IF;
+							END_IF;
+						END_IF;
+					END_FOR;
+
+					IF pv_sensor_bound THEN
+						pv_value := AI_MIDDLE_3(
+							sensor_1 := pv_sensor_value[1],
+							sensor_2 := pv_sensor_value[2],
+							sensor_3 := pv_sensor_value[3],
+							valid_1 := pv_sensor_valid[1],
+							valid_2 := pv_sensor_valid[2],
+							valid_3 := pv_sensor_valid[3],
+							error => pv_error
+						);
+					ELSE
+						pv_value := 0.0;
+						pv_error := TRUE;
+					END_IF;
+
+					position_ai_idx := binding_cfg.position_ai_idx;
+					position_error := FALSE;
+					regulator_data.reg_valve[pid_idx].output := 0.0;
+					IF position_ai_idx <> 0 THEN
+						IF (position_ai_idx >= 1) AND (position_ai_idx <= in_out_quantity) THEN
+							IF GVL_SCALE.AI_IN_ERR[position_ai_idx] = 0 THEN
+								regulator_data.reg_valve[pid_idx].output := GVL_SCALE.AI_IN_SCALE[position_ai_idx];
+							ELSE
+								position_error := TRUE;
+							END_IF;
+						ELSE
+							position_error := TRUE;
+						END_IF;
+					END_IF;
+
+					pid_enable_effective := pid_on[pid_idx] AND NOT protect_data.main_alarm AND NOT pv_error;
+					burner_pid[pid_idx](
+						sensor := pv_value,
+						settings := pid_settings_local,
+						up_block := FALSE,
+						down_block := FALSE,
+						PID_EN := pid_enable_effective,
+						up_man := valve_data.up[valve_idx],
+						down_man := valve_data.down[valve_idx],
+						up_out => regulator_data.reg_valve[pid_idx].up_out,
+						down_out => regulator_data.reg_valve[pid_idx].down_out,
+						data_trend => pid_trend[pid_idx]
+					);
+
+					regulator_data.reg_valve[pid_idx].open_state := valve_data.open_state[valve_idx];
+					regulator_data.reg_valve[pid_idx].closed_state := valve_data.closed_state[valve_idx];
+					regulator_data.reg_valve[pid_idx].feedback := pid_trend[pid_idx].DATA[PID_TREND_PV];
+					regulator_data.reg_valve[pid_idx].alarm := valve_data.error_out[valve_idx] OR pv_error;
+					regulator_data.reg_valve[pid_idx].warning := position_error;
+					alarm_accum := alarm_accum OR regulator_data.reg_valve[pid_idx].alarm;
+					warning_accum := warning_accum OR regulator_data.reg_valve[pid_idx].warning;
+
+					local_idx := pid_idx;
 					global_idx := GetBurnerRegulatorIndex(burner_id := burner_id, local_idx := local_idx);
 					IF (global_idx >= 1) AND (global_idx <= burner_quantity * burner_regulator_quantity) THEN
 						GVL_BURNER_REGULATOR.up_out[global_idx] := regulator_data.reg_valve[pid_idx].up_out;

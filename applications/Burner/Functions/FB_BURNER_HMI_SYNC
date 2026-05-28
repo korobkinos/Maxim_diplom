@@ -40,8 +40,8 @@ IF enable THEN
 	pressure_data.pressure_ai_idx := SETTINGS.pressure_settings_ai_idx[burner_id];
 	pressure_data.pressure_source_mode := 0;
 
-	ignition_data.settings_local := SETTINGS.ignition_settings[burner_id];
-	ignition_data.flame_feedback_idx := SETTINGS.ignition_settings_flame_feedback_idx[burner_id];
+	ignition_data.settings_local := SETTINGS.ignition_settings[burner_id].settings;
+	ignition_data.flame_feedback_idx := SETTINGS.ignition_settings[burner_id].flame_feedback_idx;
 
 	IF (burner_id >= 1) AND (burner_id <= burner_quantity) THEN
 		protect_data.p_gas_control_delay := SETTINGS.protect_settings[burner_id].protect[0].p_gas_control_delay;

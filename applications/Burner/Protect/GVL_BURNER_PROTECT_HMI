@@ -2,6 +2,8 @@
 VAR_GLOBAL
 	hmi_protect_enable		: ARRAY[1..burner_quantity * burner_protect_quantity] OF BOOL;
 	hmi_protect_delay_flat	: ARRAY[1..burner_quantity * protect_delay_hmi_item_quantity] OF REAL;
+	hmi_protect_ai_idx_flat	: ARRAY[1..burner_quantity * burner_protect_quantity * 3] OF WORD;
+	hmi_protect_vote_required : ARRAY[1..burner_quantity * burner_protect_quantity] OF WORD;
 	hmi_load_settings		: BOOL;
 	hmi_save_settings		: BOOL;
 END_VAR

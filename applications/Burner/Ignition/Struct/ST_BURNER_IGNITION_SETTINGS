@@ -1,0 +1,6 @@
+TYPE ST_BURNER_IGNITION_SETTINGS :
+STRUCT
+	settings           : ignition_settings;
+	flame_feedback_idx : WORD := 0;
+END_STRUCT
+END_TYPE

@@ -1,0 +1,44 @@
+FUNCTION AI_MIDDLE_3 : REAL
+VAR_INPUT
+	sensor_1 : REAL;
+	sensor_2 : REAL;
+	sensor_3 : REAL;
+	valid_1  : BOOL;
+	valid_2  : BOOL;
+	valid_3  : BOOL;
+END_VAR
+VAR_OUTPUT
+	error : BOOL;
+END_VAR
+VAR
+	sum   : REAL;
+	count : WORD;
+END_VAR
+
+// === IMPLEMENTATION ===
+
+sum := 0.0;
+count := 0;
+
+IF valid_1 THEN
+	sum := sum + sensor_1;
+	count := count + 1;
+END_IF;
+
+IF valid_2 THEN
+	sum := sum + sensor_2;
+	count := count + 1;
+END_IF;
+
+IF valid_3 THEN
+	sum := sum + sensor_3;
+	count := count + 1;
+END_IF;
+
+IF count = 0 THEN
+	error := TRUE;
+	AI_MIDDLE_3 := 0.0;
+ELSE
+	error := FALSE;
+	AI_MIDDLE_3 := sum / count;
+END_IF;

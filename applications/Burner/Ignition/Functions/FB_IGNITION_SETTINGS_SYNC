@@ -26,11 +26,11 @@ IF NOT init_done THEN
 			);
 
 			IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * ignition_hmi_quantity) THEN
-				GVL_BURNER_IGNITION_HMI.hmi_ignition_flat[flat_idx] := SETTINGS.ignition_settings[burner_id].VALUE[item_idx];
+				GVL_BURNER_IGNITION_HMI.hmi_ignition_flat[flat_idx] := SETTINGS.ignition_settings[burner_id].settings.VALUE[item_idx];
 			END_IF;
 		END_FOR;
 
-		GVL_BURNER_IGNITION_HMI.hmi_flame_feedback_idx[burner_id] := SETTINGS.ignition_settings_flame_feedback_idx[burner_id];
+		GVL_BURNER_IGNITION_HMI.hmi_flame_feedback_idx[burner_id] := SETTINGS.ignition_settings[burner_id].flame_feedback_idx;
 	END_FOR;
 
 	init_done := TRUE;
@@ -50,11 +50,11 @@ IF load_requested THEN
 			);
 
 			IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * ignition_hmi_quantity) THEN
-				GVL_BURNER_IGNITION_HMI.hmi_ignition_flat[flat_idx] := SETTINGS.ignition_settings[burner_id].VALUE[item_idx];
+				GVL_BURNER_IGNITION_HMI.hmi_ignition_flat[flat_idx] := SETTINGS.ignition_settings[burner_id].settings.VALUE[item_idx];
 			END_IF;
 		END_FOR;
 
-		GVL_BURNER_IGNITION_HMI.hmi_flame_feedback_idx[burner_id] := SETTINGS.ignition_settings_flame_feedback_idx[burner_id];
+		GVL_BURNER_IGNITION_HMI.hmi_flame_feedback_idx[burner_id] := SETTINGS.ignition_settings[burner_id].flame_feedback_idx;
 	END_FOR;
 
 	GVL_BURNER_IGNITION_HMI.hmi_load_settings := FALSE;
@@ -69,11 +69,11 @@ ELSIF save_requested THEN
 			);
 
 			IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * ignition_hmi_quantity) THEN
-				SETTINGS.ignition_settings[burner_id].VALUE[item_idx] := GVL_BURNER_IGNITION_HMI.hmi_ignition_flat[flat_idx];
+				SETTINGS.ignition_settings[burner_id].settings.VALUE[item_idx] := GVL_BURNER_IGNITION_HMI.hmi_ignition_flat[flat_idx];
 			END_IF;
 		END_FOR;
 
-		SETTINGS.ignition_settings_flame_feedback_idx[burner_id] := GVL_BURNER_IGNITION_HMI.hmi_flame_feedback_idx[burner_id];
+		SETTINGS.ignition_settings[burner_id].flame_feedback_idx := GVL_BURNER_IGNITION_HMI.hmi_flame_feedback_idx[burner_id];
 	END_FOR;
 
 	GVL_BURNER_IGNITION_HMI.hmi_save_settings := FALSE;

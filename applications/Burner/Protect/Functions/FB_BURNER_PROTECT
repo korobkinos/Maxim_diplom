@@ -31,11 +31,19 @@ VAR
 	pilot_p_control_current: BOOL;
 	case_counter           : WORD;
 	i                      : WORD;
+	sensor_idx             : WORD;
+	ai_idx                 : WORD;
+	vote_alarm_count       : WORD;
+	vote_bound_count       : WORD;
+	vote_required_cfg      : WORD;
+	protect_cfg            : ST_PROTECT_SETTINGS;
+	sensor_alarm           : BOOL;
 	p_gas_control_delay_cfg: REAL;
 	p_air_control_delay_cfg: REAL;
 	flame_control_delay_cfg: REAL;
 	protect_delay_cfg      : REAL;
 	effective_test_mode    : BOOL;
+	burner_id_valid        : BOOL;
 END_VAR
 
 VAR CONSTANT
@@ -62,7 +70,11 @@ IF NOT enable THEN
 	protect_data.main_alarm := FALSE;
 	protect_data.state := 0;
 ELSE
-	effective_test_mode := (burner_id >= 1) AND (burner_id <= burner_quantity) AND SETTINGS.burner_test_mode[burner_id];
+	burner_id_valid := (burner_id >= 1) AND (burner_id <= burner_quantity);
+	effective_test_mode := FALSE;
+	IF burner_id_valid THEN
+		effective_test_mode := SETTINGS.burner_test_mode[burner_id];
+	END_IF;
 
 	p_gas_control_delay_cfg := protect_data.p_gas_control_delay;
 	p_air_control_delay_cfg := protect_data.p_air_control_delay;
@@ -172,6 +184,51 @@ ELSE
 
 		IF effective_test_mode THEN
 			control_value := TRUE;
+		END_IF;
+
+		IF burner_id_valid THEN
+			protect_cfg := SETTINGS.protect_settings[burner_id].protect[i];
+		ELSE
+			protect_cfg.enable := FALSE;
+			protect_cfg.delay_time := 0.0;
+			protect_cfg.p_gas_control_delay := 0.0;
+			protect_cfg.p_air_control_delay := 0.0;
+			protect_cfg.flame_control_delay := 0.0;
+			protect_cfg.ai_idx[1] := 0;
+			protect_cfg.ai_idx[2] := 0;
+			protect_cfg.ai_idx[3] := 0;
+			protect_cfg.vote_required := 0;
+		END_IF;
+		vote_required_cfg := protect_cfg.vote_required;
+		vote_alarm_count := 0;
+		vote_bound_count := 0;
+
+		FOR sensor_idx := 1 TO 3 DO
+			ai_idx := protect_cfg.ai_idx[sensor_idx];
+			IF ai_idx <> 0 THEN
+				vote_bound_count := vote_bound_count + 1;
+				sensor_alarm := FALSE;
+				IF (ai_idx >= 1) AND (ai_idx <= in_out_quantity) THEN
+					IF GVL_SCALE.AI_IN_ERR[ai_idx] <> 0 THEN
+						sensor_alarm := TRUE;
+					ELSE
+						sensor_alarm := signal_value;
+					END_IF;
+				ELSE
+					sensor_alarm := TRUE;
+				END_IF;
+
+				IF sensor_alarm THEN
+					vote_alarm_count := vote_alarm_count + 1;
+				END_IF;
+			END_IF;
+		END_FOR;
+
+		IF (vote_bound_count = 0) OR (vote_required_cfg = 0) OR (vote_required_cfg > vote_bound_count) THEN
+			signal_value := FALSE;
+			control_value := FALSE;
+		ELSE
+			signal_value := vote_alarm_count >= vote_required_cfg;
 		END_IF;
 
 		cmd_execute_set := protect_data.execute_set_cmd[i];

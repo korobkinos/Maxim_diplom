@@ -5,5 +5,7 @@ STRUCT
 	p_gas_control_delay  : REAL := 0.0;
 	p_air_control_delay  : REAL := 0.0;
 	flame_control_delay  : REAL := 0.0;
+	ai_idx               : ARRAY[1..3] OF WORD := [0,0,0];
+	vote_required        : WORD := 0;
 END_STRUCT
 END_TYPE

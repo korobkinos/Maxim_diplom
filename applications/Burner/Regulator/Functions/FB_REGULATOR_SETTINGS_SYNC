@@ -4,10 +4,12 @@ VAR
 	reg_local_idx : WORD;
 	reg_flat_idx : WORD;
 	item_idx : WORD;
+	sensor_idx : WORD;
 	flat_idx : WORD;
 	load_requested : BOOL;
 	save_requested : BOOL;
 	init_done : BOOL;
+	binding_cfg : ST_REGULATOR_BINDING;
 END_VAR
 
 VAR CONSTANT
@@ -17,6 +19,7 @@ VAR CONSTANT
 	binding_valve_item_idx : WORD := 3;
 	binding_pv_item_idx : WORD := 4;
 	binding_proc_item_idx : WORD := 5;
+	pv_sensor_count : WORD := 3;
 END_VAR
 
 // === IMPLEMENTATION ===
@@ -25,6 +28,17 @@ IF NOT init_done THEN
 	FOR burner_id := 1 TO burner_quantity DO
 		FOR reg_local_idx := 0 TO burner_regulator_quantity - 1 DO
 			reg_flat_idx := (burner_id - 1) * burner_regulator_quantity + reg_local_idx + 1;
+			binding_cfg := SETTINGS.regulator_settings[burner_id].binding[reg_local_idx];
+
+			IF (binding_cfg.pv_ai_idx[1] = 0) AND (binding_cfg.pv_ai_idx[2] = 0) AND (binding_cfg.pv_ai_idx[3] = 0) AND (binding_cfg.pv_idx <> 0) THEN
+				binding_cfg.pv_ai_idx[1] := binding_cfg.pv_idx;
+			END_IF;
+			IF (binding_cfg.position_ai_idx = 0) AND (binding_cfg.proc_idx <> 0) THEN
+				binding_cfg.position_ai_idx := binding_cfg.proc_idx;
+			END_IF;
+			binding_cfg.pv_idx := binding_cfg.pv_ai_idx[1];
+			binding_cfg.proc_idx := binding_cfg.position_ai_idx;
+			SETTINGS.regulator_settings[burner_id].binding[reg_local_idx] := binding_cfg;
 
 			FOR item_idx := 1 TO pid_settings_quantity DO
 				flat_idx := (reg_flat_idx - 1) * pid_settings_quantity + item_idx;
@@ -35,27 +49,39 @@ IF NOT init_done THEN
 
 			flat_idx := (reg_flat_idx - 1) * burner_reg_binding_item_quantity + binding_enabled_item_idx;
 			IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * burner_regulator_quantity * burner_reg_binding_item_quantity) THEN
-				GVL_BURNER_REGULATOR_HMI.hmi_regulator_binding_flat[flat_idx] := SETTINGS.regulator_settings[burner_id].binding[reg_local_idx].enabled;
+				GVL_BURNER_REGULATOR_HMI.hmi_regulator_binding_flat[flat_idx] := binding_cfg.enabled;
 			END_IF;
 
 			flat_idx := (reg_flat_idx - 1) * burner_reg_binding_item_quantity + binding_pid_item_idx;
 			IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * burner_regulator_quantity * burner_reg_binding_item_quantity) THEN
-				GVL_BURNER_REGULATOR_HMI.hmi_regulator_binding_flat[flat_idx] := SETTINGS.regulator_settings[burner_id].binding[reg_local_idx].pid_idx;
+				GVL_BURNER_REGULATOR_HMI.hmi_regulator_binding_flat[flat_idx] := binding_cfg.pid_idx;
 			END_IF;
 
 			flat_idx := (reg_flat_idx - 1) * burner_reg_binding_item_quantity + binding_valve_item_idx;
 			IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * burner_regulator_quantity * burner_reg_binding_item_quantity) THEN
-				GVL_BURNER_REGULATOR_HMI.hmi_regulator_binding_flat[flat_idx] := SETTINGS.regulator_settings[burner_id].binding[reg_local_idx].valve_idx;
+				GVL_BURNER_REGULATOR_HMI.hmi_regulator_binding_flat[flat_idx] := binding_cfg.valve_idx;
 			END_IF;
 
 			flat_idx := (reg_flat_idx - 1) * burner_reg_binding_item_quantity + binding_pv_item_idx;
 			IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * burner_regulator_quantity * burner_reg_binding_item_quantity) THEN
-				GVL_BURNER_REGULATOR_HMI.hmi_regulator_binding_flat[flat_idx] := SETTINGS.regulator_settings[burner_id].binding[reg_local_idx].pv_idx;
+				GVL_BURNER_REGULATOR_HMI.hmi_regulator_binding_flat[flat_idx] := binding_cfg.pv_idx;
 			END_IF;
 
 			flat_idx := (reg_flat_idx - 1) * burner_reg_binding_item_quantity + binding_proc_item_idx;
 			IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * burner_regulator_quantity * burner_reg_binding_item_quantity) THEN
-				GVL_BURNER_REGULATOR_HMI.hmi_regulator_binding_flat[flat_idx] := SETTINGS.regulator_settings[burner_id].binding[reg_local_idx].proc_idx;
+				GVL_BURNER_REGULATOR_HMI.hmi_regulator_binding_flat[flat_idx] := binding_cfg.proc_idx;
+			END_IF;
+
+			FOR sensor_idx := 1 TO pv_sensor_count DO
+				flat_idx := ((burner_id - 1) * burner_regulator_quantity + reg_local_idx) * pv_sensor_count + sensor_idx;
+				IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * burner_regulator_quantity * pv_sensor_count) THEN
+					GVL_BURNER_REGULATOR_HMI.hmi_regulator_pv_ai_idx_flat[flat_idx] := SETTINGS.regulator_settings[burner_id].binding[reg_local_idx].pv_ai_idx[sensor_idx];
+				END_IF;
+			END_FOR;
+
+			flat_idx := (burner_id - 1) * burner_regulator_quantity + reg_local_idx + 1;
+			IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * burner_regulator_quantity) THEN
+				GVL_BURNER_REGULATOR_HMI.hmi_regulator_position_ai_idx[flat_idx] := SETTINGS.regulator_settings[burner_id].binding[reg_local_idx].position_ai_idx;
 			END_IF;
 		END_FOR;
 
@@ -87,6 +113,17 @@ IF load_requested THEN
 	FOR burner_id := 1 TO burner_quantity DO
 		FOR reg_local_idx := 0 TO burner_regulator_quantity - 1 DO
 			reg_flat_idx := (burner_id - 1) * burner_regulator_quantity + reg_local_idx + 1;
+			binding_cfg := SETTINGS.regulator_settings[burner_id].binding[reg_local_idx];
+
+			IF (binding_cfg.pv_ai_idx[1] = 0) AND (binding_cfg.pv_ai_idx[2] = 0) AND (binding_cfg.pv_ai_idx[3] = 0) AND (binding_cfg.pv_idx <> 0) THEN
+				binding_cfg.pv_ai_idx[1] := binding_cfg.pv_idx;
+			END_IF;
+			IF (binding_cfg.position_ai_idx = 0) AND (binding_cfg.proc_idx <> 0) THEN
+				binding_cfg.position_ai_idx := binding_cfg.proc_idx;
+			END_IF;
+			binding_cfg.pv_idx := binding_cfg.pv_ai_idx[1];
+			binding_cfg.proc_idx := binding_cfg.position_ai_idx;
+			SETTINGS.regulator_settings[burner_id].binding[reg_local_idx] := binding_cfg;
 
 			FOR item_idx := 1 TO pid_settings_quantity DO
 				flat_idx := (reg_flat_idx - 1) * pid_settings_quantity + item_idx;
@@ -97,27 +134,39 @@ IF load_requested THEN
 
 			flat_idx := (reg_flat_idx - 1) * burner_reg_binding_item_quantity + binding_enabled_item_idx;
 			IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * burner_regulator_quantity * burner_reg_binding_item_quantity) THEN
-				GVL_BURNER_REGULATOR_HMI.hmi_regulator_binding_flat[flat_idx] := SETTINGS.regulator_settings[burner_id].binding[reg_local_idx].enabled;
+				GVL_BURNER_REGULATOR_HMI.hmi_regulator_binding_flat[flat_idx] := binding_cfg.enabled;
 			END_IF;
 
 			flat_idx := (reg_flat_idx - 1) * burner_reg_binding_item_quantity + binding_pid_item_idx;
 			IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * burner_regulator_quantity * burner_reg_binding_item_quantity) THEN
-				GVL_BURNER_REGULATOR_HMI.hmi_regulator_binding_flat[flat_idx] := SETTINGS.regulator_settings[burner_id].binding[reg_local_idx].pid_idx;
+				GVL_BURNER_REGULATOR_HMI.hmi_regulator_binding_flat[flat_idx] := binding_cfg.pid_idx;
 			END_IF;
 
 			flat_idx := (reg_flat_idx - 1) * burner_reg_binding_item_quantity + binding_valve_item_idx;
 			IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * burner_regulator_quantity * burner_reg_binding_item_quantity) THEN
-				GVL_BURNER_REGULATOR_HMI.hmi_regulator_binding_flat[flat_idx] := SETTINGS.regulator_settings[burner_id].binding[reg_local_idx].valve_idx;
+				GVL_BURNER_REGULATOR_HMI.hmi_regulator_binding_flat[flat_idx] := binding_cfg.valve_idx;
 			END_IF;
 
 			flat_idx := (reg_flat_idx - 1) * burner_reg_binding_item_quantity + binding_pv_item_idx;
 			IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * burner_regulator_quantity * burner_reg_binding_item_quantity) THEN
-				GVL_BURNER_REGULATOR_HMI.hmi_regulator_binding_flat[flat_idx] := SETTINGS.regulator_settings[burner_id].binding[reg_local_idx].pv_idx;
+				GVL_BURNER_REGULATOR_HMI.hmi_regulator_binding_flat[flat_idx] := binding_cfg.pv_idx;
 			END_IF;
 
 			flat_idx := (reg_flat_idx - 1) * burner_reg_binding_item_quantity + binding_proc_item_idx;
 			IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * burner_regulator_quantity * burner_reg_binding_item_quantity) THEN
-				GVL_BURNER_REGULATOR_HMI.hmi_regulator_binding_flat[flat_idx] := SETTINGS.regulator_settings[burner_id].binding[reg_local_idx].proc_idx;
+				GVL_BURNER_REGULATOR_HMI.hmi_regulator_binding_flat[flat_idx] := binding_cfg.proc_idx;
+			END_IF;
+
+			FOR sensor_idx := 1 TO pv_sensor_count DO
+				flat_idx := ((burner_id - 1) * burner_regulator_quantity + reg_local_idx) * pv_sensor_count + sensor_idx;
+				IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * burner_regulator_quantity * pv_sensor_count) THEN
+					GVL_BURNER_REGULATOR_HMI.hmi_regulator_pv_ai_idx_flat[flat_idx] := SETTINGS.regulator_settings[burner_id].binding[reg_local_idx].pv_ai_idx[sensor_idx];
+				END_IF;
+			END_FOR;
+
+			flat_idx := (burner_id - 1) * burner_regulator_quantity + reg_local_idx + 1;
+			IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * burner_regulator_quantity) THEN
+				GVL_BURNER_REGULATOR_HMI.hmi_regulator_position_ai_idx[flat_idx] := SETTINGS.regulator_settings[burner_id].binding[reg_local_idx].position_ai_idx;
 			END_IF;
 		END_FOR;
 
@@ -144,6 +193,7 @@ ELSIF save_requested THEN
 	FOR burner_id := 1 TO burner_quantity DO
 		FOR reg_local_idx := 0 TO burner_regulator_quantity - 1 DO
 			reg_flat_idx := (burner_id - 1) * burner_regulator_quantity + reg_local_idx + 1;
+			binding_cfg := SETTINGS.regulator_settings[burner_id].binding[reg_local_idx];
 
 			FOR item_idx := 1 TO pid_settings_quantity DO
 				flat_idx := (reg_flat_idx - 1) * pid_settings_quantity + item_idx;
@@ -154,28 +204,44 @@ ELSIF save_requested THEN
 
 			flat_idx := (reg_flat_idx - 1) * burner_reg_binding_item_quantity + binding_enabled_item_idx;
 			IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * burner_regulator_quantity * burner_reg_binding_item_quantity) THEN
-				SETTINGS.regulator_settings[burner_id].binding[reg_local_idx].enabled := GVL_BURNER_REGULATOR_HMI.hmi_regulator_binding_flat[flat_idx];
+				binding_cfg.enabled := GVL_BURNER_REGULATOR_HMI.hmi_regulator_binding_flat[flat_idx];
 			END_IF;
 
 			flat_idx := (reg_flat_idx - 1) * burner_reg_binding_item_quantity + binding_pid_item_idx;
 			IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * burner_regulator_quantity * burner_reg_binding_item_quantity) THEN
-				SETTINGS.regulator_settings[burner_id].binding[reg_local_idx].pid_idx := GVL_BURNER_REGULATOR_HMI.hmi_regulator_binding_flat[flat_idx];
+				binding_cfg.pid_idx := GVL_BURNER_REGULATOR_HMI.hmi_regulator_binding_flat[flat_idx];
 			END_IF;
 
 			flat_idx := (reg_flat_idx - 1) * burner_reg_binding_item_quantity + binding_valve_item_idx;
 			IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * burner_regulator_quantity * burner_reg_binding_item_quantity) THEN
-				SETTINGS.regulator_settings[burner_id].binding[reg_local_idx].valve_idx := GVL_BURNER_REGULATOR_HMI.hmi_regulator_binding_flat[flat_idx];
+				binding_cfg.valve_idx := GVL_BURNER_REGULATOR_HMI.hmi_regulator_binding_flat[flat_idx];
 			END_IF;
 
 			flat_idx := (reg_flat_idx - 1) * burner_reg_binding_item_quantity + binding_pv_item_idx;
 			IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * burner_regulator_quantity * burner_reg_binding_item_quantity) THEN
-				SETTINGS.regulator_settings[burner_id].binding[reg_local_idx].pv_idx := GVL_BURNER_REGULATOR_HMI.hmi_regulator_binding_flat[flat_idx];
+				binding_cfg.pv_ai_idx[1] := GVL_BURNER_REGULATOR_HMI.hmi_regulator_binding_flat[flat_idx];
 			END_IF;
 
 			flat_idx := (reg_flat_idx - 1) * burner_reg_binding_item_quantity + binding_proc_item_idx;
 			IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * burner_regulator_quantity * burner_reg_binding_item_quantity) THEN
-				SETTINGS.regulator_settings[burner_id].binding[reg_local_idx].proc_idx := GVL_BURNER_REGULATOR_HMI.hmi_regulator_binding_flat[flat_idx];
+				binding_cfg.position_ai_idx := GVL_BURNER_REGULATOR_HMI.hmi_regulator_binding_flat[flat_idx];
 			END_IF;
+
+			FOR sensor_idx := 1 TO pv_sensor_count DO
+				flat_idx := ((burner_id - 1) * burner_regulator_quantity + reg_local_idx) * pv_sensor_count + sensor_idx;
+				IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * burner_regulator_quantity * pv_sensor_count) THEN
+					binding_cfg.pv_ai_idx[sensor_idx] := GVL_BURNER_REGULATOR_HMI.hmi_regulator_pv_ai_idx_flat[flat_idx];
+				END_IF;
+			END_FOR;
+
+			flat_idx := (burner_id - 1) * burner_regulator_quantity + reg_local_idx + 1;
+			IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * burner_regulator_quantity) THEN
+				binding_cfg.position_ai_idx := GVL_BURNER_REGULATOR_HMI.hmi_regulator_position_ai_idx[flat_idx];
+			END_IF;
+
+			binding_cfg.pv_idx := binding_cfg.pv_ai_idx[1];
+			binding_cfg.proc_idx := binding_cfg.position_ai_idx;
+			SETTINGS.regulator_settings[burner_id].binding[reg_local_idx] := binding_cfg;
 		END_FOR;
 
 		FOR item_idx := 1 TO gas_air_point_count DO

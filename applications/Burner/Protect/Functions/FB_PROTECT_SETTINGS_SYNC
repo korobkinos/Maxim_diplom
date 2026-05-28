@@ -2,6 +2,7 @@ FUNCTION_BLOCK FB_PROTECT_SETTINGS_SYNC
 VAR
 	burner_id : WORD;
 	local_idx : WORD;
+	sensor_idx : WORD;
 	flat_idx : WORD;
 	load_requested : BOOL;
 	save_requested : BOOL;
@@ -12,6 +13,7 @@ VAR CONSTANT
 	protect_p_gas_item_idx : WORD := burner_protect_quantity + 1;
 	protect_p_air_item_idx : WORD := burner_protect_quantity + 2;
 	protect_flame_item_idx : WORD := burner_protect_quantity + 3;
+	protect_sensor_count : WORD := 3;
 END_VAR
 
 // === IMPLEMENTATION ===
@@ -22,12 +24,20 @@ IF NOT init_done THEN
 			flat_idx := (burner_id - 1) * burner_protect_quantity + local_idx + 1;
 			IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * burner_protect_quantity) THEN
 				GVL_BURNER_PROTECT_HMI.hmi_protect_enable[flat_idx] := SETTINGS.protect_settings[burner_id].protect[local_idx].enable;
+				GVL_BURNER_PROTECT_HMI.hmi_protect_vote_required[flat_idx] := SETTINGS.protect_settings[burner_id].protect[local_idx].vote_required;
 			END_IF;
 
 			flat_idx := (burner_id - 1) * protect_delay_hmi_item_quantity + local_idx + 1;
 			IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * protect_delay_hmi_item_quantity) THEN
 				GVL_BURNER_PROTECT_HMI.hmi_protect_delay_flat[flat_idx] := SETTINGS.protect_settings[burner_id].protect[local_idx].delay_time;
 			END_IF;
+
+			FOR sensor_idx := 1 TO protect_sensor_count DO
+				flat_idx := ((burner_id - 1) * burner_protect_quantity + local_idx) * protect_sensor_count + sensor_idx;
+				IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * burner_protect_quantity * protect_sensor_count) THEN
+					GVL_BURNER_PROTECT_HMI.hmi_protect_ai_idx_flat[flat_idx] := SETTINGS.protect_settings[burner_id].protect[local_idx].ai_idx[sensor_idx];
+				END_IF;
+			END_FOR;
 		END_FOR;
 
 		flat_idx := (burner_id - 1) * protect_delay_hmi_item_quantity + protect_p_gas_item_idx;
@@ -57,12 +67,20 @@ IF load_requested THEN
 			flat_idx := (burner_id - 1) * burner_protect_quantity + local_idx + 1;
 			IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * burner_protect_quantity) THEN
 				GVL_BURNER_PROTECT_HMI.hmi_protect_enable[flat_idx] := SETTINGS.protect_settings[burner_id].protect[local_idx].enable;
+				GVL_BURNER_PROTECT_HMI.hmi_protect_vote_required[flat_idx] := SETTINGS.protect_settings[burner_id].protect[local_idx].vote_required;
 			END_IF;
 
 			flat_idx := (burner_id - 1) * protect_delay_hmi_item_quantity + local_idx + 1;
 			IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * protect_delay_hmi_item_quantity) THEN
 				GVL_BURNER_PROTECT_HMI.hmi_protect_delay_flat[flat_idx] := SETTINGS.protect_settings[burner_id].protect[local_idx].delay_time;
 			END_IF;
+
+			FOR sensor_idx := 1 TO protect_sensor_count DO
+				flat_idx := ((burner_id - 1) * burner_protect_quantity + local_idx) * protect_sensor_count + sensor_idx;
+				IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * burner_protect_quantity * protect_sensor_count) THEN
+					GVL_BURNER_PROTECT_HMI.hmi_protect_ai_idx_flat[flat_idx] := SETTINGS.protect_settings[burner_id].protect[local_idx].ai_idx[sensor_idx];
+				END_IF;
+			END_FOR;
 		END_FOR;
 
 		flat_idx := (burner_id - 1) * protect_delay_hmi_item_quantity + protect_p_gas_item_idx;
@@ -87,12 +105,20 @@ ELSIF save_requested THEN
 			flat_idx := (burner_id - 1) * burner_protect_quantity + local_idx + 1;
 			IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * burner_protect_quantity) THEN
 				SETTINGS.protect_settings[burner_id].protect[local_idx].enable := GVL_BURNER_PROTECT_HMI.hmi_protect_enable[flat_idx];
+				SETTINGS.protect_settings[burner_id].protect[local_idx].vote_required := GVL_BURNER_PROTECT_HMI.hmi_protect_vote_required[flat_idx];
 			END_IF;
 
 			flat_idx := (burner_id - 1) * protect_delay_hmi_item_quantity + local_idx + 1;
 			IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * protect_delay_hmi_item_quantity) THEN
 				SETTINGS.protect_settings[burner_id].protect[local_idx].delay_time := GVL_BURNER_PROTECT_HMI.hmi_protect_delay_flat[flat_idx];
 			END_IF;
+
+			FOR sensor_idx := 1 TO protect_sensor_count DO
+				flat_idx := ((burner_id - 1) * burner_protect_quantity + local_idx) * protect_sensor_count + sensor_idx;
+				IF (flat_idx >= 1) AND (flat_idx <= burner_quantity * burner_protect_quantity * protect_sensor_count) THEN
+					SETTINGS.protect_settings[burner_id].protect[local_idx].ai_idx[sensor_idx] := GVL_BURNER_PROTECT_HMI.hmi_protect_ai_idx_flat[flat_idx];
+				END_IF;
+			END_FOR;
 		END_FOR;
 
 		flat_idx := (burner_id - 1) * protect_delay_hmi_item_quantity + protect_p_gas_item_idx;
