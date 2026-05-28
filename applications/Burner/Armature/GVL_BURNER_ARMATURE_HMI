@@ -1,0 +1,9 @@
+{attribute 'qualified_only'}
+VAR_GLOBAL
+	hmi_armature_time_flat	: ARRAY[1..total_burner_armature_time_hmi_quantity] OF REAL;
+	hmi_armature_simulation	: ARRAY[1..total_burner_armature_quantity] OF BOOL;
+	hmi_armature_one_state	: ARRAY[1..total_burner_armature_quantity] OF BOOL;
+	hmi_armature_block_mode	: ARRAY[1..total_burner_armature_quantity] OF BOOL;
+	hmi_load_settings		: BOOL;
+	hmi_save_settings		: BOOL;
+END_VAR

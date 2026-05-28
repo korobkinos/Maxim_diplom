@@ -1,0 +1,10 @@
+TYPE ST_ARMATURE_SETTINGS :
+STRUCT
+	simulation : BOOL;
+	wait_time  : REAL;
+	pull_time  : REAL;
+	off_time   : REAL;
+	one_state  : BOOL;
+	block_mode : BOOL;
+END_STRUCT
+END_TYPE

@@ -15,7 +15,6 @@ VAR_GLOBAL PERSISTENT RETAIN
 	========================================================
 	*)
 	burner_test_mode		: ARRAY[1..burner_quantity] OF BOOL;	// Режим испытания по горелкам
-	burner_armature_simulation : ARRAY[1..total_burner_armature_quantity] OF BOOL;	// Имитация арматуры по горелкам (плоский массив)
 
 	// Уставки и настройки алгоритмов
 	ignition_settings : ARRAY[1..burner_quantity] OF ignition_settings;
@@ -76,26 +75,41 @@ VAR_GLOBAL PERSISTENT RETAIN
 		НАСТРОЙКИ АРМАТУРЫ
 	========================================================
 	*)
-
-	// Время ожидания прихода конечного состояния для контроля ошибки арматуры
-	burner_wait_time	: ARRAY[1..total_burner_armature_quantity] OF REAL := [10,10,3,3,3,3,60,60,3,3,3,3,3,3,3,3,3];
-
-	// Время хода арматуры
-	burner_pull_time	: ARRAY[1..total_burner_armature_quantity] OF REAL := [32(1)];
-
-	// Время отключения / удержания команды для отдельных механизмов
-	// Например: КЗ, искра и т.п.
-	burner_off_time		: ARRAY[1..total_burner_armature_quantity] OF REAL := [0,0,0,0,90,0,0,0,0,0,0,0,0,10];
-
-	// Признак арматуры с одним состоянием:
-	// TRUE  - арматура с одним состоянием
-	// FALSE - арматура с двумя состояниями
-	burner_one_state	: ARRAY[1..total_burner_armature_quantity] OF BOOL := [0,0,1,1,1,1,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0];
-
-	// Режим блокировки арматуры:
-	// FALSE - блокировка открытия
-	// TRUE  - блокировка закрытия
-	burner_block_mode	: ARRAY[1..total_burner_armature_quantity] OF BOOL := [32(0)];
+	armature_settings : ARRAY[1..total_burner_armature_quantity] OF ST_ARMATURE_SETTINGS :=
+	[
+		(simulation := FALSE, wait_time := 10, pull_time := 1, off_time := 0, one_state := FALSE, block_mode := FALSE),
+		(simulation := FALSE, wait_time := 10, pull_time := 1, off_time := 0, one_state := FALSE, block_mode := FALSE),
+		(simulation := FALSE, wait_time := 3, pull_time := 1, off_time := 0, one_state := TRUE, block_mode := FALSE),
+		(simulation := FALSE, wait_time := 3, pull_time := 1, off_time := 0, one_state := TRUE, block_mode := FALSE),
+		(simulation := FALSE, wait_time := 3, pull_time := 1, off_time := 90, one_state := TRUE, block_mode := FALSE),
+		(simulation := FALSE, wait_time := 3, pull_time := 1, off_time := 0, one_state := TRUE, block_mode := FALSE),
+		(simulation := FALSE, wait_time := 60, pull_time := 1, off_time := 0, one_state := FALSE, block_mode := FALSE),
+		(simulation := FALSE, wait_time := 60, pull_time := 1, off_time := 0, one_state := FALSE, block_mode := FALSE),
+		(simulation := FALSE, wait_time := 3, pull_time := 1, off_time := 0, one_state := FALSE, block_mode := FALSE),
+		(simulation := FALSE, wait_time := 3, pull_time := 1, off_time := 0, one_state := TRUE, block_mode := FALSE),
+		(simulation := FALSE, wait_time := 3, pull_time := 1, off_time := 0, one_state := FALSE, block_mode := FALSE),
+		(simulation := FALSE, wait_time := 3, pull_time := 1, off_time := 0, one_state := FALSE, block_mode := FALSE),
+		(simulation := FALSE, wait_time := 3, pull_time := 1, off_time := 0, one_state := FALSE, block_mode := FALSE),
+		(simulation := FALSE, wait_time := 3, pull_time := 1, off_time := 10, one_state := TRUE, block_mode := FALSE),
+		(simulation := FALSE, wait_time := 3, pull_time := 1, off_time := 0, one_state := FALSE, block_mode := FALSE),
+		(simulation := FALSE, wait_time := 3, pull_time := 1, off_time := 0, one_state := FALSE, block_mode := FALSE),
+		(simulation := FALSE, wait_time := 3, pull_time := 1, off_time := 0, one_state := FALSE, block_mode := FALSE),
+		(simulation := FALSE, wait_time := 0, pull_time := 1, off_time := 0, one_state := FALSE, block_mode := FALSE),
+		(simulation := FALSE, wait_time := 0, pull_time := 1, off_time := 0, one_state := FALSE, block_mode := FALSE),
+		(simulation := FALSE, wait_time := 0, pull_time := 1, off_time := 0, one_state := FALSE, block_mode := FALSE),
+		(simulation := FALSE, wait_time := 0, pull_time := 1, off_time := 0, one_state := FALSE, block_mode := FALSE),
+		(simulation := FALSE, wait_time := 0, pull_time := 1, off_time := 0, one_state := FALSE, block_mode := FALSE),
+		(simulation := FALSE, wait_time := 0, pull_time := 1, off_time := 0, one_state := FALSE, block_mode := FALSE),
+		(simulation := FALSE, wait_time := 0, pull_time := 1, off_time := 0, one_state := FALSE, block_mode := FALSE),
+		(simulation := FALSE, wait_time := 0, pull_time := 1, off_time := 0, one_state := FALSE, block_mode := FALSE),
+		(simulation := FALSE, wait_time := 0, pull_time := 1, off_time := 0, one_state := FALSE, block_mode := FALSE),
+		(simulation := FALSE, wait_time := 0, pull_time := 1, off_time := 0, one_state := FALSE, block_mode := FALSE),
+		(simulation := FALSE, wait_time := 0, pull_time := 1, off_time := 0, one_state := FALSE, block_mode := FALSE),
+		(simulation := FALSE, wait_time := 0, pull_time := 1, off_time := 0, one_state := FALSE, block_mode := FALSE),
+		(simulation := FALSE, wait_time := 0, pull_time := 1, off_time := 0, one_state := FALSE, block_mode := FALSE),
+		(simulation := FALSE, wait_time := 0, pull_time := 1, off_time := 0, one_state := FALSE, block_mode := FALSE),
+		(simulation := FALSE, wait_time := 0, pull_time := 1, off_time := 0, one_state := FALSE, block_mode := FALSE)
+	];
 
 
 	(*
@@ -111,19 +125,7 @@ VAR_GLOBAL PERSISTENT RETAIN
 		ЗАЩИТЫ
 	========================================================
 	*)
-
-	// Разрешение защит
-	burner_protect_enable	: ARRAY[1..total_burner_protect_quantity] OF BOOL;
-
-	// Команды на ввод / вывод защит
-
-	// Задержки срабатывания защит
-	burner_protect_delay_time : ARRAY[1..total_burner_protect_quantity] OF REAL;
-
-	// Дополнительные задержки постановки на контроль
-	burner_p_gas_control_delay : ARRAY[1..burner_quantity] OF REAL;
-	burner_p_air_control_delay : ARRAY[1..burner_quantity] OF REAL;
-	burner_flame_control_delay : ARRAY[1..burner_quantity] OF REAL;
+	protect_settings : ARRAY[1..total_burner_protect_quantity] OF ST_PROTECT_SETTINGS;
 
 
 	(*

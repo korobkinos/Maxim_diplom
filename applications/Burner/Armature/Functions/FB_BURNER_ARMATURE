@@ -140,12 +140,12 @@ FOR i := 0 TO counter_armature DO
 	IF burner_id_valid AND local_idx_valid THEN
 		arm_idx := GetBurnerArmatureIndex(burner_id := burner_id, local_idx := i);
 		IF (arm_idx >= 1) AND (arm_idx <= total_burner_armature_quantity) THEN
-			effective_armature_simulation := SETTINGS.burner_armature_simulation[arm_idx];
-			wait_time_cfg := SETTINGS.burner_wait_time[arm_idx];
-			pull_time_cfg := SETTINGS.burner_pull_time[arm_idx];
-			off_time_cfg := SETTINGS.burner_off_time[arm_idx];
-			one_state_cfg := SETTINGS.burner_one_state[arm_idx];
-			block_mode_cfg := SETTINGS.burner_block_mode[arm_idx];
+			effective_armature_simulation := SETTINGS.armature_settings[arm_idx].simulation;
+			wait_time_cfg := SETTINGS.armature_settings[arm_idx].wait_time;
+			pull_time_cfg := SETTINGS.armature_settings[arm_idx].pull_time;
+			off_time_cfg := SETTINGS.armature_settings[arm_idx].off_time;
+			one_state_cfg := SETTINGS.armature_settings[arm_idx].one_state;
+			block_mode_cfg := SETTINGS.armature_settings[arm_idx].block_mode;
 		END_IF;
 	END_IF;
 	IF enable THEN

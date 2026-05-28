@@ -1,0 +1,143 @@
+FUNCTION_BLOCK FB_PROTECT_SETTINGS_SYNC
+VAR
+	burner_id : WORD;
+	local_idx : WORD;
+	global_idx : WORD;
+	flat_idx : WORD;
+	load_requested : BOOL;
+	save_requested : BOOL;
+	init_done : BOOL;
+	base_global_idx : WORD;
+END_VAR
+
+VAR CONSTANT
+	protect_p_gas_item_idx : WORD := burner_protect_quantity + 2;
+	protect_p_air_item_idx : WORD := burner_protect_quantity + 3;
+	protect_flame_item_idx : WORD := burner_protect_quantity + 4;
+END_VAR
+
+// === IMPLEMENTATION ===
+
+IF NOT init_done THEN
+	FOR burner_id := 1 TO burner_quantity DO
+		FOR local_idx := 0 TO burner_protect_quantity DO
+			global_idx := GetBurnerProtectIndex(burner_id := burner_id, local_idx := local_idx);
+			flat_idx := GetGroupedFlatIndex(
+				group_idx := burner_id,
+				item_idx := local_idx + 1,
+				item_count := protect_delay_hmi_item_quantity,
+				item_base := 1
+			);
+			IF (global_idx >= 1) AND (global_idx <= total_burner_protect_quantity) THEN
+				GVL_BURNER_PROTECT_HMI.hmi_protect_enable[global_idx] := SETTINGS.protect_settings[global_idx].enable;
+				IF (flat_idx >= 1) AND (flat_idx <= total_burner_protect_delay_hmi_quantity) THEN
+					GVL_BURNER_PROTECT_HMI.hmi_protect_delay_flat[flat_idx] := SETTINGS.protect_settings[global_idx].delay_time;
+				END_IF;
+			END_IF;
+		END_FOR;
+
+		base_global_idx := GetBurnerProtectIndex(burner_id := burner_id, local_idx := 0);
+		IF (base_global_idx >= 1) AND (base_global_idx <= total_burner_protect_quantity) THEN
+			flat_idx := GetGroupedFlatIndex(group_idx := burner_id, item_idx := protect_p_gas_item_idx, item_count := protect_delay_hmi_item_quantity, item_base := 1);
+			IF (flat_idx >= 1) AND (flat_idx <= total_burner_protect_delay_hmi_quantity) THEN
+				GVL_BURNER_PROTECT_HMI.hmi_protect_delay_flat[flat_idx] := SETTINGS.protect_settings[base_global_idx].p_gas_control_delay;
+			END_IF;
+			flat_idx := GetGroupedFlatIndex(group_idx := burner_id, item_idx := protect_p_air_item_idx, item_count := protect_delay_hmi_item_quantity, item_base := 1);
+			IF (flat_idx >= 1) AND (flat_idx <= total_burner_protect_delay_hmi_quantity) THEN
+				GVL_BURNER_PROTECT_HMI.hmi_protect_delay_flat[flat_idx] := SETTINGS.protect_settings[base_global_idx].p_air_control_delay;
+			END_IF;
+			flat_idx := GetGroupedFlatIndex(group_idx := burner_id, item_idx := protect_flame_item_idx, item_count := protect_delay_hmi_item_quantity, item_base := 1);
+			IF (flat_idx >= 1) AND (flat_idx <= total_burner_protect_delay_hmi_quantity) THEN
+				GVL_BURNER_PROTECT_HMI.hmi_protect_delay_flat[flat_idx] := SETTINGS.protect_settings[base_global_idx].flame_control_delay;
+			END_IF;
+		END_IF;
+	END_FOR;
+	init_done := TRUE;
+END_IF;
+
+load_requested := GVL_BURNER_PROTECT_HMI.hmi_load_settings;
+save_requested := GVL_BURNER_PROTECT_HMI.hmi_save_settings;
+
+IF load_requested THEN
+	FOR burner_id := 1 TO burner_quantity DO
+		FOR local_idx := 0 TO burner_protect_quantity DO
+			global_idx := GetBurnerProtectIndex(burner_id := burner_id, local_idx := local_idx);
+			flat_idx := GetGroupedFlatIndex(
+				group_idx := burner_id,
+				item_idx := local_idx + 1,
+				item_count := protect_delay_hmi_item_quantity,
+				item_base := 1
+			);
+			IF (global_idx >= 1) AND (global_idx <= total_burner_protect_quantity) THEN
+				GVL_BURNER_PROTECT_HMI.hmi_protect_enable[global_idx] := SETTINGS.protect_settings[global_idx].enable;
+				IF (flat_idx >= 1) AND (flat_idx <= total_burner_protect_delay_hmi_quantity) THEN
+					GVL_BURNER_PROTECT_HMI.hmi_protect_delay_flat[flat_idx] := SETTINGS.protect_settings[global_idx].delay_time;
+				END_IF;
+			END_IF;
+		END_FOR;
+
+		base_global_idx := GetBurnerProtectIndex(burner_id := burner_id, local_idx := 0);
+		IF (base_global_idx >= 1) AND (base_global_idx <= total_burner_protect_quantity) THEN
+			flat_idx := GetGroupedFlatIndex(group_idx := burner_id, item_idx := protect_p_gas_item_idx, item_count := protect_delay_hmi_item_quantity, item_base := 1);
+			IF (flat_idx >= 1) AND (flat_idx <= total_burner_protect_delay_hmi_quantity) THEN
+				GVL_BURNER_PROTECT_HMI.hmi_protect_delay_flat[flat_idx] := SETTINGS.protect_settings[base_global_idx].p_gas_control_delay;
+			END_IF;
+			flat_idx := GetGroupedFlatIndex(group_idx := burner_id, item_idx := protect_p_air_item_idx, item_count := protect_delay_hmi_item_quantity, item_base := 1);
+			IF (flat_idx >= 1) AND (flat_idx <= total_burner_protect_delay_hmi_quantity) THEN
+				GVL_BURNER_PROTECT_HMI.hmi_protect_delay_flat[flat_idx] := SETTINGS.protect_settings[base_global_idx].p_air_control_delay;
+			END_IF;
+			flat_idx := GetGroupedFlatIndex(group_idx := burner_id, item_idx := protect_flame_item_idx, item_count := protect_delay_hmi_item_quantity, item_base := 1);
+			IF (flat_idx >= 1) AND (flat_idx <= total_burner_protect_delay_hmi_quantity) THEN
+				GVL_BURNER_PROTECT_HMI.hmi_protect_delay_flat[flat_idx] := SETTINGS.protect_settings[base_global_idx].flame_control_delay;
+			END_IF;
+		END_IF;
+	END_FOR;
+	GVL_BURNER_PROTECT_HMI.hmi_load_settings := FALSE;
+ELSIF save_requested THEN
+	FOR burner_id := 1 TO burner_quantity DO
+		FOR local_idx := 0 TO burner_protect_quantity DO
+			global_idx := GetBurnerProtectIndex(burner_id := burner_id, local_idx := local_idx);
+			flat_idx := GetGroupedFlatIndex(
+				group_idx := burner_id,
+				item_idx := local_idx + 1,
+				item_count := protect_delay_hmi_item_quantity,
+				item_base := 1
+			);
+			IF (global_idx >= 1) AND (global_idx <= total_burner_protect_quantity) THEN
+				SETTINGS.protect_settings[global_idx].enable := GVL_BURNER_PROTECT_HMI.hmi_protect_enable[global_idx];
+				IF (flat_idx >= 1) AND (flat_idx <= total_burner_protect_delay_hmi_quantity) THEN
+					SETTINGS.protect_settings[global_idx].delay_time := GVL_BURNER_PROTECT_HMI.hmi_protect_delay_flat[flat_idx];
+				END_IF;
+			END_IF;
+		END_FOR;
+
+		flat_idx := GetGroupedFlatIndex(group_idx := burner_id, item_idx := protect_p_gas_item_idx, item_count := protect_delay_hmi_item_quantity, item_base := 1);
+		IF (flat_idx >= 1) AND (flat_idx <= total_burner_protect_delay_hmi_quantity) THEN
+			FOR local_idx := 0 TO burner_protect_quantity DO
+				global_idx := GetBurnerProtectIndex(burner_id := burner_id, local_idx := local_idx);
+				IF (global_idx >= 1) AND (global_idx <= total_burner_protect_quantity) THEN
+					SETTINGS.protect_settings[global_idx].p_gas_control_delay := GVL_BURNER_PROTECT_HMI.hmi_protect_delay_flat[flat_idx];
+				END_IF;
+			END_FOR;
+		END_IF;
+		flat_idx := GetGroupedFlatIndex(group_idx := burner_id, item_idx := protect_p_air_item_idx, item_count := protect_delay_hmi_item_quantity, item_base := 1);
+		IF (flat_idx >= 1) AND (flat_idx <= total_burner_protect_delay_hmi_quantity) THEN
+			FOR local_idx := 0 TO burner_protect_quantity DO
+				global_idx := GetBurnerProtectIndex(burner_id := burner_id, local_idx := local_idx);
+				IF (global_idx >= 1) AND (global_idx <= total_burner_protect_quantity) THEN
+					SETTINGS.protect_settings[global_idx].p_air_control_delay := GVL_BURNER_PROTECT_HMI.hmi_protect_delay_flat[flat_idx];
+				END_IF;
+			END_FOR;
+		END_IF;
+		flat_idx := GetGroupedFlatIndex(group_idx := burner_id, item_idx := protect_flame_item_idx, item_count := protect_delay_hmi_item_quantity, item_base := 1);
+		IF (flat_idx >= 1) AND (flat_idx <= total_burner_protect_delay_hmi_quantity) THEN
+			FOR local_idx := 0 TO burner_protect_quantity DO
+				global_idx := GetBurnerProtectIndex(burner_id := burner_id, local_idx := local_idx);
+				IF (global_idx >= 1) AND (global_idx <= total_burner_protect_quantity) THEN
+					SETTINGS.protect_settings[global_idx].flame_control_delay := GVL_BURNER_PROTECT_HMI.hmi_protect_delay_flat[flat_idx];
+				END_IF;
+			END_FOR;
+		END_IF;
+	END_FOR;
+	GVL_BURNER_PROTECT_HMI.hmi_save_settings := FALSE;
+END_IF;

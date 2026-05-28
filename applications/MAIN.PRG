@@ -5,6 +5,8 @@ VAR
 	pressure_settings_sync : FB_PRESSURE_SETTINGS_SYNC;
 	ignition_settings_sync : FB_IGNITION_SETTINGS_SYNC;
 	regulator_settings_sync : FB_REGULATOR_SETTINGS_SYNC;
+	protect_settings_sync : FB_PROTECT_SETTINGS_SYNC;
+	armature_settings_sync : FB_ARMATURE_SETTINGS_SYNC;
 END_VAR
 
 // === IMPLEMENTATION ===
@@ -14,4 +16,6 @@ scale_runtime();
 pressure_settings_sync();
 ignition_settings_sync();
 regulator_settings_sync();
+protect_settings_sync();
+armature_settings_sync();
 BURNERS_MANAGER();
