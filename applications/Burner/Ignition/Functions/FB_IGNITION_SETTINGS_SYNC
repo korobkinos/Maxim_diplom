@@ -1,0 +1,80 @@
+FUNCTION_BLOCK FB_IGNITION_SETTINGS_SYNC
+VAR
+	burner_id : WORD;
+	item_idx : WORD;
+	flat_idx : WORD;
+	load_requested : BOOL;
+	save_requested : BOOL;
+	init_done : BOOL;
+END_VAR
+
+VAR CONSTANT
+	ignition_value_min_index : WORD := 1;
+	ignition_value_max_index : WORD := 5;
+END_VAR
+
+// === IMPLEMENTATION ===
+
+IF NOT init_done THEN
+	FOR burner_id := 1 TO burner_quantity DO
+		FOR item_idx := ignition_value_min_index TO ignition_value_max_index DO
+			flat_idx := GetGroupedFlatIndex(
+				group_idx := burner_id,
+				item_idx := item_idx,
+				item_count := ignition_hmi_item_quantity,
+				item_base := 1
+			);
+
+			IF (flat_idx >= 1) AND (flat_idx <= total_ignition_hmi_quantity) THEN
+				GVL_BURNER_IGNITION_HMI.hmi_ignition_flat[flat_idx] := SETTINGS.ignition_settings[burner_id].VALUE[item_idx];
+			END_IF;
+		END_FOR;
+
+		GVL_BURNER_IGNITION_HMI.hmi_flame_feedback_idx[burner_id] := SETTINGS.ignition_settings_flame_feedback_idx[burner_id];
+	END_FOR;
+
+	init_done := TRUE;
+END_IF;
+
+load_requested := GVL_BURNER_IGNITION_HMI.hmi_load_settings;
+save_requested := GVL_BURNER_IGNITION_HMI.hmi_save_settings;
+
+IF load_requested THEN
+	FOR burner_id := 1 TO burner_quantity DO
+		FOR item_idx := ignition_value_min_index TO ignition_value_max_index DO
+			flat_idx := GetGroupedFlatIndex(
+				group_idx := burner_id,
+				item_idx := item_idx,
+				item_count := ignition_hmi_item_quantity,
+				item_base := 1
+			);
+
+			IF (flat_idx >= 1) AND (flat_idx <= total_ignition_hmi_quantity) THEN
+				GVL_BURNER_IGNITION_HMI.hmi_ignition_flat[flat_idx] := SETTINGS.ignition_settings[burner_id].VALUE[item_idx];
+			END_IF;
+		END_FOR;
+
+		GVL_BURNER_IGNITION_HMI.hmi_flame_feedback_idx[burner_id] := SETTINGS.ignition_settings_flame_feedback_idx[burner_id];
+	END_FOR;
+
+	GVL_BURNER_IGNITION_HMI.hmi_load_settings := FALSE;
+ELSIF save_requested THEN
+	FOR burner_id := 1 TO burner_quantity DO
+		FOR item_idx := ignition_value_min_index TO ignition_value_max_index DO
+			flat_idx := GetGroupedFlatIndex(
+				group_idx := burner_id,
+				item_idx := item_idx,
+				item_count := ignition_hmi_item_quantity,
+				item_base := 1
+			);
+
+			IF (flat_idx >= 1) AND (flat_idx <= total_ignition_hmi_quantity) THEN
+				SETTINGS.ignition_settings[burner_id].VALUE[item_idx] := GVL_BURNER_IGNITION_HMI.hmi_ignition_flat[flat_idx];
+			END_IF;
+		END_FOR;
+
+		SETTINGS.ignition_settings_flame_feedback_idx[burner_id] := GVL_BURNER_IGNITION_HMI.hmi_flame_feedback_idx[burner_id];
+	END_FOR;
+
+	GVL_BURNER_IGNITION_HMI.hmi_save_settings := FALSE;
+END_IF;

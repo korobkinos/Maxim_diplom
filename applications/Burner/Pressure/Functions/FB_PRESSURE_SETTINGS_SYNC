@@ -1,0 +1,80 @@
+FUNCTION_BLOCK FB_PRESSURE_SETTINGS_SYNC
+VAR
+	burner_id : WORD;
+	item_idx : WORD;
+	flat_idx : WORD;
+	load_requested : BOOL;
+	save_requested : BOOL;
+	init_done : BOOL;
+END_VAR
+
+VAR CONSTANT
+	pressure_value_min_index : WORD := 1;
+	pressure_value_max_index : WORD := 9;
+END_VAR
+
+// === IMPLEMENTATION ===
+
+IF NOT init_done THEN
+	FOR burner_id := 1 TO burner_quantity DO
+		FOR item_idx := pressure_value_min_index TO pressure_value_max_index DO
+			flat_idx := GetGroupedFlatIndex(
+				group_idx := burner_id,
+				item_idx := item_idx,
+				item_count := pressure_hmi_item_quantity,
+				item_base := 1
+			);
+
+			IF (flat_idx >= 1) AND (flat_idx <= total_pressure_hmi_quantity) THEN
+				GVL_BURNER_PRESSURE_HMI.hmi_pressure_flat[flat_idx] := SETTINGS.pressure_settings[burner_id].VALUE[item_idx];
+			END_IF;
+		END_FOR;
+
+		GVL_BURNER_PRESSURE_HMI.hmi_pressure_ai_idx[burner_id] := SETTINGS.pressure_settings_ai_idx[burner_id];
+	END_FOR;
+
+	init_done := TRUE;
+END_IF;
+
+load_requested := GVL_BURNER_PRESSURE_HMI.hmi_load_settings;
+save_requested := GVL_BURNER_PRESSURE_HMI.hmi_save_settings;
+
+IF load_requested THEN
+	FOR burner_id := 1 TO burner_quantity DO
+		FOR item_idx := pressure_value_min_index TO pressure_value_max_index DO
+			flat_idx := GetGroupedFlatIndex(
+				group_idx := burner_id,
+				item_idx := item_idx,
+				item_count := pressure_hmi_item_quantity,
+				item_base := 1
+			);
+
+			IF (flat_idx >= 1) AND (flat_idx <= total_pressure_hmi_quantity) THEN
+				GVL_BURNER_PRESSURE_HMI.hmi_pressure_flat[flat_idx] := SETTINGS.pressure_settings[burner_id].VALUE[item_idx];
+			END_IF;
+		END_FOR;
+
+		GVL_BURNER_PRESSURE_HMI.hmi_pressure_ai_idx[burner_id] := SETTINGS.pressure_settings_ai_idx[burner_id];
+	END_FOR;
+
+	GVL_BURNER_PRESSURE_HMI.hmi_load_settings := FALSE;
+ELSIF save_requested THEN
+	FOR burner_id := 1 TO burner_quantity DO
+		FOR item_idx := pressure_value_min_index TO pressure_value_max_index DO
+			flat_idx := GetGroupedFlatIndex(
+				group_idx := burner_id,
+				item_idx := item_idx,
+				item_count := pressure_hmi_item_quantity,
+				item_base := 1
+			);
+
+			IF (flat_idx >= 1) AND (flat_idx <= total_pressure_hmi_quantity) THEN
+				SETTINGS.pressure_settings[burner_id].VALUE[item_idx] := GVL_BURNER_PRESSURE_HMI.hmi_pressure_flat[flat_idx];
+			END_IF;
+		END_FOR;
+
+		SETTINGS.pressure_settings_ai_idx[burner_id] := GVL_BURNER_PRESSURE_HMI.hmi_pressure_ai_idx[burner_id];
+	END_FOR;
+
+	GVL_BURNER_PRESSURE_HMI.hmi_save_settings := FALSE;
+END_IF;

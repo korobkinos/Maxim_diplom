@@ -1,0 +1,7 @@
+{attribute 'qualified_only'}
+VAR_GLOBAL
+	hmi_ignition_flat			: ARRAY[1..total_ignition_hmi_quantity] OF REAL;
+	hmi_flame_feedback_idx		: ARRAY[1..burner_quantity] OF WORD;
+	hmi_load_settings			: BOOL;
+	hmi_save_settings			: BOOL;
+END_VAR

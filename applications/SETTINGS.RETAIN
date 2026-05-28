@@ -18,12 +18,8 @@ VAR_GLOBAL PERSISTENT RETAIN
 	burner_armature_simulation : ARRAY[1..total_burner_armature_quantity] OF BOOL;	// Имитация арматуры по горелкам (плоский массив)
 
 	// Уставки и настройки алгоритмов
-	ignition_cfg_mode		: ARRAY[1..burner_quantity] OF REAL;
-	ignition_cfg_repeat		: ARRAY[1..burner_quantity] OF REAL;
-	ignition_cfg_t_ignition	: ARRAY[1..burner_quantity] OF REAL;
-	ignition_cfg_t_gas_spark: ARRAY[1..burner_quantity] OF REAL;
-	ignition_cfg_t_flame_check: ARRAY[1..burner_quantity] OF REAL;
-	ignition_cfg_flame_feedback_idx : ARRAY[1..burner_quantity] OF WORD;
+	ignition_settings : ARRAY[1..burner_quantity] OF ignition_settings;
+	ignition_settings_flame_feedback_idx : ARRAY[1..burner_quantity] OF WORD;
 
 
 	(*
@@ -136,15 +132,7 @@ VAR_GLOBAL PERSISTENT RETAIN
 		ОПРЕССОВКА
 	========================================================
 	*)
-	pressure_cfg_p_min		: ARRAY[1..burner_quantity] OF REAL;
-	pressure_cfg_p_max		: ARRAY[1..burner_quantity] OF REAL;
-	pressure_cfg_t_wait_1	: ARRAY[1..burner_quantity] OF REAL;
-	pressure_cfg_t_wait_2	: ARRAY[1..burner_quantity] OF REAL;
-	pressure_cfg_t_wait_3	: ARRAY[1..burner_quantity] OF REAL;
-	pressure_cfg_t_fast		: ARRAY[1..burner_quantity] OF REAL;
-	pressure_cfg_t_termination : ARRAY[1..burner_quantity] OF REAL;
-	pressure_cfg_kb_sensor	: ARRAY[1..burner_quantity] OF REAL;
-	pressure_cfg_press_mode	: ARRAY[1..burner_quantity] OF REAL;
-	pressure_cfg_pressure_ai_idx : ARRAY[1..burner_quantity] OF WORD;
+	pressure_settings : ARRAY[1..burner_quantity] OF pressure_settings;
+	pressure_settings_ai_idx : ARRAY[1..burner_quantity] OF WORD;
 	
 END_VAR

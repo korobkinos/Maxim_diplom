@@ -25,8 +25,12 @@ VAR_GLOBAL CONSTANT
 
 	pressure_per_burner						:		WORD:=1;			//Количество контуров опрессовки на горелку
 	total_burner_pressure_quantity			:		WORD:=burner_quantity*pressure_per_burner; //Плоский размер массива опрессовки для всех горелок
+	pressure_hmi_item_quantity				:		WORD:=9;			//Количество REAL-настроек опрессовки на одну горелку
+	total_pressure_hmi_quantity				:		WORD:=burner_quantity*pressure_hmi_item_quantity; //Плоский размер HMI массива pressure-настроек
 	ignition_per_burner						:		WORD:=1;			//Количество контуров розжига на горелку
 	total_burner_ignition_quantity			:		WORD:=burner_quantity*ignition_per_burner; //Плоский размер массива розжига для всех горелок
+	ignition_hmi_item_quantity				:		WORD:=5;			//Количество REAL-настроек розжига на одну горелку
+	total_ignition_hmi_quantity				:		WORD:=burner_quantity*ignition_hmi_item_quantity; //Плоский размер HMI массива ignition-настроек
 
 	(*
 	Пояснение по области миграции:
