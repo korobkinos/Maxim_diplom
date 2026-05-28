@@ -9,6 +9,7 @@ VAR_GLOBAL CONSTANT
 	burner_quantity							:		WORD:=1;			//Текущее количество горелок (пока один экземпляр)
 	burner_valve_quantity					:		WORD:=32;			//32 позиции арматуры на горелку (текущая локальная индексация 0..31)
 	total_burner_valve_quantity				:		WORD:=burner_quantity*burner_valve_quantity; //Плоский размер массива арматуры для всех горелок
+	total_burner_armature_quantity			:		WORD:=burner_quantity*(counter_armature+1); //Плоский размер массива имитации арматуры для всех горелок
 
 	burner_protect_quantity					:		WORD:=15;			//Количество горелочных защит
 	total_burner_protect_quantity			:		WORD:=burner_quantity*(burner_protect_quantity+1); //Плоский размер массива защит для всех горелок
