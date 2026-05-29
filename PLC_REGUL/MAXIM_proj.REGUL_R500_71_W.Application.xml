@@ -47,6 +47,9 @@
     <TypeArray name="T_ARRAY__0__31__OF_ST_ARMATURE_SETTINGS" size="640" nativesize="640" typeclass="Array" iecname="ARRAY [0..31] OF ST_ARMATURE_SETTINGS" basetype="T_ST_ARMATURE_SETTINGS">
       <ArrayDim minrange="0" maxrange="31" />
     </TypeArray>
+    <TypeArray name="T_ARRAY__1__128__OF_ARRAY__1__4__OF_WORD" size="1024" nativesize="1024" typeclass="Array" iecname="ARRAY [1..128] OF ARRAY [1..4] OF WORD" basetype="T_ARRAY__1__4__OF_WORD">
+      <ArrayDim minrange="1" maxrange="128" />
+    </TypeArray>
     <TypeUserDef name="T_GAS_AIR_PROPORTION" size="120" nativesize="120" typeclass="Userdef" pouclass="STRUCTURE" iecname="GAS_AIR_PROPORTION">
       <UserDefElement iecname="GAS_VALUE" type="T_ARRAY__1__10__OF_REAL" byteoffset="0" vartype="VAR" access="ReadWrite" />
       <UserDefElement iecname="AIR_VALUE" type="T_ARRAY__1__10__OF_REAL" byteoffset="40" vartype="VAR" access="ReadWrite" />
@@ -125,18 +128,21 @@
   </TypeList>
   <NodeList>
     <Node name="Application">
+      <Node name="GVL_REc">
+        <Node name="Save" type="T_BOOL" access="ReadWrite" />
+      </Node>
       <Node name="SETTINGS">
         <Node name="ai_scale_settings" type="T_ARRAY__1__16__OF_SCALE_DATA" access="ReadWrite" />
         <Node name="armature_settings" type="T_ARRAY__1__4__OF_ST_BURNER_ARMATURE_SETTINGS" access="ReadWrite" />
+        <Node name="boiler_simulation" type="T_BOOL" access="ReadWrite" />
         <Node name="burner_max_reach_time" type="T_ARRAY__1__4__OF_REAL" access="ReadWrite" />
         <Node name="burner_min_power" type="T_ARRAY__1__4__OF_REAL" access="ReadWrite" />
         <Node name="burner_test_mode" type="T_ARRAY__1__4__OF_BOOL" access="ReadWrite" />
         <Node name="ignition_settings" type="T_ARRAY__1__4__OF_ST_BURNER_IGNITION_SETTINGS" access="ReadWrite" />
+        <Node name="map_valve_ai_bind" type="T_ARRAY__1__128__OF_ARRAY__1__4__OF_WORD" access="ReadWrite" />
         <Node name="pressure_settings" type="T_ARRAY__1__4__OF_pressure_settings" access="ReadWrite" />
         <Node name="pressure_settings_ai_idx" type="T_ARRAY__1__4__OF_WORD" access="ReadWrite" />
         <Node name="protect_settings" type="T_ARRAY__1__4__OF_ST_BURNER_PROTECT_SETTINGS" access="ReadWrite" />
-        <Node name="reg_binding_off" type="T_WORD" access="ReadWrite" />
-        <Node name="reg_binding_on" type="T_WORD" access="ReadWrite" />
         <Node name="regulator_settings" type="T_ARRAY__1__4__OF_ST_BURNER_REGULATOR_SETTINGS" access="ReadWrite" />
       </Node>
     </Node>

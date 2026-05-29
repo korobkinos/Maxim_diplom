@@ -15,7 +15,6 @@ STRUCT
 	set_special       : ARRAY[0..burner_valve_quantity - 1] OF BOOL;
 	set_auto          : ARRAY[0..burner_valve_quantity - 1] OF BOOL;
 	set_manual        : ARRAY[0..burner_valve_quantity - 1] OF BOOL;
-	imitation_mode    : ARRAY[0..burner_valve_quantity - 1] OF BOOL;
 	open_state_di     : ARRAY[0..burner_valve_quantity - 1] OF BOOL;
 	closed_state_di   : ARRAY[0..burner_valve_quantity - 1] OF BOOL;
 	special_state_di  : ARRAY[0..burner_valve_quantity - 1] OF BOOL;

@@ -1,6 +1,5 @@
 TYPE ST_ARMATURE_SETTINGS :
 STRUCT
-	simulation : BOOL := FALSE;
 	wait_time  : REAL := 3.0;
 	pull_time  : REAL := 1.0;
 	off_time   : REAL := 0.0;

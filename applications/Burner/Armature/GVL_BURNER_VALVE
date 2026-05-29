@@ -16,7 +16,6 @@ VAR_GLOBAL
 	set_special    : ARRAY[1..burner_quantity * burner_valve_quantity] OF BOOL;
 	set_auto       : ARRAY[1..burner_quantity * burner_valve_quantity] OF BOOL;
 	set_manual     : ARRAY[1..burner_quantity * burner_valve_quantity] OF BOOL;
-	imitation_mode : ARRAY[1..burner_quantity * burner_valve_quantity] OF BOOL;
 	open_state_di  : ARRAY[1..burner_quantity * burner_valve_quantity] OF BOOL;
 	closed_state_di: ARRAY[1..burner_quantity * burner_valve_quantity] OF BOOL;
 	special_state_di: ARRAY[1..burner_quantity * burner_valve_quantity] OF BOOL;

@@ -22,7 +22,6 @@ IF NOT init_done THEN
 		FOR valve_id := 0 TO burner_valve_quantity - 1 DO
 			arm_flat_idx := (burner_id - 1) * burner_valve_quantity + valve_id + 1;
 
-			GVL_BURNER_ARMATURE_HMI.hmi_armature_simulation[arm_flat_idx] := SETTINGS.armature_settings[burner_id].valve[valve_id].simulation;
 			GVL_BURNER_ARMATURE_HMI.hmi_armature_one_state[arm_flat_idx] := SETTINGS.armature_settings[burner_id].valve[valve_id].one_state;
 			GVL_BURNER_ARMATURE_HMI.hmi_armature_block_mode[arm_flat_idx] := SETTINGS.armature_settings[burner_id].valve[valve_id].block_mode;
 
@@ -53,7 +52,6 @@ IF load_requested THEN
 		FOR valve_id := 0 TO burner_valve_quantity - 1 DO
 			arm_flat_idx := (burner_id - 1) * burner_valve_quantity + valve_id + 1;
 
-			GVL_BURNER_ARMATURE_HMI.hmi_armature_simulation[arm_flat_idx] := SETTINGS.armature_settings[burner_id].valve[valve_id].simulation;
 			GVL_BURNER_ARMATURE_HMI.hmi_armature_one_state[arm_flat_idx] := SETTINGS.armature_settings[burner_id].valve[valve_id].one_state;
 			GVL_BURNER_ARMATURE_HMI.hmi_armature_block_mode[arm_flat_idx] := SETTINGS.armature_settings[burner_id].valve[valve_id].block_mode;
 
@@ -79,7 +77,6 @@ ELSIF save_requested THEN
 		FOR valve_id := 0 TO burner_valve_quantity - 1 DO
 			arm_flat_idx := (burner_id - 1) * burner_valve_quantity + valve_id + 1;
 
-			SETTINGS.armature_settings[burner_id].valve[valve_id].simulation := GVL_BURNER_ARMATURE_HMI.hmi_armature_simulation[arm_flat_idx];
 			SETTINGS.armature_settings[burner_id].valve[valve_id].one_state := GVL_BURNER_ARMATURE_HMI.hmi_armature_one_state[arm_flat_idx];
 			SETTINGS.armature_settings[burner_id].valve[valve_id].block_mode := GVL_BURNER_ARMATURE_HMI.hmi_armature_block_mode[arm_flat_idx];
 
