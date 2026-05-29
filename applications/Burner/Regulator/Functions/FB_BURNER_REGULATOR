@@ -160,7 +160,7 @@ ELSE
 		local_idx := i;
 		IF burner_id_valid THEN
 			binding_cfg := SETTINGS.regulator_settings[burner_id].binding[local_idx];
-			IF binding_cfg.enabled = SETTINGS.reg_binding_on THEN
+			IF binding_cfg.enabled = GVL_CONSTANT.reg_binding_on THEN
 				pid_idx := binding_cfg.pid_idx;
 				valve_idx := binding_cfg.valve_idx;
 

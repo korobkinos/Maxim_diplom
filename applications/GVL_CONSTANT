@@ -12,6 +12,8 @@ VAR_GLOBAL CONSTANT
 	pid_settings_quantity               : WORD := 15;
 	gas_air_map_quantity                : WORD := 30;
 	burner_reg_binding_item_quantity    : WORD := 5;
+	reg_binding_off                     : WORD := 0;
+	reg_binding_on                      : WORD := 1;
 
 	pressure_hmi_quantity               : WORD := 9;
 	ignition_hmi_quantity               : WORD := 5;

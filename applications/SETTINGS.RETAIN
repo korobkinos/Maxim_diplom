@@ -1,11 +1,5 @@
 {attribute 'qualified_only'}
 
-VAR_GLOBAL CONSTANT
-	// Состояние привязки регулятора
-	reg_binding_off	: WORD := 0; // привязка отключена
-	reg_binding_on	: WORD := 1; // привязка включена
-END_VAR
-
 
 VAR_GLOBAL PERSISTENT RETAIN
 
