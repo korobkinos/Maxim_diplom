@@ -1,0 +1,8 @@
+﻿{
+  "entries": {
+    "settings.retain": {
+      "prefer_persistent_gvl": true
+    }
+  }, 
+  "version": 1
+}

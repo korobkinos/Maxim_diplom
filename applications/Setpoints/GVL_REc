@@ -1,0 +1,9 @@
+﻿VAR_GLOBAL
+	{attribute 'ps.add_redundancy'}
+	Init: 						BOOL;
+	{attribute 'ps.add_redundancy'}
+	 {attribute 'symbol' := 'readwrite'}
+	Save: 						BOOL;
+	{attribute 'ps.add_redundancy'}
+	Load: 						BOOL;	
+END_VAR
